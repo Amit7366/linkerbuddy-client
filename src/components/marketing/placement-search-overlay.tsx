@@ -100,14 +100,14 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
       />
 
       <motion.div
-        className="relative z-10 w-full max-w-[720px] overflow-hidden rounded-2xl border border-white/30 bg-white/75 shadow-[0_30px_80px_#071b3d40] backdrop-blur-2xl dark:border-white/10 dark:bg-[#121a2b]/80 dark:shadow-[0_30px_80px_#00000080]"
+        className="relative z-10 w-full max-w-[720px] overflow-hidden rounded-2xl border border-[#d6e3f5] bg-white shadow-[0_30px_80px_#071b3d40] backdrop-blur-2xl dark:border-white/10 dark:bg-[#121a2b]/95 dark:shadow-[0_30px_80px_#00000080]"
         initial={reduce ? { opacity: 1 } : { opacity: 0, y: 24, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={reduce ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.28, ease }}
       >
-        <div className="flex items-center gap-3 border-b border-line/70 px-4 py-3.5 dark:border-white/10">
-          <Search className="size-5 shrink-0 text-brand" aria-hidden />
+        <div className="flex items-center gap-3 border-b border-[#dfe6f0] px-4 py-3.5 dark:border-white/10">
+          <Search className="size-5 shrink-0 text-[#1268f3] dark:text-brand" aria-hidden />
           <div className="min-w-0 flex-1">
             <p id={titleId} className="sr-only">
               {t("search.title")}
@@ -117,7 +117,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder={t("hero.searchPlaceholder")}
-              className="w-full border-0 bg-transparent text-[15px] text-ink outline-none placeholder:text-muted"
+              className="w-full border-0 bg-transparent text-[15px] font-medium text-[#0b1830] outline-none placeholder:text-[#63708a] dark:text-ink dark:placeholder:text-muted"
               autoComplete="off"
               spellCheck={false}
             />
@@ -129,7 +129,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
               type="button"
               onClick={onClose}
               aria-label={t("search.close")}
-              className="grid size-9 place-items-center rounded-xl border border-line bg-card/80 text-ink transition-colors hover:bg-sky dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+              className="grid size-9 place-items-center rounded-xl border border-[#dfe6f0] bg-[#f7f9fc] text-[#0b1830] transition-colors hover:bg-[#eaf3ff] dark:border-white/10 dark:bg-white/5 dark:text-ink dark:hover:bg-white/10"
             >
               <X className="size-4" aria-hidden />
             </button>
@@ -138,18 +138,20 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
 
         <div className="max-h-[min(58vh,420px)] overflow-y-auto p-2">
           {!query.trim() ? (
-            <p className="px-3 py-8 text-center text-[12px] text-muted">{t("search.hint")}</p>
+            <p className="px-3 py-8 text-center text-[12px] text-[#63708a] dark:text-muted">
+              {t("search.hint")}
+            </p>
           ) : results.length === 0 && searching ? (
             <div className="space-y-2 px-2 py-3">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="h-14 animate-pulse rounded-xl bg-line/50 dark:bg-white/5"
+                  className="h-14 animate-pulse rounded-xl bg-[#e8eef6] dark:bg-white/5"
                 />
               ))}
             </div>
           ) : results.length === 0 ? (
-            <p className="px-3 py-8 text-center text-[12px] text-muted">
+            <p className="px-3 py-8 text-center text-[12px] text-[#63708a] dark:text-muted">
               {t("search.empty", { query: debouncedQuery })}
             </p>
           ) : (
@@ -166,7 +168,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                   >
                     <button
                       type="button"
-                      className="flex w-full cursor-pointer items-center gap-3 rounded-xl border-0 bg-transparent px-3 py-3 text-left transition-colors hover:bg-sky/80 dark:hover:bg-white/8"
+                      className="flex w-full cursor-pointer items-center gap-3 rounded-xl border-0 bg-transparent px-3 py-3 text-left transition-colors hover:bg-[#eaf3ff] dark:hover:bg-white/8"
                       onClick={() => {
                         onClose();
                         document
@@ -174,19 +176,19 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                           ?.scrollIntoView({ behavior: "smooth" });
                       }}
                     >
-                      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-sky text-[11px] font-extrabold text-brand dark:bg-[#1a2740]">
+                      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#eaf3ff] text-[11px] font-extrabold text-[#1268f3] dark:bg-[#1a2740] dark:text-brand">
                         {domainInitials(site.domain)}
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[13px] font-bold text-ink">
+                        <span className="block truncate text-[13px] font-bold text-[#1268f3] dark:text-brand">
                           {site.domain}
                         </span>
-                        <span className="mt-0.5 block text-[10px] text-muted">
+                        <span className="mt-0.5 block text-[10px] text-[#5a6880] dark:text-muted">
                           {site.niche} · DR {site.dr} · {formatTraffic(site.traffic)} · $
                           {site.guest}
                         </span>
                       </span>
-                      <span className="rounded-lg bg-brand/10 px-2 py-1 text-[10px] font-bold text-brand">
+                      <span className="rounded-lg bg-[#eaf3ff] px-2 py-1 text-[10px] font-bold text-[#1268f3] dark:bg-brand/10 dark:text-brand">
                         {site.owner}
                       </span>
                     </button>

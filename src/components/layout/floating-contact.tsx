@@ -102,11 +102,11 @@ export function FloatingContact() {
                     rel={"external" in action && action.external ? "noopener noreferrer" : undefined}
                     className={cn(
                       "group inline-flex items-center gap-2.5 rounded-full py-2 pr-2 pl-3.5 no-underline shadow-[0_12px_30px_#071b3d33] backdrop-blur-md transition-transform hover:-translate-y-0.5 dark:shadow-[0_12px_30px_#00000066]",
-                      "bg-card/95 text-ink ring-1 ring-line dark:bg-[#121a2b]/95 dark:ring-white/10",
+                      "bg-navy text-white ring-1 ring-white/15 dark:bg-[#121a2b] dark:ring-white/10",
                     )}
                     onClick={() => setOpen(false)}
                   >
-                    <span className="text-[12px] font-bold whitespace-nowrap">
+                    <span className="text-[12px] font-bold whitespace-nowrap text-white">
                       {t(action.labelKey)}
                     </span>
                     <span

@@ -114,7 +114,7 @@ export function Marketplace() {
 
         <Reveal delay={0.12}>
           <div
-            className="overflow-hidden rounded-xl border-0 shadow-none tablet:border tablet:border-[#dce4ed] tablet:shadow-[var(--shadow-table)]"
+            className="overflow-hidden rounded-xl border-0 shadow-none tablet:border tablet:border-line tablet:bg-card tablet:shadow-[var(--shadow-table)]"
             role="table"
             aria-label="Guest post inventory"
           >
@@ -139,8 +139,8 @@ export function Marketplace() {
                   key={site.id}
                   role="row"
                   className={cn(
-                    "mb-2.5 grid grid-cols-3 gap-3.5 rounded-xl border border-[#dfe6ef] bg-white p-[15px] text-[11px] tablet:mb-0 tablet:min-h-[65px] tablet:grid-cols-[1.65fr_0.8fr_0.35fr_0.8fr_0.7fr_0.65fr_0.58fr_0.65fr] tablet:items-center tablet:gap-0 tablet:rounded-none tablet:border-0 tablet:border-t tablet:border-[#e8edf3] tablet:px-[15px] tablet:py-0 tablet:hover:bg-[#f8fbff]",
-                    selected && "bg-[#f0f7ff]",
+                    "mb-2.5 grid grid-cols-3 gap-3.5 rounded-xl border border-line bg-card p-[15px] text-[11px] text-ink tablet:mb-0 tablet:min-h-[65px] tablet:grid-cols-[1.65fr_0.8fr_0.35fr_0.8fr_0.7fr_0.65fr_0.58fr_0.65fr] tablet:items-center tablet:gap-0 tablet:rounded-none tablet:border-0 tablet:border-t tablet:border-line tablet:px-[15px] tablet:py-0 tablet:hover:bg-sky",
+                    selected && "bg-sky dark:bg-[#15233a]",
                   )}
                 >
                   <div className="col-span-3 flex items-center gap-2.5 tablet:col-span-1">
@@ -150,21 +150,21 @@ export function Marketplace() {
                       aria-pressed={selected}
                       onClick={() => toggle(site.id)}
                       className={cn(
-                        "grid size-[25px] place-items-center rounded-[7px] border border-[#cbd6e4] bg-white text-sm font-bold text-[#2a6fd5]",
+                        "grid size-[25px] place-items-center rounded-[7px] border border-line bg-card text-sm font-bold text-brand",
                         selected && "border-brand bg-brand text-white",
                       )}
                     >
                       {selected ? "✓" : "+"}
                     </button>
                     <div className="flex flex-col gap-1">
-                      <b className="text-[11px]">{site.domain}</b>
-                      <small className="text-[8px] text-[#8090a4]">
+                      <b className="text-[11px] text-ink">{site.domain}</b>
+                      <small className="text-[8px] text-muted">
                         <span
                           className={cn(
                             "rounded px-1.5 py-0.5",
                             site.owner === "Admin"
-                              ? "bg-[#daf5eb] text-[#07805d]"
-                              : "bg-[#fff0d8] text-[#a86500]",
+                              ? "bg-[#daf5eb] text-[#07805d] dark:bg-[#0f3d32] dark:text-[#34d399]"
+                              : "bg-[#fff0d8] text-[#a86500] dark:bg-[#3d2e0f] dark:text-[#fbbf24]",
                           )}
                         >
                           {site.owner}
@@ -175,42 +175,52 @@ export function Marketplace() {
                     </div>
                   </div>
 
-                  <span data-label="Niche" className="before:mb-1 before:block before:text-[8px] before:font-normal before:text-[#8692a4] before:uppercase before:content-[attr(data-label)] tablet:before:hidden">
+                  <span
+                    data-label="Niche"
+                    className="text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
+                  >
                     {site.niche}
                   </span>
-                  <span data-label="DR" className="before:mb-1 before:block before:text-[8px] before:font-normal before:text-[#8692a4] before:uppercase before:content-[attr(data-label)] tablet:before:hidden">
+                  <span
+                    data-label="DR"
+                    className="text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
+                  >
                     {site.dr}
                   </span>
                   <strong
                     data-label="Traffic"
-                    className="before:mb-1 before:block before:text-[8px] before:font-normal before:text-[#8692a4] before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
+                    className="text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
                   >
                     {formatTraffic(site.traffic)}
-                    <small className="mt-0.5 block text-[8px] font-normal text-[#079369]">↗ 6.4%</small>
+                    <small className="mt-0.5 block text-[8px] font-normal text-green">↗ 6.4%</small>
                   </strong>
                   <span
                     data-label="India share"
-                    className="before:mb-1 before:block before:text-[8px] before:font-normal before:text-[#8692a4] before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
+                    className="text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
                   >
                     🇮🇳 {site.countryShare}%
                   </span>
                   <strong
                     data-label="Guest post"
-                    className="before:mb-1 before:block before:text-[8px] before:font-normal before:text-[#8692a4] before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
+                    className="text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
                   >
                     ${site.guest}{" "}
-                    <small className="text-[8px] font-normal text-[#8491a3]">/ post</small>
+                    <small className="text-[8px] font-normal text-muted">/ post</small>
                   </strong>
                   <span
                     data-label="TAT"
-                    className="hidden before:mb-1 before:block before:text-[8px] before:font-normal before:text-[#8692a4] before:uppercase before:content-[attr(data-label)] tablet:block tablet:before:hidden"
+                    className="hidden text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:block tablet:before:hidden"
                   >
                     {site.tat}
                   </span>
                   <button
                     type="button"
                     onClick={() => toggle(site.id)}
-                    className="col-span-3 cursor-pointer rounded-[7px] border border-[#a7c8f5] bg-[#f5f9ff] px-2 py-2 text-[9px] font-bold text-[#1764cc] hover:bg-brand hover:text-white tablet:col-span-1"
+                    className={cn(
+                      "col-span-3 cursor-pointer rounded-lg border border-[#9fc0f0] bg-[#eaf3ff] px-3 py-2 text-[9px] font-bold text-[#1268f3] hover:bg-[#1268f3] hover:text-white tablet:col-span-1 dark:border-[#2a4570] dark:bg-[#15233a] dark:text-[#7db4ff] dark:hover:border-brand dark:hover:bg-brand dark:hover:text-white",
+                      selected &&
+                        "border-[#1268f3] bg-[#1268f3] text-white hover:bg-[#075be2] dark:border-brand dark:bg-brand dark:text-white",
+                    )}
                   >
                     {selected ? t("marketplace.selected") : t("marketplace.addSite")}
                   </button>
@@ -222,7 +232,7 @@ export function Marketplace() {
 
         <Button
           variant="ghost"
-          className="mx-auto mt-[22px] block border border-[#cdd8e7] px-4 py-2.5 text-[11px] font-bold text-[#37618f] shadow-none"
+          className="mx-auto mt-[22px] block border border-line px-4 py-2.5 text-[11px] font-bold text-ink shadow-none"
           onClick={() => showToast(t("marketplace.moreLoaded"))}
         >
           {t("marketplace.viewMore")}
