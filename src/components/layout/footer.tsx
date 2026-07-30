@@ -1,37 +1,90 @@
+"use client";
+
 import Link from "next/link";
+import { FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
 import { siteConfig } from "@/config/site";
-import { marketingNav } from "@/config/nav";
+import { Logo } from "@/components/ui/logo";
+import { Container } from "@/components/layout/container";
+import { useTranslations } from "@/providers/locale-provider";
 
 export function Footer() {
+  const t = useTranslations();
+
+  const columns = [
+    {
+      title: t("footer.marketplace"),
+      links: [
+        { title: t("footer.indiaSites"), href: "#marketplace" },
+        { title: t("footer.adminSites"), href: "#marketplace" },
+        { title: t("footer.linkInsertions"), href: "#marketplace" },
+      ],
+    },
+    {
+      title: t("footer.company"),
+      links: [
+        { title: t("footer.howItWorks"), href: "#how-it-works" },
+        { title: t("footer.faqs"), href: "#faq" },
+        { title: t("footer.contact"), href: "/contact" },
+      ],
+    },
+    {
+      title: t("footer.legal"),
+      links: [
+        { title: t("footer.privacy"), href: "/privacy" },
+        { title: t("footer.terms"), href: "/terms" },
+        { title: t("footer.replacement"), href: "/replacement-policy" },
+      ],
+    },
+  ];
+
   return (
-    <footer className="border-t border-zinc-200 bg-zinc-50">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 md:grid-cols-3">
-        <div>
-          <p className="text-lg font-bold text-zinc-900">{siteConfig.name}</p>
-          <p className="mt-2 text-sm text-zinc-600">{siteConfig.description}</p>
-        </div>
-        <div>
-          <p className="font-medium text-zinc-900">Navigation</p>
-          <ul className="mt-3 space-y-2">
-            {marketingNav.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className="text-sm text-zinc-600 hover:text-zinc-900">
+    <footer className="bg-[#06152f] px-0 pt-[55px] pb-[22px] text-[#b5c3d8] dark:bg-[#040914]">
+      <Container>
+        <div className="grid grid-cols-2 gap-8 tablet:grid-cols-[1.2fr_1.2fr_0.6fr_0.6fr] tablet:gap-[45px]">
+          <div className="col-span-2 flex flex-col gap-2.5 tablet:col-span-1">
+            <Logo light />
+            <p className="m-0 max-w-sm text-[11px] leading-[1.7]">{t("footer.blurb")}</p>
+          </div>
+
+          {columns.map((column) => (
+            <div key={column.title} className="flex flex-col gap-2.5">
+              <b className="text-[11px] text-white">{column.title}</b>
+              {column.links.map((item) => (
+                <Link
+                  key={item.title}
+                  href={item.href}
+                  className="text-[10px] text-[#9facbf] no-underline hover:text-white"
+                >
                   {item.title}
                 </Link>
-              </li>
-            ))}
-          </ul>
+              ))}
+            </div>
+          ))}
         </div>
-        <div>
-          <p className="font-medium text-zinc-900">Get started</p>
-          <p className="mt-3 text-sm text-zinc-600">
-            Ready to grow? Contact us or create an account today.
+
+        <div className="mt-[35px] flex flex-col gap-3 border-t border-white/10 pt-[18px] text-[9px] tablet:flex-row tablet:items-center tablet:justify-between">
+          <p className="m-0">
+            © {new Date().getFullYear()} {siteConfig.name}. {t("footer.copyright")}
           </p>
+          <div className="flex items-center gap-3">
+            <span>{t("footer.legalLine")}</span>
+            <a
+              href={siteConfig.links.linkedin}
+              aria-label="LinkedIn"
+              className="text-[#9facbf] hover:text-white"
+            >
+              <FaLinkedinIn size={12} />
+            </a>
+            <a
+              href={siteConfig.links.twitter}
+              aria-label="X (Twitter)"
+              className="text-[#9facbf] hover:text-white"
+            >
+              <FaXTwitter size={12} />
+            </a>
+          </div>
         </div>
-      </div>
-      <div className="border-t border-zinc-200 py-4 text-center text-sm text-zinc-500">
-        © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
-      </div>
+      </Container>
     </footer>
   );
 }

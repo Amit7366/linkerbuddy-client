@@ -1,9 +1,11 @@
-export function Container({
-  children,
-  className,
-}: {
+import { cn } from "@/lib/utils";
+
+interface ContainerProps {
   children: React.ReactNode;
   className?: string;
-}) {
-  return <div className={`mx-auto max-w-6xl px-4 ${className ?? ""}`}>{children}</div>;
+  as?: "div" | "section" | "header" | "footer" | "nav";
+}
+
+export function Container({ children, className, as: Tag = "div" }: ContainerProps) {
+  return <Tag className={cn("lb-container", className)}>{children}</Tag>;
 }

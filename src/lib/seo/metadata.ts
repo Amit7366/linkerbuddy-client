@@ -14,7 +14,7 @@ export function buildMetadata({
   path = "",
   noIndex = false,
 }: BuildMetadataOptions): Metadata {
-  const pageTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
+  const pageTitle = title ?? siteConfig.name;
   const pageDescription = description ?? siteConfig.description;
   const url = `${siteConfig.url}${path}`;
 
