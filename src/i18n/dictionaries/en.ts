@@ -16,6 +16,7 @@ export const en = {
     services: "Services",
     agencies: "For Agencies",
     howItWorks: "How it works",
+    pricing: "Pricing",
     resources: "Resources",
     marketplace: "Marketplace",
     chooseMarket: "Choose a market",
@@ -244,6 +245,55 @@ export const en = {
     searching: "Searching inventory…",
     empty: "No placements match “{query}”.",
     openSearch: "Open placement search",
+  },
+  contact: {
+    open: "Open contact options",
+    close: "Close contact options",
+    menu: "Contact options",
+    email: "Email",
+    whatsapp: "WhatsApp",
+    phone: "Call",
+  },
+  pricing: {
+    title: "Pricing",
+    subtitle:
+      "Choose a plan that matches your placement volume. Upgrade anytime as campaigns grow.",
+    month: "month",
+    cta: "Get started",
+    noCard: "No credit card required",
+    compare: "View plans comparison",
+    plans: {
+      startup: {
+        name: "Startup",
+        description: "Perfect for small teams and startups looking to get started with placements.",
+        features: {
+          users: "Up to 5 team seats",
+          pages: "Up to 25 placements / month",
+          domains: "India marketplace access",
+          support: "Email support",
+        },
+      },
+      growth: {
+        name: "Growth",
+        description: "Ideal for growing agencies that need more volume, reporting, and speed.",
+        features: {
+          users: "Up to 15 team seats",
+          pages: "Up to 80 placements / month",
+          domains: "Priority turnaround",
+          support: "Live URL reports",
+        },
+      },
+      enterprise: {
+        name: "Enterprise",
+        description: "Advanced tools for large organizations running multi-market campaigns.",
+        features: {
+          users: "Unlimited team seats",
+          pages: "Custom placement volume",
+          domains: "Private inventory options",
+          support: "Dedicated campaign manager",
+        },
+      },
+    },
   },
 } as const;
 

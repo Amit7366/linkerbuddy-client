@@ -44,6 +44,17 @@ const ProcessSteps = dynamic(
   },
 );
 
+const Pricing = dynamic(
+  () => import("@/components/marketing/pricing").then((m) => m.Pricing),
+  {
+    loading: () => (
+      <section className="lb-section">
+        <HomeSkeleton />
+      </section>
+    ),
+  },
+);
+
 const Faq = dynamic(
   () => import("@/components/marketing/faq").then((m) => m.Faq),
   {
@@ -89,6 +100,7 @@ export default function HomePage() {
       <Benefits />
       <Agency />
       <ProcessSteps />
+      <Pricing />
       <Faq />
       <CtaForm />
       <ShortlistBar />

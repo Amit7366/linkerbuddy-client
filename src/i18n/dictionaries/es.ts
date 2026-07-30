@@ -16,6 +16,7 @@ export const es: Dictionary = {
     services: "Servicios",
     agencies: "Para agencias",
     howItWorks: "Cómo funciona",
+    pricing: "Precios",
     resources: "Recursos",
     marketplace: "Marketplace",
     chooseMarket: "Elige un mercado",
@@ -244,5 +245,57 @@ export const es: Dictionary = {
     searching: "Buscando inventario…",
     empty: "Ninguna colocación coincide con “{query}”.",
     openSearch: "Abrir búsqueda de colocaciones",
+  },
+  contact: {
+    open: "Abrir opciones de contacto",
+    close: "Cerrar opciones de contacto",
+    menu: "Opciones de contacto",
+    email: "Email",
+    whatsapp: "WhatsApp",
+    phone: "Llamar",
+  },
+  pricing: {
+    title: "Precios",
+    subtitle:
+      "Elige un plan según tu volumen de colocaciones. Mejora cuando tus campañas crezcan.",
+    month: "mes",
+    cta: "Empezar",
+    noCard: "No se requiere tarjeta de crédito",
+    compare: "Ver comparación de planes",
+    plans: {
+      startup: {
+        name: "Startup",
+        description:
+          "Ideal para equipos pequeños y startups que quieren empezar con colocaciones.",
+        features: {
+          users: "Hasta 5 asientos de equipo",
+          pages: "Hasta 25 colocaciones / mes",
+          domains: "Acceso al marketplace de India",
+          support: "Soporte por email",
+        },
+      },
+      growth: {
+        name: "Growth",
+        description:
+          "Perfecto para agencias en crecimiento que necesitan más volumen, informes y velocidad.",
+        features: {
+          users: "Hasta 15 asientos de equipo",
+          pages: "Hasta 80 colocaciones / mes",
+          domains: "Entrega prioritaria",
+          support: "Informes de URL en vivo",
+        },
+      },
+      enterprise: {
+        name: "Enterprise",
+        description:
+          "Herramientas avanzadas para organizaciones grandes con campañas multi-mercado.",
+        features: {
+          users: "Asientos de equipo ilimitados",
+          pages: "Volumen de colocaciones a medida",
+          domains: "Inventario privado opcional",
+          support: "Gestor de campaña dedicado",
+        },
+      },
+    },
   },
 };
