@@ -63,9 +63,13 @@ function isEmailValid(email: string) {
   return z.string().email().safeParse(email).success;
 }
 
-function safeRedirect(raw: string | null): string {
+function safeRedirect(raw: string | null, role?: string): string {
   if (!raw || !raw.startsWith("/") || raw.startsWith("//")) {
+    if (role === "SUPER_ADMIN") return "/dashboard/super-admin";
     return "/account/settings/profile";
+  }
+  if (raw.startsWith("/dashboard")) {
+    return role === "SUPER_ADMIN" ? raw : "/account/settings/profile";
   }
   return raw;
 }
@@ -229,8 +233,8 @@ export function LoginForm() {
 
     setLoading(true);
     try {
-      await login(parsed.data.email, parsed.data.password);
-      router.push(safeRedirect(searchParams.get("redirect")));
+      const data = await login(parsed.data.email, parsed.data.password);
+      router.push(safeRedirect(searchParams.get("redirect"), data.user.role));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {

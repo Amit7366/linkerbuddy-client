@@ -1,15 +1,11 @@
-import {
-  SITE_LISTINGS,
-  type FilterKey,
-  type SiteListing,
-} from "@/config/landing";
+import type { FilterKey, SiteListing } from "@/config/landing";
 
 export type SortValue = "recommended" | "price" | "traffic" | "dr" | "da";
 
 export function filterAndSortSites(
   filter: FilterKey,
   sort: SortValue,
-  source: SiteListing[] = SITE_LISTINGS,
+  source: SiteListing[],
 ): SiteListing[] {
   let next = source.filter((site) => {
     if (filter === "all") return true;

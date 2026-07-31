@@ -1,6 +1,6 @@
 import { apiClient, setAccessToken } from "./client";
 import { endpoints } from "./endpoints";
-import type { AuthTokens } from "@/types/auth";
+import type { AuthTokens, AuthUser } from "@/types/auth";
 
 export async function login(email: string, password: string) {
   const data = await apiClient<AuthTokens>(endpoints.auth.login, {
@@ -36,5 +36,5 @@ export async function logout() {
 }
 
 export async function getMe() {
-  return apiClient(endpoints.users.me, { auth: true });
+  return apiClient<AuthUser>(endpoints.users.me, { auth: true });
 }

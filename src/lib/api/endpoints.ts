@@ -12,5 +12,9 @@ export const endpoints = {
     create: "/leads",
     list: "/leads",
   },
+  marketplace: {
+    list: "/marketplace",
+    detail: (id: number | string) => `/marketplace/${id}`,
+  },
   health: "/health",
 } as const;

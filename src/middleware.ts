@@ -3,14 +3,18 @@ import type { NextRequest } from "next/server";
 
 const protectedAccountPaths = ["/account"];
 const protectedCrmPaths = ["/crm"];
+const protectedDashboardPaths = ["/dashboard"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isAccountRoute = protectedAccountPaths.some((p) => pathname.startsWith(p));
   const isCrmRoute = protectedCrmPaths.some((p) => pathname.startsWith(p));
+  const isDashboardRoute = protectedDashboardPaths.some((p) =>
+    pathname.startsWith(p),
+  );
 
-  if (isAccountRoute || isCrmRoute) {
+  if (isAccountRoute || isCrmRoute || isDashboardRoute) {
     const refreshToken = request.cookies.get("refreshToken");
 
     if (!refreshToken) {
@@ -24,5 +28,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/account/:path*", "/crm/:path*"],
+  matcher: ["/account/:path*", "/crm/:path*", "/dashboard/:path*"],
 };

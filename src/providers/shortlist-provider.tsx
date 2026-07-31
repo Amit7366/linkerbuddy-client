@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
-import { SITE_LISTINGS } from "@/config/landing";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { listMarketplace } from "@/lib/api/marketplace";
 
 interface ShortlistContextValue {
   selectedIds: number[];
@@ -15,9 +15,35 @@ const ShortlistContext = createContext<ShortlistContextValue | null>(null);
 
 export function ShortlistProvider({ children }: { children: React.ReactNode }) {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [priceById, setPriceById] = useState<Record<number, number>>({});
+
+  useEffect(() => {
+    if (selectedIds.length === 0) {
+      setPriceById({});
+      return;
+    }
+
+    let cancelled = false;
+    void listMarketplace({ ids: selectedIds, limit: 100 })
+      .then((data) => {
+        if (cancelled) return;
+        const next: Record<number, number> = {};
+        for (const site of data.listings) {
+          next[site.id] = site.guest;
+        }
+        setPriceById(next);
+      })
+      .catch(() => {
+        if (!cancelled) setPriceById({});
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedIds]);
 
   const value = useMemo<ShortlistContextValue>(() => {
-    const selected = SITE_LISTINGS.filter((site) => selectedIds.includes(site.id));
+    const total = selectedIds.reduce((sum, id) => sum + (priceById[id] ?? 0), 0);
     return {
       selectedIds,
       toggle: (id: number) =>
@@ -25,10 +51,10 @@ export function ShortlistProvider({ children }: { children: React.ReactNode }) {
           prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
         ),
       clear: () => setSelectedIds([]),
-      total: selected.reduce((sum, site) => sum + site.guest, 0),
-      count: selected.length,
+      total,
+      count: selectedIds.length,
     };
-  }, [selectedIds]);
+  }, [priceById, selectedIds]);
 
   return <ShortlistContext.Provider value={value}>{children}</ShortlistContext.Provider>;
 }

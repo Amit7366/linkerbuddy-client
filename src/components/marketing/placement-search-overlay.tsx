@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Search, X } from "lucide-react";
-import { SITE_LISTINGS, formatTraffic, domainInitials } from "@/config/landing";
+import { formatTraffic, domainInitials } from "@/config/landing";
+import { listMarketplace } from "@/lib/api/marketplace";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useTranslations } from "@/providers/locale-provider";
 import { cn } from "@/lib/utils";
@@ -44,6 +45,19 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebouncedValue(query, 320);
   const searching = query.trim().length > 0 && query !== debouncedQuery;
+  const [results, setResults] = useState<
+    Array<{
+      id: number;
+      domain: string;
+      niche: string;
+      da: number;
+      dr: number;
+      traffic: number;
+      guest: number;
+      owner: string;
+    }>
+  >([]);
+  const [loadingResults, setLoadingResults] = useState(false);
 
   useEffect(() => {
     const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 80);
@@ -62,23 +76,33 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
     };
   }, [onClose]);
 
-  const results = useMemo(() => {
-    const q = debouncedQuery.trim().toLowerCase();
-    if (!q) return [];
+  useEffect(() => {
+    const q = debouncedQuery.trim();
+    if (!q) {
+      setResults([]);
+      setLoadingResults(false);
+      return;
+    }
 
-    return SITE_LISTINGS.filter((site) => {
-      return (
-        site.domain.toLowerCase().includes(q) ||
-        site.niche.toLowerCase().includes(q) ||
-        site.country.toLowerCase().includes(q) ||
-        String(site.dr).includes(q) ||
-        String(site.da).includes(q) ||
-        String(site.guest).includes(q) ||
-        site.owner.toLowerCase().includes(q) ||
-        site.trend.toLowerCase().includes(q)
-      );
-    }).slice(0, 8);
+    let cancelled = false;
+    setLoadingResults(true);
+    void listMarketplace({ q, page: 1, limit: 8 })
+      .then((data) => {
+        if (!cancelled) setResults(data.listings);
+      })
+      .catch(() => {
+        if (!cancelled) setResults([]);
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingResults(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [debouncedQuery]);
+
+  const showLoading = searching || loadingResults;
 
   return (
     <motion.div
@@ -126,7 +150,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
           </div>
 
           <div className="flex items-center gap-2">
-            {searching ? <LoadingDots /> : null}
+            {showLoading ? <LoadingDots /> : null}
             <button
               type="button"
               onClick={onClose}
@@ -143,7 +167,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
             <p className="px-3 py-8 text-center text-[12px] text-[#63708a] dark:text-muted">
               {t("search.hint")}
             </p>
-          ) : results.length === 0 && searching ? (
+          ) : results.length === 0 && showLoading ? (
             <div className="space-y-2 px-2 py-3">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div

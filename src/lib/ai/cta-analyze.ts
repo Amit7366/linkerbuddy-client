@@ -1,4 +1,5 @@
-import { SITE_LISTINGS, type SiteListing } from "@/config/landing";
+import { env } from "@/config/env";
+import type { SiteListing } from "@/config/landing";
 import type {
   AiRecommendation,
   CtaAnalyzeInput,
@@ -31,10 +32,27 @@ function parseBudgetRange(budget: string): { min: number; max: number } {
   return { min: 30, max: 50 };
 }
 
-export function getCandidateListings(niche: string, budget: string): SiteListing[] {
-  const { min, max } = parseBudgetRange(budget);
+async function fetchMarketplacePool(): Promise<SiteListing[]> {
+  const response = await fetch(
+    `${env.NEXT_PUBLIC_API_URL}/marketplace?limit=100&sort=dr`,
+    { next: { revalidate: 60 } },
+  );
+  if (!response.ok) return [];
+  const json = (await response.json()) as {
+    success: boolean;
+    data?: { listings: SiteListing[] };
+  };
+  return json.success && json.data ? json.data.listings : [];
+}
 
-  const inBudget = SITE_LISTINGS.filter((site) => site.guest >= min && site.guest <= max);
+export async function getCandidateListings(
+  niche: string,
+  budget: string,
+): Promise<SiteListing[]> {
+  const { min, max } = parseBudgetRange(budget);
+  const listings = await fetchMarketplacePool();
+
+  const inBudget = listings.filter((site) => site.guest >= min && site.guest <= max);
   const nicheExact = inBudget.filter((site) => site.niche === niche);
   const pool = nicheExact.length >= 3 ? nicheExact : inBudget;
 
@@ -138,7 +156,7 @@ export async function analyzeCtaBrief(
   input: CtaAnalyzeInput,
   apiKey: string | undefined,
 ): Promise<CtaAnalyzeResult> {
-  const candidates = getCandidateListings(input.niche, input.budget);
+  const candidates = await getCandidateListings(input.niche, input.budget);
 
   if (candidates.length === 0) {
     return {

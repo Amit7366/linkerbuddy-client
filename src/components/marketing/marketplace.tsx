@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -11,7 +11,8 @@ import {
   type FilterKey,
   type SiteListing,
 } from "@/config/landing";
-import { filterAndSortSites, type SortValue } from "@/lib/site-listings";
+import type { SortValue } from "@/lib/site-listings";
+import { listMarketplace } from "@/lib/api/marketplace";
 import { SiteListingRow } from "@/components/marketing/site-listing-row";
 import { SiteDetailModal } from "@/components/marketing/site-detail-modal";
 import { useTranslations } from "@/providers/locale-provider";
@@ -22,11 +23,38 @@ const PREVIEW_COUNT = 10;
 export function Marketplace() {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [sort, setSort] = useState<SortValue>("recommended");
+  const [previewSites, setPreviewSites] = useState<SiteListing[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [detailSite, setDetailSite] = useState<SiteListing | null>(null);
   const t = useTranslations();
 
-  const sites = useMemo(() => filterAndSortSites(filter, sort), [filter, sort]);
-  const previewSites = sites.slice(0, PREVIEW_COUNT);
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    void listMarketplace({
+      filter,
+      sort,
+      page: 1,
+      limit: PREVIEW_COUNT,
+    })
+      .then((data) => {
+        if (cancelled) return;
+        setPreviewSites(data.listings);
+        setTotal(data.total);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setPreviewSites([]);
+        setTotal(0);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [filter, sort]);
 
   return (
     <section id="marketplace" className="lb-section" aria-labelledby="marketplace-heading">
@@ -80,7 +108,7 @@ export function Marketplace() {
         <div className="mb-3 flex flex-col items-start justify-between gap-2.5 text-[11px] tablet:flex-row tablet:items-center">
           <span className="text-muted">
             <b className="text-ink">
-              {t("marketplace.verified", { count: sites.length })}
+              {t("marketplace.verified", { count: total })}
             </b>{" "}
             · {t("marketplace.updated")}
           </span>
@@ -121,9 +149,15 @@ export function Marketplace() {
               <span>{t("marketplace.columns.action")}</span>
             </div>
 
-            {previewSites.map((site) => (
-              <SiteListingRow key={site.id} site={site} onView={setDetailSite} />
-            ))}
+            {loading ? (
+              <p className="px-4 py-10 text-center text-[12px] text-muted">Loading…</p>
+            ) : previewSites.length === 0 ? (
+              <p className="px-4 py-10 text-center text-[12px] text-muted">No listings found</p>
+            ) : (
+              previewSites.map((site) => (
+                <SiteListingRow key={site.id} site={site} onView={setDetailSite} />
+              ))
+            )}
           </div>
         </Reveal>
 

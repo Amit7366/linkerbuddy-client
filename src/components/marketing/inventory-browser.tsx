@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -10,17 +10,17 @@ import {
   MARKETPLACE_FILTERS,
   SORT_OPTIONS,
   type FilterKey,
+  type SiteListing,
 } from "@/config/landing";
-import { filterAndSortSites, type SortValue } from "@/lib/site-listings";
+import type { SortValue } from "@/lib/site-listings";
+import { listMarketplace } from "@/lib/api/marketplace";
 import { useTranslations } from "@/providers/locale-provider";
 import { SiteListingRow } from "@/components/marketing/site-listing-row";
 import { SiteDetailModal } from "@/components/marketing/site-detail-modal";
 import { InventorySkeletonList } from "@/components/marketing/inventory-skeleton";
 import { cn } from "@/lib/utils";
-import type { SiteListing } from "@/config/landing";
 
 const PAGE_SIZE = 12;
-const LOAD_DELAY_MS = 720;
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -29,40 +29,67 @@ export function InventoryBrowser() {
   const reduce = useReducedMotion();
   const [filter, setFilter] = useState<FilterKey>("all");
   const [sort, setSort] = useState<SortValue>("recommended");
-  const [visible, setVisible] = useState(PAGE_SIZE);
+  const [page, setPage] = useState(1);
+  const [sites, setSites] = useState<SiteListing[]>([]);
+  const [total, setTotal] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [detailSite, setDetailSite] = useState<SiteListing | null>(null);
   const [, startTransition] = useTransition();
 
+  const fetchPage = useCallback(
+    async (nextPage: number, replace: boolean) => {
+      const data = await listMarketplace({
+        filter,
+        sort,
+        page: nextPage,
+        limit: PAGE_SIZE,
+      });
+      setTotal(data.total);
+      setSites((prev) => (replace ? data.listings : [...prev, ...data.listings]));
+      setPage(nextPage);
+    },
+    [filter, sort],
+  );
+
   useEffect(() => {
-    const timer = window.setTimeout(() => setInitialLoading(false), 550);
-    return () => window.clearTimeout(timer);
-  }, []);
+    let cancelled = false;
+    setInitialLoading(true);
+    setSites([]);
+    setPage(1);
+    void fetchPage(1, true)
+      .catch(() => {
+        if (!cancelled) {
+          setSites([]);
+          setTotal(0);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setInitialLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchPage]);
 
-  const sites = useMemo(() => filterAndSortSites(filter, sort), [filter, sort]);
-
-  const visibleSites = sites.slice(0, visible);
-  const hasMore = visible < sites.length;
-  const remaining = Math.max(0, sites.length - visible);
+  const hasMore = sites.length < total;
+  const remaining = Math.max(0, total - sites.length);
 
   const handleFilter = (key: FilterKey) => {
     startTransition(() => {
       setFilter(key);
-      setVisible(PAGE_SIZE);
-      setInitialLoading(true);
     });
-    window.setTimeout(() => setInitialLoading(false), 420);
   };
 
-  const loadMore = useCallback(() => {
+  const loadMore = useCallback(async () => {
     if (loadingMore || !hasMore) return;
     setLoadingMore(true);
-    window.setTimeout(() => {
-      setVisible((n) => Math.min(n + PAGE_SIZE, sites.length));
+    try {
+      await fetchPage(page + 1, false);
+    } finally {
       setLoadingMore(false);
-    }, LOAD_DELAY_MS);
-  }, [hasMore, loadingMore, sites.length]);
+    }
+  }, [fetchPage, hasMore, loadingMore, page]);
 
   return (
     <div className="pb-16 pt-8 tablet:pt-12">
@@ -124,8 +151,8 @@ export function InventoryBrowser() {
           <span className="text-muted">
             <b className="text-ink">
               {t("inventory.showing", {
-                shown: Math.min(visible, sites.length),
-                total: sites.length,
+                shown: sites.length,
+                total,
               })}
             </b>{" "}
             · {t("marketplace.updated")}
@@ -136,7 +163,6 @@ export function InventoryBrowser() {
               value={sort}
               onChange={(e) => {
                 setSort(e.target.value as SortValue);
-                setVisible(PAGE_SIZE);
               }}
               className="rounded-lg border border-line bg-card px-3 py-2 text-[11px] text-ink"
             >
@@ -174,7 +200,7 @@ export function InventoryBrowser() {
           ) : (
             <>
               <AnimatePresence initial={false}>
-                {visibleSites.map((site, index) => (
+                {sites.map((site, index) => (
                   <motion.div
                     key={site.id}
                     initial={reduce ? false : { opacity: 0, y: 12 }}
@@ -190,7 +216,9 @@ export function InventoryBrowser() {
                 ))}
               </AnimatePresence>
 
-              {loadingMore ? <InventorySkeletonList count={Math.min(PAGE_SIZE, remaining)} /> : null}
+              {loadingMore ? (
+                <InventorySkeletonList count={Math.min(PAGE_SIZE, remaining)} />
+              ) : null}
             </>
           )}
         </div>
@@ -201,7 +229,7 @@ export function InventoryBrowser() {
               variant="ghost"
               disabled={loadingMore}
               className="min-w-[200px] border border-line px-5 py-3 text-[12px] font-bold text-ink shadow-none disabled:opacity-70"
-              onClick={loadMore}
+              onClick={() => void loadMore()}
             >
               {loadingMore ? (
                 <span className="inline-flex items-center gap-2">
@@ -216,7 +244,7 @@ export function InventoryBrowser() {
 
           {!initialLoading && !hasMore ? (
             <p className="text-[11px] text-muted">
-              {t("inventory.allLoaded", { total: sites.length })}
+              {t("inventory.allLoaded", { total })}
             </p>
           ) : null}
         </div>
