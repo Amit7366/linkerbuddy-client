@@ -70,7 +70,9 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
       return (
         site.domain.toLowerCase().includes(q) ||
         site.niche.toLowerCase().includes(q) ||
+        site.country.toLowerCase().includes(q) ||
         String(site.dr).includes(q) ||
+        String(site.da).includes(q) ||
         String(site.guest).includes(q) ||
         site.owner.toLowerCase().includes(q) ||
         site.trend.toLowerCase().includes(q)

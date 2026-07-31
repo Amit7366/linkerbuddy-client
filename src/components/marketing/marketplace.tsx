@@ -1,44 +1,32 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/motion/reveal";
-import { useShortlist } from "@/providers/shortlist-provider";
-import { useToast } from "@/components/ui/toast";
 import {
   MARKETPLACE_FILTERS,
-  SITE_LISTINGS,
   SORT_OPTIONS,
-  formatTraffic,
   type FilterKey,
+  type SiteListing,
 } from "@/config/landing";
+import { filterAndSortSites, type SortValue } from "@/lib/site-listings";
+import { SiteListingRow } from "@/components/marketing/site-listing-row";
+import { SiteDetailModal } from "@/components/marketing/site-detail-modal";
 import { useTranslations } from "@/providers/locale-provider";
 import { cn } from "@/lib/utils";
 
+const PREVIEW_COUNT = 10;
+
 export function Marketplace() {
   const [filter, setFilter] = useState<FilterKey>("all");
-  const [sort, setSort] = useState<(typeof SORT_OPTIONS)[number]["value"]>("recommended");
-  const { selectedIds, toggle } = useShortlist();
-  const { showToast } = useToast();
+  const [sort, setSort] = useState<SortValue>("recommended");
+  const [detailSite, setDetailSite] = useState<SiteListing | null>(null);
   const t = useTranslations();
 
-  const sites = useMemo(() => {
-    let next = SITE_LISTINGS.filter((site) => {
-      if (filter === "all") return true;
-      if (filter === "budget") return site.guest < 50;
-      if (filter === "authority") return site.dr >= 40 && site.dr <= 60;
-      if (filter === "traffic") return site.traffic >= 10000;
-      if (filter === "admin") return site.owner === "Admin";
-      return site.niche === filter;
-    });
-
-    if (sort === "price") next = [...next].sort((a, b) => a.guest - b.guest);
-    if (sort === "traffic") next = [...next].sort((a, b) => b.traffic - a.traffic);
-    if (sort === "dr") next = [...next].sort((a, b) => b.dr - a.dr);
-    return next;
-  }, [filter, sort]);
+  const sites = useMemo(() => filterAndSortSites(filter, sort), [filter, sort]);
+  const previewSites = sites.slice(0, PREVIEW_COUNT);
 
   return (
     <section id="marketplace" className="lb-section" aria-labelledby="marketplace-heading">
@@ -100,7 +88,7 @@ export function Marketplace() {
             {t("marketplace.sortBy")}
             <select
               value={sort}
-              onChange={(e) => setSort(e.target.value as typeof sort)}
+              onChange={(e) => setSort(e.target.value as SortValue)}
               className="rounded-lg border border-line bg-card px-3 py-2 text-[11px] text-ink"
             >
               {SORT_OPTIONS.map((option) => (
@@ -119,125 +107,39 @@ export function Marketplace() {
             aria-label="Guest post inventory"
           >
             <div
-              className="hidden min-h-[42px] grid-cols-[1.65fr_0.8fr_0.35fr_0.8fr_0.7fr_0.65fr_0.58fr_0.65fr] items-center bg-navy px-[15px] text-[9px] tracking-[0.4px] text-[#d8e3f2] uppercase tablet:grid"
+              className="hidden min-h-[42px] grid-cols-[1.45fr_0.65fr_0.28fr_0.28fr_0.65fr_0.6fr_0.55fr_0.45fr_0.75fr] items-center bg-navy px-[15px] text-[9px] tracking-[0.4px] text-[#d8e3f2] uppercase tablet:grid"
               role="row"
             >
               <span>{t("marketplace.columns.website")}</span>
               <span>{t("marketplace.columns.niche")}</span>
+              <span>{t("marketplace.columns.da")}</span>
               <span>{t("marketplace.columns.dr")}</span>
               <span>{t("marketplace.columns.traffic")}</span>
-              <span>{t("marketplace.columns.indiaShare")}</span>
+              <span>{t("marketplace.columns.country")}</span>
               <span>{t("marketplace.columns.guestPost")}</span>
               <span>{t("marketplace.columns.tat")}</span>
               <span>{t("marketplace.columns.action")}</span>
             </div>
 
-            {sites.map((site) => {
-              const selected = selectedIds.includes(site.id);
-              return (
-                <div
-                  key={site.id}
-                  role="row"
-                  className={cn(
-                    "mb-2.5 grid grid-cols-3 gap-3.5 rounded-xl border border-line bg-card p-[15px] text-[11px] text-ink tablet:mb-0 tablet:min-h-[65px] tablet:grid-cols-[1.65fr_0.8fr_0.35fr_0.8fr_0.7fr_0.65fr_0.58fr_0.65fr] tablet:items-center tablet:gap-0 tablet:rounded-none tablet:border-0 tablet:border-t tablet:border-line tablet:px-[15px] tablet:py-0 tablet:hover:bg-sky",
-                    selected && "bg-sky dark:bg-[#15233a]",
-                  )}
-                >
-                  <div className="col-span-3 flex items-center gap-2.5 tablet:col-span-1">
-                    <button
-                      type="button"
-                      aria-label={`Select ${site.domain}`}
-                      aria-pressed={selected}
-                      onClick={() => toggle(site.id)}
-                      className={cn(
-                        "grid size-[25px] place-items-center rounded-[7px] border border-line bg-card text-sm font-bold text-brand",
-                        selected && "border-brand bg-brand text-white",
-                      )}
-                    >
-                      {selected ? "✓" : "+"}
-                    </button>
-                    <div className="flex flex-col gap-1">
-                      <b className="text-[11px] text-ink">{site.domain}</b>
-                      <small className="text-[8px] text-muted">
-                        <span
-                          className={cn(
-                            "rounded px-1.5 py-0.5",
-                            site.owner === "Admin"
-                              ? "bg-[#daf5eb] text-[#07805d] dark:bg-[#0f3d32] dark:text-[#34d399]"
-                              : "bg-[#fff0d8] text-[#a86500] dark:bg-[#3d2e0f] dark:text-[#fbbf24]",
-                          )}
-                        >
-                          {site.owner}
-                        </span>
-                        {" · "}
-                        {site.trend} ↗
-                      </small>
-                    </div>
-                  </div>
-
-                  <span
-                    data-label="Niche"
-                    className="text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
-                  >
-                    {site.niche}
-                  </span>
-                  <span
-                    data-label="DR"
-                    className="text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
-                  >
-                    {site.dr}
-                  </span>
-                  <strong
-                    data-label="Traffic"
-                    className="text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
-                  >
-                    {formatTraffic(site.traffic)}
-                    <small className="mt-0.5 block text-[8px] font-normal text-green">↗ 6.4%</small>
-                  </strong>
-                  <span
-                    data-label="India share"
-                    className="text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
-                  >
-                    🇮🇳 {site.countryShare}%
-                  </span>
-                  <strong
-                    data-label="Guest post"
-                    className="text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:before:hidden"
-                  >
-                    ${site.guest}{" "}
-                    <small className="text-[8px] font-normal text-muted">/ post</small>
-                  </strong>
-                  <span
-                    data-label="TAT"
-                    className="hidden text-ink before:mb-1 before:block before:text-[8px] before:font-normal before:text-muted before:uppercase before:content-[attr(data-label)] tablet:block tablet:before:hidden"
-                  >
-                    {site.tat}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => toggle(site.id)}
-                    className={cn(
-                      "col-span-3 cursor-pointer rounded-lg border border-[#9fc0f0] bg-[#eaf3ff] px-3 py-2 text-[9px] font-bold text-[#1268f3] hover:bg-[#1268f3] hover:text-white tablet:col-span-1 dark:border-[#2a4570] dark:bg-[#15233a] dark:text-[#7db4ff] dark:hover:border-brand dark:hover:bg-brand dark:hover:text-white",
-                      selected &&
-                        "border-[#1268f3] bg-[#1268f3] text-white hover:bg-[#075be2] dark:border-brand dark:bg-brand dark:text-white",
-                    )}
-                  >
-                    {selected ? t("marketplace.selected") : t("marketplace.addSite")}
-                  </button>
-                </div>
-              );
-            })}
+            {previewSites.map((site) => (
+              <SiteListingRow key={site.id} site={site} onView={setDetailSite} />
+            ))}
           </div>
         </Reveal>
 
-        <Button
-          variant="ghost"
-          className="mx-auto mt-[22px] block border border-line px-4 py-2.5 text-[11px] font-bold text-ink shadow-none"
-          onClick={() => showToast(t("marketplace.moreLoaded"))}
+        <Link
+          href="/inventory"
+          className="mx-auto mt-[22px] flex w-fit items-center justify-center rounded-[10px] border border-line bg-card px-4 py-2.5 text-[11px] font-bold text-ink transition-colors hover:bg-sky"
         >
           {t("marketplace.viewMore")}
-        </Button>
+        </Link>
       </Container>
+
+      <SiteDetailModal
+        site={detailSite}
+        open={Boolean(detailSite)}
+        onClose={() => setDetailSite(null)}
+      />
     </section>
   );
 }

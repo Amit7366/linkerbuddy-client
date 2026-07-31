@@ -80,13 +80,12 @@ export function Header() {
             <ThemeToggle />
           </div>
 
-          <button
-            type="button"
-            className="hidden cursor-pointer border-0 bg-transparent text-[13px] font-semibold text-[var(--nav-link)] hover:text-white desktop:inline"
-            onClick={() => showToast(t("toast.signInSoon"))}
+          <Link
+            href="/login"
+            className="hidden text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white desktop:inline"
           >
             {t("common.signIn")}
-          </button>
+          </Link>
           <Button
             size="sm"
             className="hidden phablet:inline-flex"

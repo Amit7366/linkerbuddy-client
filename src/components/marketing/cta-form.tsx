@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, Select, TextInput } from "@/components/ui/field";
 import { Container } from "@/components/layout/container";
@@ -8,15 +8,31 @@ import { Reveal } from "@/components/motion/reveal";
 import { useToast } from "@/components/ui/toast";
 import { CTA_BUDGETS, CTA_NICHES } from "@/config/landing";
 import { useTranslations } from "@/providers/locale-provider";
+import { CtaAiModal, type CtaBrief } from "@/components/marketing/cta-ai-modal";
 
 export function CtaForm() {
   const { showToast } = useToast();
   const t = useTranslations();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [brief, setBrief] = useState<CtaBrief | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const niche = String(data.get("niche") ?? "");
+    const budget = String(data.get("budget") ?? "");
+    const email = String(data.get("email") ?? "").trim();
+
+    if (!niche || !budget || !email) return;
+
+    setSubmitting(true);
+    setBrief({ niche, budget, email });
+    setModalOpen(true);
     showToast(t("cta.toast"));
-    event.currentTarget.reset();
+    form.reset();
+    setSubmitting(false);
   };
 
   return (
@@ -67,13 +83,22 @@ export function CtaForm() {
                 />
               </Field>
 
-              <Button type="submit" className="h-[50px] w-full">
+              <Button type="submit" className="h-[50px] w-full" disabled={submitting}>
                 {t("cta.submit")}
               </Button>
             </form>
           </div>
         </Reveal>
       </Container>
+
+      <CtaAiModal
+        open={modalOpen}
+        brief={brief}
+        onClose={() => {
+          setModalOpen(false);
+          setBrief(null);
+        }}
+      />
     </section>
   );
 }

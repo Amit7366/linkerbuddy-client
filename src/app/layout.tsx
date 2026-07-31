@@ -68,6 +68,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={localeMeta[locale].dir}
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} ${notoDevanagari.variable} ${notoBengali.variable} h-full antialiased`}
       suppressHydrationWarning
     >

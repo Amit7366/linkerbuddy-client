@@ -155,7 +155,7 @@ export function HeroProductPreview() {
             <span>{t("hero.sitesSelected")}</span>
           </span>
           <span className="flex flex-col text-[#b7c5da]">
-            {t("hero.estimatedTotal")} <b className="text-[11px] text-white">$95</b>
+            {t("hero.estimatedTotal")} <b className="text-[11px] text-white">$155</b>
           </span>
           <button
             type="button"

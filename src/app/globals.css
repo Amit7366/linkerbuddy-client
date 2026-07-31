@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Match next-themes class strategy (not prefers-color-scheme) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --navy: #071b3d;
   --blue: #1268f3;
@@ -186,6 +189,52 @@
   .dark .lb-btn-light {
     background: var(--card);
     color: var(--ink);
+  }
+
+  .lb-add-site {
+    min-width: 0;
+    flex: 1;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 1px solid #9fc0f0;
+    background: #eaf3ff;
+    padding: 8px 12px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #1268f3;
+  }
+
+  .lb-add-site:hover {
+    background: #1268f3;
+    color: #fff;
+  }
+
+  .lb-add-site[data-selected="true"] {
+    border-color: #1268f3;
+    background: #1268f3;
+    color: #fff;
+  }
+
+  .lb-add-site[data-selected="true"]:hover {
+    background: #075be2;
+  }
+
+  .dark .lb-add-site {
+    border-color: #2a4570;
+    background: #15233a;
+    color: #7db4ff;
+  }
+
+  .dark .lb-add-site:hover {
+    border-color: var(--blue);
+    background: var(--blue);
+    color: #fff;
+  }
+
+  .dark .lb-add-site[data-selected="true"] {
+    border-color: var(--blue);
+    background: var(--blue);
+    color: #fff;
   }
 
   .lb-section {

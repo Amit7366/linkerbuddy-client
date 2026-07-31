@@ -65,10 +65,10 @@ function StatValue({
 }
 
 const STATS = [
-  { key: "websites", value: "250", suffix: "+", countTo: 250, duration: 1.6 },
-  { key: "niches", value: "25", suffix: "+", countTo: 25, duration: 1.2 },
-  { key: "tat", value: "1–3", suffix: "", countTo: null, duration: 0 },
-  { key: "dofollow", value: "90", suffix: "%", countTo: 90, duration: 1.4 },
+  { key: "websites", value: "98", suffix: "", countTo: 98, duration: 1.6 },
+  { key: "niches", value: "10", suffix: "+", countTo: 10, duration: 1.2 },
+  { key: "tat", value: "Instant", suffix: "", countTo: null, duration: 0 },
+  { key: "dofollow", value: "2", suffix: "", countTo: 2, duration: 1.0 },
 ] as const;
 
 export function HeroStatsStrip() {
