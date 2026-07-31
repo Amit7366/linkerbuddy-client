@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { Suspense, useEffect, useId, useMemo, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Check, ChevronDown } from "lucide-react";
 import {
@@ -8,6 +9,8 @@ import {
   type MarketplaceCountry,
   type MarketplaceCountryCode,
 } from "@/config/nav";
+import { countryCodeToFilterParam, normalizeCountryParam } from "@/lib/marketplace-filters";
+import { stripLocalePrefix, withLocalePrefix } from "@/i18n/routing";
 import { useTranslations } from "@/providers/locale-provider";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +20,16 @@ interface MarketplaceDropdownProps {
   fullWidth?: boolean;
 }
 
-export function MarketplaceDropdown({
+function codeFromCountryParam(country: string | null): MarketplaceCountryCode | null {
+  if (!country) return null;
+  const normalized = normalizeCountryParam(country).toLowerCase();
+  const match = marketplaceCountries.find(
+    (item) => countryCodeToFilterParam(item.code).toLowerCase() === normalized,
+  );
+  return match?.code ?? null;
+}
+
+function MarketplaceDropdownInner({
   className,
   onSelect,
   fullWidth = false,
@@ -28,6 +40,18 @@ export function MarketplaceDropdown({
   const rootRef = useRef<HTMLDivElement>(null);
   const listId = useId();
   const t = useTranslations();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const urlCountryCode = useMemo(
+    () => codeFromCountryParam(searchParams.get("country")),
+    [searchParams],
+  );
+
+  useEffect(() => {
+    if (urlCountryCode) setSelected(urlCountryCode);
+  }, [urlCountryCode]);
 
   const selectedCountry =
     marketplaceCountries.find((c) => c.code === selected) ?? marketplaceCountries[0];
@@ -58,9 +82,34 @@ export function MarketplaceDropdown({
     setOpen(false);
     onSelect?.(country);
 
-    if (country.href.startsWith("#")) {
-      document.querySelector(country.href)?.scrollIntoView({ behavior: "smooth" });
+    const next = new URLSearchParams(searchParams.toString());
+    // Drop chip-implied India when switching markets from the navbar
+    if (next.get("country")?.toLowerCase() === "india") {
+      // replace with selected market
     }
+    next.set("country", countryCodeToFilterParam(country.code).toLowerCase());
+
+    const qs = next.toString();
+    const { locale, pathname: barePath } = stripLocalePrefix(pathname);
+    const activeLocale = locale ?? "en";
+
+    if (barePath === "/inventory") {
+      router.push(
+        qs
+          ? `${withLocalePrefix("/inventory", activeLocale)}?${qs}`
+          : withLocalePrefix("/inventory", activeLocale),
+      );
+      return;
+    }
+
+    router.push(
+      qs
+        ? `${withLocalePrefix("/", activeLocale)}?${qs}#marketplace`
+        : `${withLocalePrefix("/", activeLocale)}#marketplace`,
+    );
+    window.setTimeout(() => {
+      document.querySelector("#marketplace")?.scrollIntoView({ behavior: "smooth" });
+    }, 80);
   };
 
   return (
@@ -166,5 +215,19 @@ export function MarketplaceDropdown({
         ) : null}
       </AnimatePresence>
     </div>
+  );
+}
+
+export function MarketplaceDropdown(props: MarketplaceDropdownProps) {
+  return (
+    <Suspense
+      fallback={
+        <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--nav-link)]">
+          {props.fullWidth ? null : "Marketplace"}
+        </span>
+      }
+    >
+      <MarketplaceDropdownInner {...props} />
+    </Suspense>
   );
 }

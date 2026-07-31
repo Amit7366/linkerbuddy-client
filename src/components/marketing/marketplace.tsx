@@ -1,60 +1,108 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { Skeleton, HomeSkeleton } from "@/components/ui/skeleton";
 import { Reveal } from "@/components/motion/reveal";
-import {
-  MARKETPLACE_FILTERS,
-  SORT_OPTIONS,
-  type FilterKey,
-  type SiteListing,
-} from "@/config/landing";
+import { SORT_OPTIONS, type SiteListing } from "@/config/landing";
 import type { SortValue } from "@/lib/site-listings";
 import { listMarketplace } from "@/lib/api/marketplace";
+import { useMarketplaceStats } from "@/hooks/use-marketplace-stats";
+import { useMarketplaceFilters } from "@/hooks/use-marketplace-filters";
+import { useIsomorphicLayoutReady } from "@/hooks/use-isomorphic-layout-ready";
+import { MarketplaceFilterBar } from "@/components/marketing/marketplace-filter-bar";
 import { SiteListingRow } from "@/components/marketing/site-listing-row";
 import { SiteDetailModal } from "@/components/marketing/site-detail-modal";
-import { useTranslations } from "@/providers/locale-provider";
-import { cn } from "@/lib/utils";
+import { useTranslations, useLocale } from "@/providers/locale-provider";
+import { buildInventoryHref } from "@/lib/marketplace-filters";
 
 const PREVIEW_COUNT = 10;
 
-export function Marketplace() {
-  const [filter, setFilter] = useState<FilterKey>("all");
-  const [sort, setSort] = useState<SortValue>("recommended");
+function MarketplaceInner() {
   const [previewSites, setPreviewSites] = useState<SiteListing[]>([]);
-  const [total, setTotal] = useState(0);
+  const [filteredTotal, setFilteredTotal] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [listError, setListError] = useState(false);
+  const [reloadToken, setReloadToken] = useState(0);
   const [detailSite, setDetailSite] = useState<SiteListing | null>(null);
   const t = useTranslations();
+  const { locale } = useLocale();
+  const layoutReady = useIsomorphicLayoutReady();
+  const {
+    data: stats,
+    isError: statsError,
+    isSuccess: statsSuccess,
+    refetch: refetchStats,
+  } = useMarketplaceStats();
+  const {
+    sort,
+    constrained,
+    toggleFilter,
+    clearFilters,
+    setSort,
+    toApiParams,
+    isSelected,
+  } = useMarketplaceFilters({ hash: "#marketplace" });
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    void listMarketplace({
-      filter,
-      sort,
-      page: 1,
-      limit: PREVIEW_COUNT,
-    })
+    setListError(false);
+    setFilteredTotal(null);
+
+    void listMarketplace(toApiParams(1, PREVIEW_COUNT))
       .then((data) => {
         if (cancelled) return;
         setPreviewSites(data.listings);
-        setTotal(data.total);
+        setFilteredTotal(data.total);
       })
       .catch(() => {
         if (cancelled) return;
         setPreviewSites([]);
-        setTotal(0);
+        setFilteredTotal(null);
+        setListError(true);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
+
     return () => {
       cancelled = true;
     };
-  }, [filter, sort]);
+  }, [toApiParams, reloadToken]);
+
+  const inventoryTotal =
+    !constrained && layoutReady && statsSuccess && stats
+      ? stats.total
+      : filteredTotal;
+
+  const badgeContent = !layoutReady ? (
+    <Skeleton className="h-3 w-28 rounded-full" />
+  ) : statsSuccess && stats ? (
+    t("marketplace.badge", { count: stats.total })
+  ) : statsError ? (
+    t("marketplace.verifiedError")
+  ) : (
+    <Skeleton className="h-3 w-28 rounded-full" />
+  );
+
+  const emptyState = (
+    <div className="flex flex-col items-center gap-3 px-4 py-12 text-center">
+      <p className="m-0 text-[14px] font-bold text-ink">{t("marketplace.emptyTitle")}</p>
+      <p className="m-0 max-w-sm text-[12px] text-muted">{t("marketplace.emptyDescription")}</p>
+      <button
+        type="button"
+        onClick={clearFilters}
+        className="cursor-pointer rounded-lg border border-line bg-sky px-3 py-2 text-[11px] font-bold text-brand hover:bg-brand hover:text-white"
+      >
+        {t("marketplace.clearFilters")}
+      </button>
+    </div>
+  );
 
   return (
     <section id="marketplace" className="lb-section" aria-labelledby="marketplace-heading">
@@ -66,51 +114,47 @@ export function Marketplace() {
             kicker={t("marketplace.kicker")}
             title={t("marketplace.title")}
             description={t("marketplace.description")}
-            badge={t("marketplace.badge")}
+            badge={badgeContent}
           />
         </Reveal>
 
         <Reveal delay={0.08}>
-          <div
-            className="mt-[29px] mb-[23px] flex gap-2.5 overflow-x-auto pr-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden tablet:grid tablet:grid-cols-7 tablet:overflow-visible tablet:pr-0"
-            role="group"
-            aria-label="Quick site filters"
-          >
-            {MARKETPLACE_FILTERS.map((item) => (
-              <button
-                key={item.key}
-                type="button"
-                onClick={() => setFilter(item.key)}
-                className={cn(
-                  "flex min-w-[132px] cursor-pointer items-center gap-2.5 rounded-[10px] border border-line bg-card px-2.5 py-3 text-left hover:border-[#72a9f8] hover:bg-sky hover:shadow-[0_5px_18px_#2067d317] tablet:min-w-0",
-                  filter === item.key && "border-[#72a9f8] bg-sky shadow-[0_5px_18px_#2067d317]",
-                )}
-              >
-                <span
-                  className={cn(
-                    "grid size-[29px] place-items-center rounded-lg bg-sky font-extrabold text-brand",
-                    filter === item.key && "bg-brand text-white",
-                  )}
-                >
-                  {item.icon}
-                </span>
-                <span className="flex flex-col gap-0.5">
-                  <b className="text-[10px] text-ink">{t(`marketplace.filters.${item.key}.label`)}</b>
-                  <small className="text-[8px] text-muted">
-                    {t(`marketplace.filters.${item.key}.sub`)}
-                  </small>
-                </span>
-              </button>
-            ))}
-          </div>
+          <MarketplaceFilterBar
+            className="mt-[29px] mb-[23px]"
+            isSelected={isSelected}
+            onToggle={toggleFilter}
+          />
         </Reveal>
 
         <div className="mb-3 flex flex-col items-start justify-between gap-2.5 text-[11px] tablet:flex-row tablet:items-center">
-          <span className="text-muted">
-            <b className="text-ink">
-              {t("marketplace.verified", { count: total })}
-            </b>{" "}
-            · {t("marketplace.updated")}
+          <span className="flex items-center gap-2 text-muted">
+            {layoutReady && listError ? (
+              <>
+                <span>{t("marketplace.verifiedError")}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    void refetchStats();
+                    setReloadToken((n) => n + 1);
+                  }}
+                  className="cursor-pointer rounded-md border border-line bg-card px-2 py-1 text-[10px] font-bold text-brand hover:bg-sky"
+                >
+                  {t("marketplace.retry")}
+                </button>
+              </>
+            ) : !layoutReady || loading || inventoryTotal === null ? (
+              <>
+                <Skeleton className="h-4 w-36 rounded" />
+                <span>· {t("marketplace.updated")}</span>
+              </>
+            ) : (
+              <>
+                <b className="text-ink">
+                  {t("marketplace.verified", { count: inventoryTotal })}
+                </b>{" "}
+                · {t("marketplace.updated")}
+              </>
+            )}
           </span>
           <label className="flex items-center gap-2 text-muted">
             {t("marketplace.sortBy")}
@@ -150,9 +194,22 @@ export function Marketplace() {
             </div>
 
             {loading ? (
-              <p className="px-4 py-10 text-center text-[12px] text-muted">Loading…</p>
+              <p className="px-4 py-10 text-center text-[12px] text-muted">
+                {t("marketplace.verifiedLoading")}
+              </p>
+            ) : listError ? (
+              <div className="flex flex-col items-center gap-3 px-4 py-10 text-center">
+                <p className="m-0 text-[12px] text-muted">{t("marketplace.verifiedError")}</p>
+                <button
+                  type="button"
+                  onClick={() => setReloadToken((n) => n + 1)}
+                  className="cursor-pointer rounded-lg border border-line bg-sky px-3 py-2 text-[11px] font-bold text-brand hover:bg-brand hover:text-white"
+                >
+                  {t("marketplace.retry")}
+                </button>
+              </div>
             ) : previewSites.length === 0 ? (
-              <p className="px-4 py-10 text-center text-[12px] text-muted">No listings found</p>
+              emptyState
             ) : (
               previewSites.map((site) => (
                 <SiteListingRow key={site.id} site={site} onView={setDetailSite} />
@@ -162,7 +219,7 @@ export function Marketplace() {
         </Reveal>
 
         <Link
-          href="/inventory"
+          href={buildInventoryHref(searchParams, locale)}
           className="mx-auto mt-[22px] flex w-fit items-center justify-center rounded-[10px] border border-line bg-card px-4 py-2.5 text-[11px] font-bold text-ink transition-colors hover:bg-sky"
         >
           {t("marketplace.viewMore")}
@@ -175,5 +232,13 @@ export function Marketplace() {
         onClose={() => setDetailSite(null)}
       />
     </section>
+  );
+}
+
+export function Marketplace() {
+  return (
+    <Suspense fallback={<HomeSkeleton />}>
+      <MarketplaceInner />
+    </Suspense>
   );
 }

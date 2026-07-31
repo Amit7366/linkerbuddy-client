@@ -1,11 +1,11 @@
 import { Container } from "@/components/layout/container";
-import { buildMetadata } from "@/lib/seo/metadata";
+import { buildLocalizedMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/i18n/request-locale";
 
-export const metadata = buildMetadata({
-  title: "About",
-  description: "Learn about our mission to help businesses grow online.",
-  path: "/about",
-});
+export async function generateMetadata() {
+  const locale = await getRequestLocale();
+  return buildLocalizedMetadata({ locale, page: "about", path: "/about" });
+}
 
 export default function AboutPage() {
   return (

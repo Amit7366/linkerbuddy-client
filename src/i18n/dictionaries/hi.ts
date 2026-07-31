@@ -61,19 +61,65 @@ export const hi: Dictionary = {
       niches: "ट्रैफ़िक देश",
       tat: "पब्लिश TAT",
       dofollow: "मैक्स डोफॉलो लिंक",
+      loading: "इन्वेंटरी आँकड़े लोड हो रहे हैं",
+      error: "इन्वेंटरी आँकड़े लोड नहीं हो सके।",
+      retry: "फिर कोशिश करें",
     },
     qualityTitle: "क्वालिटी-चेक्ड इन्वेंटरी",
     qualitySub: "लाइव Moz और Ahrefs मेट्रिक्स",
+  },
+  seo: {
+    siteName: "Linkerbuddy",
+    titleTemplate: "{title} | Linkerbuddy",
+    pages: {
+      home: {
+        title: "भारत गेस्ट पोस्ट साइट्स",
+        description:
+          "पारदर्शी कीमत और तेज़ TAT के साथ सत्यापित भारतीय गेस्ट पोस्ट और लिंक इंसर्शन प्लेसमेंट देखें।",
+      },
+      inventory: {
+        title: "पूर्ण इन्वेंटरी",
+        description:
+          "Moz DA, Ahrefs DR, ट्रैफ़िक, कीमत और इंस्टेंट TAT के साथ पूरी गेस्ट पोस्ट इन्वेंटरी ब्राउज़ करें।",
+      },
+      about: {
+        title: "हमारे बारे में",
+        description:
+          "जानें कि Linkerbuddy प्लेसमेंट कैसे सत्यापित करता है और टीम्स को भरोसे के साथ गेस्ट पोस्ट खरीदने में कैसे मदद करता है।",
+      },
+      pricing: {
+        title: "मूल्य निर्धारण",
+        description:
+          "स्टार्टअप, एजेंसियों और एंटरप्राइज़ SEO टीमों के लिए सरल प्लेसमेंट प्लान।",
+      },
+      blog: {
+        title: "ब्लॉग",
+        description:
+          "गेस्ट पोस्ट, लिंक बिल्डिंग और मार्केटप्लेस खरीद पर गाइड और अपडेट।",
+      },
+      contact: {
+        title: "संपर्क",
+        description:
+          "कस्टम लिस्ट, बल्क कैंपेन और मार्केटप्लेस एक्सेस के लिए Linkerbuddy टीम से बात करें।",
+      },
+    },
   },
   marketplace: {
     kicker: "स्मार्ट डिस्कवरी",
     title: "मिनटों में सही साइट्स शॉर्टलिस्ट करें",
     description:
       "महत्वपूर्ण मेट्रिक्स से फ़िल्टर करें, विकल्प तुलना करें और एक कैम्पेन सूची बनाएँ।",
-    badge: "लाइव इन्वेंटरी · 98 साइट्स",
+    badge: "लाइव इन्वेंटरी · {count} साइट्स",
     verified: "{count} सत्यापित प्लेसमेंट",
+    verifiedLoading: "इन्वेंटरी लोड हो रही है…",
+    verifiedError: "इन्वेंटरी लोड नहीं हो सकी।",
+    retry: "फिर कोशिश करें",
     updated: "Moz और Ahrefs मेट्रिक्स",
     sortBy: "इससे क्रमबद्ध करें",
+    filterGroup: "मार्केटप्लेस फ़िल्टर",
+    emptyTitle: "इन फ़िल्टर से कोई साइट मेल नहीं खाती",
+    emptyDescription: "कोई फ़िल्टर हटाएँ या पूरी इन्वेंटरी देखने के लिए रीसेट करें।",
+    clearFilters: "फ़िल्टर साफ़ करें",
     sort: {
       recommended: "अनुशंसित",
       price: "कीमत: कम से अधिक",
@@ -302,6 +348,10 @@ export const hi: Dictionary = {
   },
   scrollToTop: {
     label: "ऊपर जाएँ",
+  },
+  preloader: {
+    label: "Linkerbuddy लोड हो रहा है",
+    loading: "प्लेसमेंट तैयार हो रहे हैं…",
   },
   pricing: {
     title: "मूल्य निर्धारण",

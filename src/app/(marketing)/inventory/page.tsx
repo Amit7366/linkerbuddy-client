@@ -1,13 +1,12 @@
 import { InventoryBrowser } from "@/components/marketing/inventory-browser";
 import { ShortlistBar } from "@/components/marketing/shortlist-bar";
-import { buildMetadata } from "@/lib/seo/metadata";
+import { buildLocalizedMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/i18n/request-locale";
 
-export const metadata = buildMetadata({
-  title: "Full inventory",
-  description:
-    "Browse the full guest post inventory with Moz DA, Ahrefs DR, traffic, pricing, and instant TAT.",
-  path: "/inventory",
-});
+export async function generateMetadata() {
+  const locale = await getRequestLocale();
+  return buildLocalizedMetadata({ locale, page: "inventory", path: "/inventory" });
+}
 
 export default function InventoryPage() {
   return (

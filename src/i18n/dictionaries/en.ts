@@ -61,19 +61,61 @@ export const en = {
       niches: "Traffic countries",
       tat: "Publish TAT",
       dofollow: "Max dofollow links",
+      loading: "Loading inventory stats",
+      error: "Couldn’t load inventory stats.",
+      retry: "Retry",
     },
     qualityTitle: "Quality-checked inventory",
     qualitySub: "Live Moz & Ahrefs metrics",
+  },
+  seo: {
+    siteName: "Linkerbuddy",
+    titleTemplate: "{title} | Linkerbuddy",
+    pages: {
+      home: {
+        title: "India Guest Post Sites",
+        description:
+          "Browse verified Indian guest post and link insertion placements with transparent pricing and fast turnaround.",
+      },
+      inventory: {
+        title: "Full inventory",
+        description:
+          "Browse the full guest post inventory with Moz DA, Ahrefs DR, traffic, pricing, and instant TAT.",
+      },
+      about: {
+        title: "About",
+        description: "Learn how Linkerbuddy verifies placements and helps teams buy guest posts with confidence.",
+      },
+      pricing: {
+        title: "Pricing",
+        description: "Simple placement plans for startups, agencies, and enterprise SEO teams.",
+      },
+      blog: {
+        title: "Blog",
+        description: "Guides and updates on guest posts, link building, and marketplace buying.",
+      },
+      contact: {
+        title: "Contact",
+        description: "Talk to the Linkerbuddy team about custom lists, bulk campaigns, and marketplace access.",
+      },
+    },
   },
   marketplace: {
     kicker: "Smart discovery",
     title: "Shortlist the right sites in minutes",
     description:
       "Filter by the metrics that matter, compare options, and build one campaign list.",
-    badge: "Live inventory · 98 sites",
+    badge: "Live inventory · {count} sites",
     verified: "{count} verified placements",
+    verifiedLoading: "Loading inventory…",
+    verifiedError: "Couldn’t load inventory.",
+    retry: "Retry",
     updated: "metrics from Moz & Ahrefs",
     sortBy: "Sort by",
+    filterGroup: "Marketplace filters",
+    emptyTitle: "No sites match these filters",
+    emptyDescription: "Try removing a filter or reset to browse the full inventory.",
+    clearFilters: "Clear filters",
     sort: {
       recommended: "Recommended",
       price: "Price: Low to high",
@@ -305,6 +347,10 @@ export const en = {
   },
   scrollToTop: {
     label: "Scroll to top",
+  },
+  preloader: {
+    label: "Loading Linkerbuddy",
+    loading: "Preparing placements…",
   },
   pricing: {
     title: "Pricing",

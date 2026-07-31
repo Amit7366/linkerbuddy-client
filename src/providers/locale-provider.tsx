@@ -9,9 +9,11 @@ import {
   useState,
   useTransition,
 } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { localeMeta, type Locale } from "@/i18n/config";
 import { writeLocaleCookie } from "@/i18n/cookie";
 import { getDictionary, getMessage } from "@/i18n";
+import { swapLocaleInPath } from "@/i18n/routing";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 
 interface LocaleContextValue {
@@ -32,17 +34,32 @@ interface LocaleProviderProps {
 export function LocaleProvider({ children, initialLocale }: LocaleProviderProps) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    setLocaleState(initialLocale);
+  }, [initialLocale]);
 
   const dictionary = useMemo(() => getDictionary(locale), [locale]);
 
-  const setLocale = useCallback((next: Locale) => {
-    startTransition(() => {
-      setLocaleState(next);
-      writeLocaleCookie(next);
-      document.documentElement.lang = next;
-      document.documentElement.dir = localeMeta[next].dir;
-    });
-  }, []);
+  const setLocale = useCallback(
+    (next: Locale) => {
+      startTransition(() => {
+        setLocaleState(next);
+        writeLocaleCookie(next);
+        document.documentElement.lang = next;
+        document.documentElement.dir = localeMeta[next].dir;
+
+        const nextPath = swapLocaleInPath(pathname, next);
+        const qs = searchParams.toString();
+        const hash = typeof window !== "undefined" ? window.location.hash : "";
+        router.push(`${nextPath}${qs ? `?${qs}` : ""}${hash}`);
+      });
+    },
+    [pathname, router, searchParams],
+  );
 
   useEffect(() => {
     document.documentElement.lang = locale;

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { Geist, Geist_Mono, Noto_Sans_Bengali, Noto_Sans_Devanagari } from "next/font/google";
 import { AppProviders } from "@/providers/app-providers";
 import { siteConfig } from "@/config/site";
-import { LOCALE_COOKIE, localeMeta } from "@/i18n/config";
-import { resolveLocale } from "@/i18n";
+import { localeMeta } from "@/i18n/config";
+import { getRequestLocale } from "@/i18n/request-locale";
+import { getDictionary } from "@/i18n";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,36 +33,40 @@ const notoBengali = Noto_Sans_Bengali({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    default: `${siteConfig.name} | India Guest Post Marketplace`,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  openGraph: {
-    title: siteConfig.name,
-    description: siteConfig.description,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    type: "website",
-    images: [{ url: siteConfig.ogImage }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description,
-  },
-  robots: { index: true, follow: true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const dict = getDictionary(locale);
+
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: {
+      default: dict.seo.titleTemplate.replace("{title}", dict.seo.pages.home.title),
+      template: `%s | ${dict.seo.siteName}`,
+    },
+    description: dict.seo.pages.home.description,
+    openGraph: {
+      title: dict.seo.siteName,
+      description: dict.seo.pages.home.description,
+      url: siteConfig.url,
+      siteName: dict.seo.siteName,
+      type: "website",
+      images: [{ url: siteConfig.ogImage }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.seo.siteName,
+      description: dict.seo.pages.home.description,
+    },
+    robots: { index: true, follow: true },
+  };
+}
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const locale = resolveLocale(cookieStore.get(LOCALE_COOKIE)?.value);
+  const locale = await getRequestLocale();
 
   return (
     <html

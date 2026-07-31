@@ -1,12 +1,12 @@
 import { Container } from "@/components/layout/container";
 import { ContactForm } from "@/components/forms/contact-form";
-import { buildMetadata } from "@/lib/seo/metadata";
+import { buildLocalizedMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/i18n/request-locale";
 
-export const metadata = buildMetadata({
-  title: "Contact",
-  description: "Get in touch with our team.",
-  path: "/contact",
-});
+export async function generateMetadata() {
+  const locale = await getRequestLocale();
+  return buildLocalizedMetadata({ locale, page: "contact", path: "/contact" });
+}
 
 export default function ContactPage() {
   return (

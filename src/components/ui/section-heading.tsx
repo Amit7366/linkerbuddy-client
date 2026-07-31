@@ -5,7 +5,7 @@ interface SectionHeadingProps {
   title: string;
   description?: string;
   align?: "left" | "center" | "split";
-  badge?: string;
+  badge?: React.ReactNode;
   light?: boolean;
   className?: string;
   children?: React.ReactNode;

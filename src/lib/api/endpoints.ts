@@ -14,6 +14,7 @@ export const endpoints = {
   },
   marketplace: {
     list: "/marketplace",
+    stats: "/marketplace/stats",
     detail: (id: number | string) => `/marketplace/${id}`,
   },
   health: "/health",

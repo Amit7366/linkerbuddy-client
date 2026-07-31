@@ -1,11 +1,11 @@
 import { Container } from "@/components/layout/container";
-import { buildMetadata } from "@/lib/seo/metadata";
+import { buildLocalizedMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/i18n/request-locale";
 
-export const metadata = buildMetadata({
-  title: "Pricing",
-  description: "Simple, transparent pricing for every stage of your business.",
-  path: "/pricing",
-});
+export async function generateMetadata() {
+  const locale = await getRequestLocale();
+  return buildLocalizedMetadata({ locale, page: "pricing", path: "/pricing" });
+}
 
 const plans = [
   { name: "Starter", price: "$0", description: "Landing page + lead capture" },

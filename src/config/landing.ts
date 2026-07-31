@@ -43,10 +43,10 @@ export const HERO_TRUST = [
 ] as const;
 
 export const HERO_STATS = [
-  { value: "98", suffix: "", label: "Verified websites", countTo: 98, duration: 1.6 },
-  { value: "10", suffix: "+", label: "Traffic countries", countTo: 10, duration: 1.2 },
+  { value: "—", suffix: "", label: "Verified websites", countTo: null, duration: 1.6 },
+  { value: "—", suffix: "+", label: "Traffic countries", countTo: null, duration: 1.2 },
   { value: "Instant", suffix: "", label: "Publish TAT", countTo: null, duration: 0 },
-  { value: "2", suffix: "", label: "Max dofollow links", countTo: 2, duration: 1.0 },
+  { value: "—", suffix: "", label: "Max dofollow links", countTo: null, duration: 1.0 },
 ] as const;
 
 export const BENEFITS = [

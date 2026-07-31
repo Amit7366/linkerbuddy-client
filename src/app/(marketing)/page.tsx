@@ -4,7 +4,9 @@ import { ShortlistBar } from "@/components/marketing/shortlist-bar";
 import { JsonLd } from "@/components/seo/json-ld";
 import { HomeSkeleton } from "@/components/ui/skeleton";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/json-ld";
-import { buildMetadata } from "@/lib/seo/metadata";
+import { buildLocalizedMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/i18n/request-locale";
+import { getDictionary } from "@/i18n";
 
 const Marketplace = dynamic(
   () => import("@/components/marketing/marketplace").then((m) => m.Marketplace),
@@ -77,23 +79,34 @@ const CtaForm = dynamic(
   },
 );
 
-export const metadata = buildMetadata({
-  title: "India Guest Post Sites",
-  description:
-    "Browse verified Indian guest post and link insertion placements with transparent pricing and fast turnaround.",
-  path: "/",
-});
+export async function generateMetadata() {
+  const locale = await getRequestLocale();
+  return buildLocalizedMetadata({ locale, page: "home", path: "/" });
+}
 
-export default function HomePage() {
+export default async function HomePage() {
+  const locale = await getRequestLocale();
+  const dict = getDictionary(locale);
+
   return (
     <>
-      <JsonLd data={organizationJsonLd()} />
-      <JsonLd data={websiteJsonLd()} />
+      <JsonLd
+        data={organizationJsonLd({
+          locale,
+          description: dict.seo.pages.home.description,
+        })}
+      />
+      <JsonLd
+        data={websiteJsonLd({
+          locale,
+          description: dict.seo.pages.home.description,
+        })}
+      />
       <a
         href="#marketplace"
         className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-card focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-ink"
       >
-        Skip to marketplace
+        {dict.common.skipToMarketplace}
       </a>
       <Hero />
       <Marketplace />

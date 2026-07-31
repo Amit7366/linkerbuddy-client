@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { JsonLd } from "@/components/seo/json-ld";
 import { articleJsonLd } from "@/lib/seo/json-ld";
-import { buildMetadata } from "@/lib/seo/metadata";
+import { buildLocalizedMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/i18n/request-locale";
 
 const posts: Record<string, { title: string; description: string; date: string; content: string }> = {
   "launch-your-landing-page": {
@@ -29,17 +30,21 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = posts[slug];
   if (!post) return {};
+  const locale = await getRequestLocale();
 
-  return buildMetadata({
+  return buildLocalizedMetadata({
+    locale,
+    page: "blog",
+    path: `/blog/${slug}`,
     title: post.title,
     description: post.description,
-    path: `/blog/${slug}`,
   });
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = posts[slug];
+  const locale = await getRequestLocale();
 
   if (!post) notFound();
 
@@ -51,6 +56,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           description: post.description,
           slug,
           datePublished: post.date,
+          locale,
         })}
       />
       <article className="prose prose-zinc max-w-3xl">

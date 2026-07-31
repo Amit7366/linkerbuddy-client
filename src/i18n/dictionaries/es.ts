@@ -61,19 +61,65 @@ export const es: Dictionary = {
       niches: "Países de tráfico",
       tat: "TAT de publicación",
       dofollow: "Máx. enlaces dofollow",
+      loading: "Cargando estadísticas del inventario",
+      error: "No se pudieron cargar las estadísticas.",
+      retry: "Reintentar",
     },
     qualityTitle: "Inventario con control de calidad",
     qualitySub: "Métricas en vivo de Moz y Ahrefs",
+  },
+  seo: {
+    siteName: "Linkerbuddy",
+    titleTemplate: "{title} | Linkerbuddy",
+    pages: {
+      home: {
+        title: "Sitios de guest post en India",
+        description:
+          "Explora colocaciones verificadas de guest post e inserción de enlaces en India con precios transparentes y plazos claros.",
+      },
+      inventory: {
+        title: "Inventario completo",
+        description:
+          "Consulta el inventario completo de guest posts con Moz DA, Ahrefs DR, tráfico, precios y TAT instantáneo.",
+      },
+      about: {
+        title: "Acerca de",
+        description:
+          "Descubre cómo Linkerbuddy verifica colocaciones y ayuda a los equipos a comprar guest posts con confianza.",
+      },
+      pricing: {
+        title: "Precios",
+        description:
+          "Planes de colocación simples para startups, agencias y equipos SEO empresariales.",
+      },
+      blog: {
+        title: "Blog",
+        description:
+          "Guías y novedades sobre guest posts, link building y compras en el marketplace.",
+      },
+      contact: {
+        title: "Contacto",
+        description:
+          "Habla con el equipo de Linkerbuddy sobre listas personalizadas, campañas masivas y acceso al marketplace.",
+      },
+    },
   },
   marketplace: {
     kicker: "Descubrimiento inteligente",
     title: "Selecciona los sitios correctos en minutos",
     description:
       "Filtra por las métricas que importan, compara opciones y arma una sola lista de campaña.",
-    badge: "Inventario en vivo · 98 sitios",
+    badge: "Inventario en vivo · {count} sitios",
     verified: "{count} colocaciones verificadas",
+    verifiedLoading: "Cargando inventario…",
+    verifiedError: "No se pudo cargar el inventario.",
+    retry: "Reintentar",
     updated: "métricas de Moz y Ahrefs",
     sortBy: "Ordenar por",
+    filterGroup: "Filtros del marketplace",
+    emptyTitle: "Ningún sitio coincide con estos filtros",
+    emptyDescription: "Prueba a quitar un filtro o restablece para ver todo el inventario.",
+    clearFilters: "Borrar filtros",
     sort: {
       recommended: "Recomendado",
       price: "Precio: de menor a mayor",
@@ -305,6 +351,10 @@ export const es: Dictionary = {
   },
   scrollToTop: {
     label: "Volver arriba",
+  },
+  preloader: {
+    label: "Cargando Linkerbuddy",
+    loading: "Preparando colocaciones…",
   },
   pricing: {
     title: "Precios",

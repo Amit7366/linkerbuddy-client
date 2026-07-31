@@ -1,67 +1,70 @@
 "use client";
 
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
-import {
-  MARKETPLACE_FILTERS,
-  SORT_OPTIONS,
-  type FilterKey,
-  type SiteListing,
-} from "@/config/landing";
+import { SORT_OPTIONS, type SiteListing } from "@/config/landing";
 import type { SortValue } from "@/lib/site-listings";
 import { listMarketplace } from "@/lib/api/marketplace";
-import { useTranslations } from "@/providers/locale-provider";
+import { useMarketplaceFilters } from "@/hooks/use-marketplace-filters";
+import { useTranslations, useLocale } from "@/providers/locale-provider";
+import { MarketplaceFilterBar } from "@/components/marketing/marketplace-filter-bar";
 import { SiteListingRow } from "@/components/marketing/site-listing-row";
 import { SiteDetailModal } from "@/components/marketing/site-detail-modal";
 import { InventorySkeletonList } from "@/components/marketing/inventory-skeleton";
-import { cn } from "@/lib/utils";
+import { HomeSkeleton } from "@/components/ui/skeleton";
+import { withLocalePrefix } from "@/i18n/routing";
 
 const PAGE_SIZE = 12;
-
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export function InventoryBrowser() {
+function InventoryBrowserInner() {
   const t = useTranslations();
+  const { locale } = useLocale();
   const reduce = useReducedMotion();
-  const [filter, setFilter] = useState<FilterKey>("all");
-  const [sort, setSort] = useState<SortValue>("recommended");
   const [page, setPage] = useState(1);
   const [sites, setSites] = useState<SiteListing[]>([]);
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState<number | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [listError, setListError] = useState(false);
   const [detailSite, setDetailSite] = useState<SiteListing | null>(null);
-  const [, startTransition] = useTransition();
+  const {
+    sort,
+    constrained,
+    toggleFilter,
+    clearFilters,
+    setSort,
+    toApiParams,
+    isSelected,
+  } = useMarketplaceFilters();
 
   const fetchPage = useCallback(
     async (nextPage: number, replace: boolean) => {
-      const data = await listMarketplace({
-        filter,
-        sort,
-        page: nextPage,
-        limit: PAGE_SIZE,
-      });
+      const data = await listMarketplace(toApiParams(nextPage, PAGE_SIZE));
       setTotal(data.total);
       setSites((prev) => (replace ? data.listings : [...prev, ...data.listings]));
       setPage(nextPage);
     },
-    [filter, sort],
+    [toApiParams],
   );
 
   useEffect(() => {
     let cancelled = false;
     setInitialLoading(true);
+    setListError(false);
     setSites([]);
+    setTotal(null);
     setPage(1);
     void fetchPage(1, true)
       .catch(() => {
         if (!cancelled) {
           setSites([]);
-          setTotal(0);
+          setTotal(null);
+          setListError(true);
         }
       })
       .finally(() => {
@@ -72,14 +75,9 @@ export function InventoryBrowser() {
     };
   }, [fetchPage]);
 
-  const hasMore = sites.length < total;
-  const remaining = Math.max(0, total - sites.length);
-
-  const handleFilter = (key: FilterKey) => {
-    startTransition(() => {
-      setFilter(key);
-    });
-  };
+  const safeTotal = total ?? 0;
+  const hasMore = sites.length < safeTotal;
+  const remaining = Math.max(0, safeTotal - sites.length);
 
   const loadMore = useCallback(async () => {
     if (loadingMore || !hasMore) return;
@@ -107,63 +105,40 @@ export function InventoryBrowser() {
             </p>
           </div>
           <Link
-            href="/#marketplace"
+            href={`${withLocalePrefix("/", locale)}#marketplace`}
             className="inline-flex w-fit items-center rounded-lg border border-line bg-card px-3.5 py-2 text-[11px] font-bold text-ink transition-colors hover:bg-sky"
           >
             ← {t("inventory.backHome")}
           </Link>
         </div>
 
-        <div
-          className="mb-5 flex gap-2.5 overflow-x-auto pr-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden tablet:grid tablet:grid-cols-7 tablet:overflow-visible tablet:pr-0"
-          role="group"
-          aria-label="Quick site filters"
-        >
-          {MARKETPLACE_FILTERS.map((item) => (
-            <button
-              key={item.key}
-              type="button"
-              onClick={() => handleFilter(item.key)}
-              className={cn(
-                "flex min-w-[132px] cursor-pointer items-center gap-2.5 rounded-[10px] border border-line bg-card px-2.5 py-3 text-left hover:border-[#72a9f8] hover:bg-sky hover:shadow-[0_5px_18px_#2067d317] tablet:min-w-0",
-                filter === item.key && "border-[#72a9f8] bg-sky shadow-[0_5px_18px_#2067d317]",
-              )}
-            >
-              <span
-                className={cn(
-                  "grid size-[29px] place-items-center rounded-lg bg-sky font-extrabold text-brand",
-                  filter === item.key && "bg-brand text-white",
-                )}
-              >
-                {item.icon}
-              </span>
-              <span className="flex flex-col gap-0.5">
-                <b className="text-[10px] text-ink">{t(`marketplace.filters.${item.key}.label`)}</b>
-                <small className="text-[8px] text-muted">
-                  {t(`marketplace.filters.${item.key}.sub`)}
-                </small>
-              </span>
-            </button>
-          ))}
-        </div>
+        <MarketplaceFilterBar
+          className="mb-5"
+          isSelected={isSelected}
+          onToggle={toggleFilter}
+        />
 
         <div className="mb-3 flex flex-col items-start justify-between gap-2.5 text-[11px] tablet:flex-row tablet:items-center">
           <span className="text-muted">
-            <b className="text-ink">
-              {t("inventory.showing", {
-                shown: sites.length,
-                total,
-              })}
-            </b>{" "}
-            · {t("marketplace.updated")}
+            {initialLoading || total === null ? (
+              <span className="inline-block h-4 w-40 animate-pulse rounded bg-line/60" />
+            ) : (
+              <>
+                <b className="text-ink">
+                  {t("inventory.showing", {
+                    shown: sites.length,
+                    total,
+                  })}
+                </b>{" "}
+                · {t("marketplace.updated")}
+              </>
+            )}
           </span>
           <label className="flex items-center gap-2 text-muted">
             {t("marketplace.sortBy")}
             <select
               value={sort}
-              onChange={(e) => {
-                setSort(e.target.value as SortValue);
-              }}
+              onChange={(e) => setSort(e.target.value as SortValue)}
               className="rounded-lg border border-line bg-card px-3 py-2 text-[11px] text-ink"
             >
               {SORT_OPTIONS.map((option) => (
@@ -197,6 +172,40 @@ export function InventoryBrowser() {
 
           {initialLoading ? (
             <InventorySkeletonList count={PAGE_SIZE} />
+          ) : listError ? (
+            <div className="flex flex-col items-center gap-3 px-4 py-12 text-center">
+              <p className="m-0 text-[12px] text-muted">{t("marketplace.verifiedError")}</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setInitialLoading(true);
+                  void fetchPage(1, true)
+                    .catch(() => setListError(true))
+                    .finally(() => setInitialLoading(false));
+                }}
+                className="cursor-pointer rounded-lg border border-line bg-sky px-3 py-2 text-[11px] font-bold text-brand hover:bg-brand hover:text-white"
+              >
+                {t("marketplace.retry")}
+              </button>
+            </div>
+          ) : sites.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 px-4 py-12 text-center">
+              <p className="m-0 text-[14px] font-bold text-ink">
+                {t("marketplace.emptyTitle")}
+              </p>
+              <p className="m-0 max-w-sm text-[12px] text-muted">
+                {t("marketplace.emptyDescription")}
+              </p>
+              {constrained ? (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="cursor-pointer rounded-lg border border-line bg-sky px-3 py-2 text-[11px] font-bold text-brand hover:bg-brand hover:text-white"
+                >
+                  {t("marketplace.clearFilters")}
+                </button>
+              ) : null}
+            </div>
           ) : (
             <>
               <AnimatePresence initial={false}>
@@ -224,7 +233,7 @@ export function InventoryBrowser() {
         </div>
 
         <div className="mt-6 flex flex-col items-center gap-3">
-          {!initialLoading && hasMore ? (
+          {!initialLoading && !listError && hasMore ? (
             <Button
               variant="ghost"
               disabled={loadingMore}
@@ -242,9 +251,9 @@ export function InventoryBrowser() {
             </Button>
           ) : null}
 
-          {!initialLoading && !hasMore ? (
+          {!initialLoading && !listError && sites.length > 0 && !hasMore ? (
             <p className="text-[11px] text-muted">
-              {t("inventory.allLoaded", { total })}
+              {t("inventory.allLoaded", { total: safeTotal })}
             </p>
           ) : null}
         </div>
@@ -256,5 +265,13 @@ export function InventoryBrowser() {
         onClose={() => setDetailSite(null)}
       />
     </div>
+  );
+}
+
+export function InventoryBrowser() {
+  return (
+    <Suspense fallback={<HomeSkeleton />}>
+      <InventoryBrowserInner />
+    </Suspense>
   );
 }

@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { Container } from "@/components/layout/container";
-import { buildMetadata } from "@/lib/seo/metadata";
+import { buildLocalizedMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/i18n/request-locale";
+import { withLocalePrefix } from "@/i18n/routing";
 
-export const metadata = buildMetadata({
-  title: "Blog",
-  description: "Insights on growing your business online.",
-  path: "/blog",
-});
+export async function generateMetadata() {
+  const locale = await getRequestLocale();
+  return buildLocalizedMetadata({ locale, page: "blog", path: "/blog" });
+}
 
 const posts = [
   {
@@ -23,14 +24,19 @@ const posts = [
   },
 ];
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const locale = await getRequestLocale();
+
   return (
     <Container className="py-20">
       <h1 className="text-4xl font-bold">Blog</h1>
       <div className="mt-10 space-y-8">
         {posts.map((post) => (
           <article key={post.slug} className="border-b border-zinc-200 pb-8">
-            <Link href={`/blog/${post.slug}`} className="group">
+            <Link
+              href={withLocalePrefix(`/blog/${post.slug}`, locale)}
+              className="group"
+            >
               <h2 className="text-2xl font-semibold group-hover:text-zinc-600">{post.title}</h2>
             </Link>
             <p className="mt-2 text-sm text-zinc-500">{post.date}</p>
