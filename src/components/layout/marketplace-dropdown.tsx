@@ -18,6 +18,8 @@ interface MarketplaceDropdownProps {
   className?: string;
   onSelect?: (country: MarketplaceCountry) => void;
   fullWidth?: boolean;
+  /** Matches other nav items: orange label + short underline when Marketplace is the active section/page. */
+  active?: boolean;
 }
 
 function codeFromCountryParam(country: string | null): MarketplaceCountryCode | null {
@@ -33,6 +35,7 @@ function MarketplaceDropdownInner({
   className,
   onSelect,
   fullWidth = false,
+  active = false,
 }: MarketplaceDropdownProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<MarketplaceCountryCode>("IN");
@@ -117,13 +120,18 @@ function MarketplaceDropdownInner({
       <button
         type="button"
         className={cn(
-          "inline-flex items-center gap-1.5 border-0 bg-transparent text-[13px] font-semibold text-[var(--nav-link)] transition-colors hover:text-white",
+          "relative inline-flex items-center gap-1.5 border-0 bg-transparent text-[13px] font-semibold transition-colors",
           fullWidth && "w-full justify-between py-1",
-          open && "text-white",
+          active
+            ? "text-[var(--orange)] after:absolute after:right-0 after:-bottom-1 after:left-0 after:mx-auto after:h-[2px] after:w-4 after:rounded-full after:bg-[var(--orange)]"
+            : open
+              ? "text-white"
+              : "text-[var(--nav-link)] hover:text-white",
         )}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listId}
+        aria-current={active ? "true" : undefined}
         onClick={() => setOpen((prev) => !prev)}
       >
         <span className="inline-flex items-center gap-2">

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { UserRound } from "lucide-react";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import { Logo } from "@/components/ui/logo";
@@ -11,17 +12,26 @@ import { MarketplaceDropdown } from "@/components/layout/marketplace-dropdown";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { useToast } from "@/components/ui/toast";
-import { useTranslations } from "@/providers/locale-provider";
+import { useTranslations, useLocale } from "@/providers/locale-provider";
 import { useSession } from "@/providers/session-provider";
+import {
+  useActiveHomeNavSection,
+  type HomeNavSection,
+} from "@/hooks/use-active-home-nav";
+import { withLocalePrefix } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { key: "nav.services", href: "#services" },
-  { key: "nav.agencies", href: "#agencies" },
-  { key: "nav.howItWorks", href: "#how-it-works" },
-  { key: "nav.pricing", href: "#pricing" },
-  { key: "nav.resources", href: "#faq" },
-] as const;
+  { key: "nav.services", href: "#services", section: "services" },
+  { key: "nav.agencies", href: "#agencies", section: "agencies" },
+  { key: "nav.howItWorks", href: "#how-it-works", section: "how-it-works" },
+  { key: "nav.pricing", href: "#pricing", section: "pricing" },
+  { key: "nav.resources", href: "#faq", section: "faq" },
+] as const satisfies ReadonlyArray<{
+  key: string;
+  href: `#${HomeNavSection}`;
+  section: HomeNavSection;
+}>;
 
 function ProfileNavLink({
   name,
@@ -51,13 +61,34 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const { showToast } = useToast();
   const t = useTranslations();
+  const { locale } = useLocale();
   const { user, loading } = useSession();
+  const pathname = usePathname();
+  const { active, isHome, setActive } = useActiveHomeNavSection();
 
   const displayName = user?.name?.trim() || user?.email?.split("@")[0] || "Account";
+  const homeHref = withLocalePrefix("/", locale);
 
   const scrollTo = (selector: string) => {
     document.querySelector(selector)?.scrollIntoView({ behavior: "smooth" });
     setOpen(false);
+  };
+
+  const handleNavClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    section: HomeNavSection,
+  ) => {
+    setActive(section);
+    setOpen(false);
+
+    if (!isHome) return;
+
+    event.preventDefault();
+    const el = document.getElementById(section);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      window.history.replaceState(null, "", `${pathname}#${section}`);
+    }
   };
 
   return (
@@ -79,8 +110,10 @@ export function Header() {
         >
           <MarketplaceDropdown
             fullWidth={open}
+            active={active === "marketplace"}
             onSelect={(country) => {
               setOpen(false);
+              setActive("marketplace");
               showToast(
                 t("toast.marketplaceSelected", {
                   name: t(`marketplaceCountries.${country.code}.name`),
@@ -89,16 +122,25 @@ export function Header() {
             }}
           />
 
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white"
-              onClick={() => setOpen(false)}
-            >
-              {t(item.key)}
-            </Link>
-          ))}
+          {NAV_ITEMS.map((item) => {
+            const isActive = active === item.section;
+            return (
+              <Link
+                key={item.href}
+                href={`${homeHref}${item.href}`}
+                aria-current={isActive ? "true" : undefined}
+                className={cn(
+                  "relative text-[13px] font-semibold no-underline transition-colors",
+                  isActive
+                    ? "text-[var(--orange)] after:absolute after:right-0 after:-bottom-1 after:left-0 after:mx-auto after:h-[2px] after:w-4 after:rounded-full after:bg-[var(--orange)]"
+                    : "text-[var(--nav-link)] hover:text-white",
+                )}
+                onClick={(event) => handleNavClick(event, item.section)}
+              >
+                {t(item.key)}
+              </Link>
+            );
+          })}
 
           {open && !loading && user ? (
             <ProfileNavLink name={displayName} className="mt-2 tablet:hidden" />
