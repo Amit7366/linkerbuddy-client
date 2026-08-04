@@ -1,16 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useShortlist } from "@/providers/shortlist-provider";
-import { useToast } from "@/components/ui/toast";
+import { useCart } from "@/providers/shortlist-provider";
 import { useTranslations } from "@/providers/locale-provider";
 
 export function ShortlistBar() {
-  const { count, total, clear } = useShortlist();
-  const { showToast } = useToast();
+  const { count, total, clear, openDrawer, presentation } = useCart();
   const t = useTranslations();
 
-  if (count === 0) return null;
+  if (presentation !== "bar" || count === 0) return null;
 
   return (
     <div
@@ -42,7 +40,7 @@ export function ShortlistBar() {
         {t("shortlist.clear")}
       </button>
 
-      <Button size="sm" onClick={() => showToast(t("shortlist.ready"))}>
+      <Button size="sm" onClick={openDrawer}>
         {t("shortlist.review")}
       </Button>
     </div>

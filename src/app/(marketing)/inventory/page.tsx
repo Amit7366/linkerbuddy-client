@@ -1,5 +1,4 @@
 import { InventoryBrowser } from "@/components/marketing/inventory-browser";
-import { ShortlistBar } from "@/components/marketing/shortlist-bar";
 import { buildLocalizedMetadata } from "@/lib/seo/metadata";
 import { getRequestLocale } from "@/i18n/request-locale";
 
@@ -9,10 +8,5 @@ export async function generateMetadata() {
 }
 
 export default function InventoryPage() {
-  return (
-    <>
-      <InventoryBrowser />
-      <ShortlistBar />
-    </>
-  );
+  return <InventoryBrowser />;
 }

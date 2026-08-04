@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutList, LogOut, Menu, Plus, X } from "lucide-react";
+import { LayoutList, LogOut, Menu, Package, Plus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { useSuperAdminAuth } from "./super-admin-shell";
@@ -19,6 +19,12 @@ const navItems = [
     href: "/dashboard/super-admin/listings/new",
     label: "Add listing",
     icon: Plus,
+    exact: false,
+  },
+  {
+    href: "/dashboard/super-admin/orders",
+    label: "Orders",
+    icon: Package,
     exact: false,
   },
 ];
@@ -137,10 +143,14 @@ export function SuperAdminSidebar({ children }: { children: React.ReactNode }) {
           </button>
           <div className="min-w-0 flex-1">
             <h1 className="truncate text-base font-semibold text-zinc-900">
-              Marketplace
+              {pathname.startsWith("/dashboard/super-admin/orders")
+                ? "Orders"
+                : "Marketplace"}
             </h1>
             <p className="truncate text-xs text-zinc-500">
-              Manage inventory listings
+              {pathname.startsWith("/dashboard/super-admin/orders")
+                ? "Manage customer orders and fulfillment"
+                : "Manage inventory listings"}
             </p>
           </div>
         </header>

@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -7,9 +8,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import { AuthFormPanel } from "@/components/forms/auth-forms";
 import { AuthBrandPanel } from "@/components/auth/auth-brand-panel";
 import { Logo } from "@/components/ui/logo";
+import { useSession } from "@/providers/session-provider";
 import { cn } from "@/lib/utils";
-
-const ease = [0.22, 1, 0.36, 1] as const;
 
 export type AuthMode = "login" | "register";
 
@@ -17,16 +17,40 @@ interface AuthShellProps {
   mode: AuthMode;
 }
 
-export function AuthShell({ mode }: AuthShellProps) {
+function accountHomeForRole(role?: string) {
+  if (role === "SUPER_ADMIN") return "/dashboard/super-admin";
+  return "/account";
+}
+
+function AuthShellInner({ mode }: AuthShellProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const reduce = useReducedMotion();
+  const { user, loading } = useSession();
+
+  useEffect(() => {
+    if (loading || !user) return;
+    const redirect = searchParams.get("redirect");
+    if (redirect && redirect.startsWith("/") && !redirect.startsWith("//")) {
+      router.replace(redirect);
+      return;
+    }
+    router.replace(accountHomeForRole(user.role));
+  }, [loading, user, router, searchParams]);
 
   function switchMode(next: AuthMode) {
     if (next === mode) return;
     const redirect = searchParams.get("redirect");
     const qs = redirect ? `?redirect=${encodeURIComponent(redirect)}` : "";
     router.replace(next === "login" ? `/login${qs}` : `/register${qs}`);
+  }
+
+  if (loading || user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background text-sm text-muted">
+        {user ? "Redirecting…" : "Checking session…"}
+      </div>
+    );
   }
 
   return (
@@ -88,5 +112,19 @@ export function AuthShell({ mode }: AuthShellProps) {
 
       <AuthBrandPanel />
     </div>
+  );
+}
+
+export function AuthShell({ mode }: AuthShellProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center text-sm text-muted">
+          Loading…
+        </div>
+      }
+    >
+      <AuthShellInner mode={mode} />
+    </Suspense>
   );
 }

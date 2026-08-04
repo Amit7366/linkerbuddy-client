@@ -29,6 +29,7 @@ const EXCLUDED_PREFIXES = [
   "/account",
   "/products",
   "/cart",
+  "/checkout",
   "/categories",
   "/brand",
   "/og",

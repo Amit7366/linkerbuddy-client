@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/marketing/hero";
-import { ShortlistBar } from "@/components/marketing/shortlist-bar";
 import { JsonLd } from "@/components/seo/json-ld";
 import { HomeSkeleton } from "@/components/ui/skeleton";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/json-ld";
@@ -116,7 +115,6 @@ export default async function HomePage() {
       <Pricing />
       <Faq />
       <CtaForm />
-      <ShortlistBar />
     </>
   );
 }

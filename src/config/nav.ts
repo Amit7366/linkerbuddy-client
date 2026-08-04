@@ -100,7 +100,20 @@ export const crmNav = [
 ] as const;
 
 export const accountNav = [
-  { title: "Orders", href: "/account/orders" },
-  { title: "Wishlist", href: "/account/wishlist" },
-  { title: "Profile", href: "/account/settings/profile" },
+  { title: "Overview", href: "/account", icon: "overview", exact: true },
+  { title: "My orders", href: "/account/orders", icon: "orders" },
+  { title: "Reviews", href: "/account/reviews", icon: "reviews" },
+  { title: "Delivery addresses", href: "/account/settings/billing", icon: "addresses" },
+  { title: "Recently viewed", href: "/account/recent", icon: "recent" },
+  { title: "Favorite items", href: "/account/wishlist", icon: "favorites" },
+] as const;
+
+export const accountQuickLinks = [
+  { title: "Profile", href: "/account/settings/profile", tone: "profile" },
+  { title: "Gifts", href: "/account/gifts", tone: "gifts" },
+  { title: "Wallet", href: "/account/wallet", tone: "wallet" },
+] as const;
+
+export const accountFooterNav = [
+  { title: "Settings", href: "/account/settings/profile", icon: "settings" },
 ] as const;

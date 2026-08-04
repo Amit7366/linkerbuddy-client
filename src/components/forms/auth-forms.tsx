@@ -16,6 +16,7 @@ import {
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { login, register } from "@/lib/api/auth";
+import { useSession } from "@/providers/session-provider";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -26,9 +27,17 @@ const loginSchema = z.object({
 
 const registerSchema = z
   .object({
-    name: z.string().min(1, "Name is required"),
-    email: z.string().email("Enter a valid email"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    name: z.string().trim().min(1, "Name is required"),
+    email: z.string().trim().email("Enter a valid email"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .refine((password) => /[a-z]/.test(password) && /[A-Z]/.test(password), {
+        message: "Password must include lowercase and uppercase letters",
+      })
+      .refine((password) => /[^A-Za-z]/.test(password), {
+        message: "Password must include a number or symbol",
+      }),
     confirmPassword: z.string().min(1, "Confirm your password"),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -66,10 +75,10 @@ function isEmailValid(email: string) {
 function safeRedirect(raw: string | null, role?: string): string {
   if (!raw || !raw.startsWith("/") || raw.startsWith("//")) {
     if (role === "SUPER_ADMIN") return "/dashboard/super-admin";
-    return "/account/settings/profile";
+    return "/account";
   }
   if (raw.startsWith("/dashboard")) {
-    return role === "SUPER_ADMIN" ? raw : "/account/settings/profile";
+    return role === "SUPER_ADMIN" ? raw : "/account";
   }
   return raw;
 }
@@ -215,6 +224,7 @@ function SubmitButton({
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { establishSession } = useSession();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -234,6 +244,7 @@ export function LoginForm() {
     setLoading(true);
     try {
       const data = await login(parsed.data.email, parsed.data.password);
+      establishSession(data.user);
       router.push(safeRedirect(searchParams.get("redirect"), data.user.role));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
@@ -284,6 +295,7 @@ export function LoginForm() {
 export function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { establishSession } = useSession();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -319,8 +331,9 @@ export function RegisterForm() {
 
     setLoading(true);
     try {
-      await register(parsed.data.name, parsed.data.email, parsed.data.password);
-      router.push(safeRedirect(searchParams.get("redirect")));
+      const data = await register(parsed.data.name, parsed.data.email, parsed.data.password);
+      establishSession(data.user);
+      router.push(safeRedirect(searchParams.get("redirect"), data.user.role));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
