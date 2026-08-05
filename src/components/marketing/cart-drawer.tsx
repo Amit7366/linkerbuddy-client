@@ -5,18 +5,21 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Minus, Plus, Trash2, X } from "lucide-react";
 import { useCart } from "@/providers/shortlist-provider";
-import { useTranslations } from "@/providers/locale-provider";
+import { useLocale, useTranslations } from "@/providers/locale-provider";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { SiteDetailModal } from "@/components/marketing/site-detail-modal";
 import type { SiteListing } from "@/config/landing";
+import { withLocalePrefix } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export function CartDrawer() {
   const t = useTranslations();
+  const { locale } = useLocale();
   const reduce = useReducedMotion();
   const titleId = useId();
+  const checkoutHref = withLocalePrefix("/checkout", locale);
   const {
     items,
     total,
@@ -235,7 +238,7 @@ export function CartDrawer() {
                     </Button>
                   ) : (
                     <ButtonLink
-                      href="/checkout"
+                      href={checkoutHref}
                       className="flex-[1.4] text-center"
                       onClick={closeDrawer}
                     >

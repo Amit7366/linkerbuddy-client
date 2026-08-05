@@ -15,20 +15,22 @@ interface AppProvidersProps {
 }
 
 export function AppProviders({ children, locale }: AppProvidersProps) {
+  // SessionProvider must stay outside Suspense — LocaleProvider uses useSearchParams,
+  // and remounting the suspense boundary was wiping in-memory auth on route changes.
   return (
     <ThemeProvider>
-      <Suspense fallback={null}>
-        <LocaleProvider initialLocale={locale}>
-          <QueryProvider>
-            <SessionProvider>
+      <QueryProvider>
+        <SessionProvider>
+          <Suspense fallback={null}>
+            <LocaleProvider initialLocale={locale}>
               <CartProvider>
                 <PagePreloader />
                 {children}
               </CartProvider>
-            </SessionProvider>
-          </QueryProvider>
-        </LocaleProvider>
-      </Suspense>
+            </LocaleProvider>
+          </Suspense>
+        </SessionProvider>
+      </QueryProvider>
     </ThemeProvider>
   );
 }

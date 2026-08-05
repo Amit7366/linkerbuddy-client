@@ -27,8 +27,16 @@ function withLocaleCookie(response: NextResponse, locale: string) {
   return response;
 }
 
+function hasSession(request: NextRequest) {
+  return Boolean(request.cookies.get("refreshToken")?.value);
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Do NOT bounce /login → /account based only on cookie presence.
+  // Invalid/stale refresh cookies caused an infinite account↔login loader loop.
+  // AuthShell redirects after the session is actually restored.
 
   const isAccountRoute = protectedAccountPaths.some((p) => pathname.startsWith(p));
   const isCrmRoute = protectedCrmPaths.some((p) => pathname.startsWith(p));
@@ -37,9 +45,7 @@ export function middleware(request: NextRequest) {
   );
 
   if (isAccountRoute || isCrmRoute || isDashboardRoute) {
-    const refreshToken = request.cookies.get("refreshToken");
-
-    if (!refreshToken) {
+    if (!hasSession(request)) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);

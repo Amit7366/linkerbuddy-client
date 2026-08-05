@@ -5,12 +5,15 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
-import { useTranslations } from "@/providers/locale-provider";
+import { useLocale, useTranslations } from "@/providers/locale-provider";
+import { withLocalePrefix } from "@/i18n/routing";
 
 function SuccessContent() {
   const t = useTranslations();
+  const { locale } = useLocale();
   const params = useSearchParams();
   const orderNumber = params.get("order") ?? "";
+  const homeHref = withLocalePrefix("/", locale);
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-lg flex-col items-center justify-center px-4 py-16 text-center">
@@ -30,7 +33,7 @@ function SuccessContent() {
         </div>
       ) : null}
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <ButtonLink href="/">{t("checkout.backHome")}</ButtonLink>
+        <ButtonLink href={homeHref}>{t("checkout.backHome")}</ButtonLink>
         <Link
           href="/account/orders"
           className="rounded-lg px-4 py-2.5 text-sm font-semibold text-navy underline-offset-2 hover:underline"

@@ -1,6 +1,8 @@
 import type { NextResponse } from "next/server";
 
 export const REFRESH_COOKIE_NAME = "refreshToken";
+/** Readable marker so the client can skip anonymous refresh calls (httpOnly token is invisible to JS). */
+export const SESSION_HINT_COOKIE = "lb_has_session";
 export const REFRESH_COOKIE_MAX_AGE = 2 * 60 * 60; // 2 hours (seconds)
 
 export function refreshCookieOptions() {
@@ -14,8 +16,20 @@ export function refreshCookieOptions() {
   };
 }
 
+function hintCookieOptions() {
+  const secure = process.env.NODE_ENV === "production";
+  return {
+    httpOnly: false,
+    secure,
+    sameSite: "lax" as const,
+    path: "/",
+    maxAge: REFRESH_COOKIE_MAX_AGE,
+  };
+}
+
 export function setRefreshCookie(response: NextResponse, token: string) {
   response.cookies.set(REFRESH_COOKIE_NAME, token, refreshCookieOptions());
+  response.cookies.set(SESSION_HINT_COOKIE, "1", hintCookieOptions());
 }
 
 export function clearRefreshCookie(response: NextResponse) {
@@ -23,6 +37,16 @@ export function clearRefreshCookie(response: NextResponse) {
     ...refreshCookieOptions(),
     maxAge: 0,
   });
+  response.cookies.set(SESSION_HINT_COOKIE, "", {
+    ...hintCookieOptions(),
+    maxAge: 0,
+  });
+}
+
+/** Client-only: true when a session cookie is likely present. */
+export function hasSessionHint(): boolean {
+  if (typeof document === "undefined") return false;
+  return document.cookie.split("; ").some((part) => part.startsWith(`${SESSION_HINT_COOKIE}=`));
 }
 
 /** Read refreshToken from an upstream API Set-Cookie header. */

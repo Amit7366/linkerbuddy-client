@@ -25,9 +25,8 @@ import {
   Wallet,
   X,
 } from "lucide-react";
-import { getAccessToken } from "@/lib/api/client";
-import { getMe, logout, refreshSession } from "@/lib/api/auth";
 import { canAccessAccount } from "@/lib/auth/permissions";
+import { useSession } from "@/providers/session-provider";
 import { siteConfig } from "@/config/site";
 import {
   accountFooterNav,
@@ -86,59 +85,41 @@ function initials(user: AuthUser) {
 export function AccountShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const {
+    user: sessionUser,
+    loading: sessionLoading,
+    signOut: sessionSignOut,
+    refreshUser: sessionRefreshUser,
+  } = useSession();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function boot() {
-      try {
-        if (!getAccessToken()) {
-          await refreshSession();
-        }
-        const me = await getMe();
-        if (cancelled) return;
-        if (!canAccessAccount(me.role)) {
-          router.replace("/login");
-          return;
-        }
-        setUser(me);
-      } catch {
-        if (!cancelled) {
-          const redirect = encodeURIComponent(pathname || "/account");
-          router.replace(`/login?redirect=${redirect}`);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
+    if (sessionLoading) return;
+    if (!sessionUser) {
+      const redirect = encodeURIComponent(pathname || "/account");
+      router.replace(`/login?redirect=${redirect}`);
+      return;
     }
-
-    void boot();
-    return () => {
-      cancelled = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router]);
+    if (!canAccessAccount(sessionUser.role)) {
+      router.replace("/login");
+    }
+  }, [sessionLoading, sessionUser, pathname, router]);
 
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
   const refreshUser = useCallback(async () => {
-    const me = await getMe();
-    setUser(me);
-  }, []);
+    await sessionRefreshUser();
+  }, [sessionRefreshUser]);
 
   const signOut = useCallback(async () => {
-    try {
-      await logout();
-    } catch {
-      // ignore
-    }
+    await sessionSignOut();
     router.replace("/login");
-  }, [router]);
+  }, [sessionSignOut, router]);
+
+  const user = sessionUser;
+  const loading = sessionLoading;
 
   const value = useMemo(
     () => (user ? { user, loading, signOut, refreshUser } : null),
@@ -147,8 +128,11 @@ export function AccountShell({ children }: { children: React.ReactNode }) {
 
   if (loading || !user || !value) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--surface)]">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[var(--surface)] px-4 text-center">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand border-t-transparent" />
+        <p className="text-sm text-muted">
+          {loading ? "Loading your account…" : "Redirecting to sign in…"}
+        </p>
       </div>
     );
   }
@@ -162,8 +146,8 @@ export function AccountShell({ children }: { children: React.ReactNode }) {
   }
 
   const sidebar = (
-    <div className="flex h-full flex-col">
-      <div className="border-b border-line px-5 py-5">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="shrink-0 border-b border-line px-5 py-5">
         <Link href="/" className="text-sm font-bold text-navy no-underline">
           {siteConfig.name}
         </Link>
@@ -184,6 +168,7 @@ export function AccountShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setMobileOpen(false)}
                 className="flex flex-col items-center gap-1.5 rounded-xl border border-line bg-card px-2 py-3 text-center no-underline transition hover:border-brand/30"
               >
                 <span
@@ -201,7 +186,10 @@ export function AccountShell({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3 py-4" aria-label="Account">
+      <nav
+        className="min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-contain px-3 py-4"
+        aria-label="Account"
+      >
         {accountNav.map((item) => {
           const Icon = NAV_ICONS[item.icon];
           const active = isActive(item.href, "exact" in item ? item.exact : false);
@@ -209,6 +197,7 @@ export function AccountShell({ children }: { children: React.ReactNode }) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => setMobileOpen(false)}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium no-underline transition-colors",
                 active
@@ -223,7 +212,7 @@ export function AccountShell({ children }: { children: React.ReactNode }) {
         })}
       </nav>
 
-      <div className="space-y-1 border-t border-line px-3 py-4">
+      <div className="shrink-0 space-y-1 border-t border-line px-3 py-4">
         {accountFooterNav.map((item) => {
           const Icon = NAV_ICONS[item.icon];
           const active = isActive(item.href);
@@ -231,6 +220,7 @@ export function AccountShell({ children }: { children: React.ReactNode }) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => setMobileOpen(false)}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium no-underline transition-colors",
                 active
@@ -259,7 +249,7 @@ export function AccountShell({ children }: { children: React.ReactNode }) {
     <AccountAuthContext.Provider value={value}>
       <div className="min-h-screen bg-[var(--surface)]">
         <div className="mx-auto flex min-h-screen max-w-[1200px]">
-          <aside className="hidden w-[280px] shrink-0 border-r border-line bg-card lg:block">
+          <aside className="hidden h-screen w-[280px] shrink-0 flex-col overflow-hidden border-r border-line bg-card lg:sticky lg:top-0 lg:flex">
             {sidebar}
           </aside>
 
@@ -271,8 +261,8 @@ export function AccountShell({ children }: { children: React.ReactNode }) {
                 className="absolute inset-0 bg-black/40"
                 onClick={() => setMobileOpen(false)}
               />
-              <aside className="absolute inset-y-0 left-0 w-[280px] bg-card shadow-xl">
-                <div className="flex justify-end p-3">
+              <aside className="absolute inset-y-0 left-0 flex w-[min(280px,88vw)] flex-col overflow-hidden bg-card shadow-xl">
+                <div className="flex shrink-0 justify-end p-3">
                   <button
                     type="button"
                     onClick={() => setMobileOpen(false)}

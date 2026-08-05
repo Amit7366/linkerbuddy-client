@@ -40,28 +40,54 @@ export async function proxyAuth({
   body,
   clearCookie = false,
 }: ProxyAuthOptions): Promise<NextResponse> {
+  const existing = request?.cookies.get(REFRESH_COOKIE_NAME)?.value;
+
+  // Avoid noisy upstream 401s when there is nothing to refresh
+  if (path === "/auth/refresh" && !existing) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: { code: "UNAUTHORIZED", message: "Refresh token required" },
+      },
+      { status: 401 },
+    );
+  }
+
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
 
-  const existing = request?.cookies.get(REFRESH_COOKIE_NAME)?.value;
-  if (existing) {
+  // Prefer JSON body for refresh — Cookie header forwarding is brittle across runtimes
+  let upstreamBody = body;
+  if (path === "/auth/refresh" && existing) {
+    upstreamBody = { refreshToken: existing };
+  } else if (existing) {
     headers.Cookie = `${REFRESH_COOKIE_NAME}=${existing}`;
   }
 
-  const upstream = await fetch(`${env.NEXT_PUBLIC_API_URL}${path}`, {
-    method,
-    headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
-    cache: "no-store",
-  });
+  let upstream: Response;
+  try {
+    upstream = await fetch(`${env.NEXT_PUBLIC_API_URL}${path}`, {
+      method,
+      headers,
+      body: upstreamBody === undefined ? undefined : JSON.stringify(upstreamBody),
+      cache: "no-store",
+    });
+  } catch {
+    return NextResponse.json(
+      {
+        success: false,
+        error: { code: "UPSTREAM_ERROR", message: "Auth service unavailable" },
+      },
+      { status: 503 },
+    );
+  }
 
   const data = (await upstream.json().catch(() => ({
     success: false,
     error: { code: "UPSTREAM_ERROR", message: "Auth service unavailable" },
   }))) as UpstreamBody;
 
-  // Never expose refreshToken to the browser — only set it as httpOnly cookie
   const tokenFromBody = data.data?.refreshToken;
   if (data.data && "refreshToken" in data.data) {
     const { refreshToken: _omit, ...safeData } = data.data;
@@ -70,15 +96,18 @@ export async function proxyAuth({
 
   const response = NextResponse.json(data, { status: upstream.status });
 
-  if (clearCookie || upstream.status === 401) {
+  if (clearCookie) {
     clearRefreshCookie(response);
   }
 
-  const token = extractRefreshTokenFromUpstream(upstream) ?? tokenFromBody ?? null;
+  // Invalid/expired refresh — drop the app cookie so middleware/login stop looping
+  if (path === "/auth/refresh" && upstream.status === 401 && existing) {
+    clearRefreshCookie(response);
+  }
+
+  const token = tokenFromBody ?? extractRefreshTokenFromUpstream(upstream) ?? null;
   if (token) {
     setRefreshCookie(response, token);
-  } else if (clearCookie) {
-    clearRefreshCookie(response);
   }
 
   return response;

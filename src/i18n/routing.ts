@@ -16,6 +16,7 @@ export const localizedMarketingPrefixes = [
   "/pricing",
   "/blog",
   "/contact",
+  "/checkout",
 ] as const;
 
 const EXCLUDED_PREFIXES = [
@@ -29,7 +30,6 @@ const EXCLUDED_PREFIXES = [
   "/account",
   "/products",
   "/cart",
-  "/checkout",
   "/categories",
   "/brand",
   "/og",

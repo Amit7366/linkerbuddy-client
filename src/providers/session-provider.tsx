@@ -50,10 +50,26 @@ function isSessionExpired(startedAt: number | null) {
   return Date.now() - startedAt >= SESSION_MAX_MS;
 }
 
+async function probeHasSession(): Promise<boolean> {
+  try {
+    const res = await fetch("/api/auth/status", {
+      method: "GET",
+      credentials: "include",
+      cache: "no-store",
+    });
+    if (!res.ok) return false;
+    const data = (await res.json()) as { hasSession?: boolean };
+    return Boolean(data.hasSession);
+  } catch {
+    return false;
+  }
+}
+
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const signingOut = useRef(false);
+  const bootGeneration = useRef(0);
 
   const signOut = useCallback(async () => {
     if (signingOut.current) return;
@@ -76,10 +92,19 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const refreshUser = useCallback(async () => {
     try {
       if (!getAccessToken()) {
+        const hasSession = await probeHasSession();
+        if (!hasSession) {
+          setAccessToken(null);
+          setUser(null);
+          return null;
+        }
         await refreshSession();
       }
       const me = await getMe();
       setUser(me);
+      if (!readSessionStarted()) {
+        writeSessionStarted(Date.now());
+      }
       return me;
     } catch {
       setAccessToken(null);
@@ -89,36 +114,47 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    const generation = ++bootGeneration.current;
     let cancelled = false;
 
     async function boot() {
       try {
         const started = readSessionStarted();
+
+        // Soft-expire client window: try cookie refresh first; only hard-logout if refresh fails
         if (isSessionExpired(started)) {
-          await apiLogout().catch(() => null);
-          setAccessToken(null);
           clearSessionStarted();
-          if (!cancelled) setUser(null);
-          return;
         }
 
         if (!getAccessToken()) {
-          await refreshSession();
-        }
-        const me = await getMe();
-        if (cancelled) return;
+          const hasSession = await probeHasSession();
+          if (cancelled || generation !== bootGeneration.current) return;
 
-        if (!started) {
+          if (!hasSession) {
+            setUser(null);
+            return;
+          }
+
+          await refreshSession();
+          if (cancelled || generation !== bootGeneration.current) return;
+        }
+
+        const me = await getMe();
+        if (cancelled || generation !== bootGeneration.current) return;
+
+        if (!readSessionStarted()) {
           writeSessionStarted(Date.now());
         }
         setUser(me);
       } catch {
-        if (!cancelled) {
+        if (!cancelled && generation === bootGeneration.current) {
           setAccessToken(null);
           setUser(null);
         }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled && generation === bootGeneration.current) {
+          setLoading(false);
+        }
       }
     }
 

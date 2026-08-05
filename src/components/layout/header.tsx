@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UserRound } from "lucide-react";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
@@ -33,24 +32,35 @@ const NAV_ITEMS = [
   section: HomeNavSection;
 }>;
 
+function userInitials(name: string) {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0]![0]}${parts[1]![0]}`.toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase() || "U";
+}
+
 function ProfileNavLink({
   name,
   className,
+  onClick,
 }: {
   name: string;
   className?: string;
+  onClick?: () => void;
 }) {
   return (
     <Link
       href="/account"
+      onClick={onClick}
       className={cn(
-        "inline-flex max-w-[160px] items-center gap-2 no-underline",
+        "inline-flex max-w-[180px] items-center gap-2 no-underline",
         className,
       )}
       title={name}
     >
-      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white/15 text-white ring-1 ring-white/25">
-        <UserRound className="size-4" />
+      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white/15 text-[11px] font-bold text-white ring-1 ring-white/25">
+        {userInitials(name)}
       </span>
       <span className="truncate text-[13px] font-semibold text-white">{name}</span>
     </Link>
@@ -103,7 +113,7 @@ export function Header() {
           className={cn(
             "items-center gap-[30px]",
             open
-              ? "absolute top-[66px] right-0 left-0 z-[60] flex flex-col items-stretch gap-4 bg-navy p-5 phablet:top-[74px]"
+              ? "absolute top-[66px] right-0 left-0 z-[60] flex max-h-[calc(100dvh-66px)] flex-col items-stretch gap-4 overflow-y-auto bg-navy p-5 phablet:top-[74px] phablet:max-h-[calc(100dvh-74px)]"
               : "hidden tablet:flex",
           )}
           aria-label="Main navigation"
@@ -143,12 +153,18 @@ export function Header() {
           })}
 
           {open && !loading && user ? (
-            <ProfileNavLink name={displayName} className="mt-2 tablet:hidden" />
+            <div className="mt-2 border-t border-white/10 pt-4 tablet:hidden">
+              <ProfileNavLink
+                name={displayName}
+                className="max-w-none"
+                onClick={() => setOpen(false)}
+              />
+            </div>
           ) : null}
           {open && !loading && !user ? (
             <Link
               href="/login"
-              className="text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white tablet:hidden"
+              className="mt-2 border-t border-white/10 pt-4 text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white tablet:hidden"
               onClick={() => setOpen(false)}
             >
               {t("common.signIn")}
@@ -165,11 +181,14 @@ export function Header() {
           </div>
 
           {!loading && user ? (
-            <ProfileNavLink name={displayName} className="hidden desktop:inline-flex" />
+            <ProfileNavLink
+              name={displayName}
+              className="hidden tablet:inline-flex"
+            />
           ) : !loading ? (
             <Link
               href="/login"
-              className="hidden text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white desktop:inline"
+              className="hidden text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white tablet:inline"
             >
               {t("common.signIn")}
             </Link>

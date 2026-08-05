@@ -8,9 +8,5 @@ export const metadata = buildMetadata({
 });
 
 export default function CheckoutPage() {
-  return (
-    <div className="pb-16">
-      <CheckoutClient />
-    </div>
-  );
+  return <CheckoutClient />;
 }

@@ -1,4 +1,5 @@
 import * as React from "react";
+import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
@@ -31,9 +32,28 @@ export function Button({ className, variant, size, type = "button", ...props }: 
 }
 
 export interface ButtonLinkProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    VariantProps<typeof buttonVariants> {}
+  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">,
+    VariantProps<typeof buttonVariants> {
+  href: string;
+}
 
-export function ButtonLink({ className, variant, size, ...props }: ButtonLinkProps) {
-  return <a className={cn(buttonVariants({ variant, size }), className)} {...props} />;
+function isInternalHref(href: string) {
+  return href.startsWith("/") || href.startsWith("#");
+}
+
+export function ButtonLink({
+  className,
+  variant,
+  size,
+  href,
+  ...props
+}: ButtonLinkProps) {
+  const classes = cn(buttonVariants({ variant, size }), className);
+
+  // Use Next.js Link for in-app routes so navigation stays client-side (no full reload)
+  if (isInternalHref(href)) {
+    return <Link href={href} className={classes} {...props} />;
+  }
+
+  return <a href={href} className={classes} {...props} />;
 }

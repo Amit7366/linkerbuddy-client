@@ -40,15 +40,29 @@ export async function register(name: string, email: string, password: string) {
   return data;
 }
 
-export async function refreshSession() {
-  const data = await authBff<AuthTokens>("/api/auth/refresh");
-  setAccessToken(data.accessToken);
-  return data;
+/** Sync mutex so React Strict Mode / AccountShell cannot rotate the same token twice. */
+let refreshInFlight: Promise<AuthTokens> | null = null;
+
+export function refreshSession(): Promise<AuthTokens> {
+  if (!refreshInFlight) {
+    refreshInFlight = authBff<AuthTokens>("/api/auth/refresh")
+      .then((data) => {
+        setAccessToken(data.accessToken);
+        return data;
+      })
+      .finally(() => {
+        refreshInFlight = null;
+      });
+  }
+  return refreshInFlight;
 }
 
 export async function logout() {
-  await authBff<{ message: string }>("/api/auth/logout");
-  setAccessToken(null);
+  try {
+    await authBff<{ message: string }>("/api/auth/logout");
+  } finally {
+    setAccessToken(null);
+  }
 }
 
 export async function getMe() {
