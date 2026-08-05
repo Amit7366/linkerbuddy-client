@@ -3,7 +3,8 @@ import { proxyAuth } from "@/lib/auth/proxy-auth";
 
 export async function POST(request: NextRequest) {
   return proxyAuth({
-    path: "/auth/refresh",
+    path: "/auth/logout",
     request,
+    clearCookie: true,
   });
 }
