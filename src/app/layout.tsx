@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Noto_Sans_Bengali, Noto_Sans_Devanagari } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Instrument_Serif,
+  Noto_Sans_Bengali,
+  Noto_Sans_Devanagari,
+} from "next/font/google";
 import { AppProviders } from "@/providers/app-providers";
 import { siteConfig } from "@/config/site";
 import { localeMeta } from "@/i18n/config";
@@ -16,6 +22,14 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -73,7 +87,7 @@ export default async function RootLayout({
       lang={locale}
       dir={localeMeta[locale].dir}
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} ${notoDevanagari.variable} ${notoBengali.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${notoDevanagari.variable} ${notoBengali.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body

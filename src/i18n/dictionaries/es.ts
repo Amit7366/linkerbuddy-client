@@ -34,12 +34,21 @@ export const es: Dictionary = {
   hero: {
     breadcrumbHome: "Inicio",
     breadcrumbGuest: "Sitios de guest post",
-    breadcrumbIndia: "India",
-    eyebrow: "Marketplace de colocaciones en India",
-    titleLine1: "Guest posts indios.",
-    titleLine2: "Verificados, no adivinados.",
+    eyebrow: "Marketplace de colocaciones verificadas",
+    title: "Guest posts en {country}",
     subtitle:
-      "Encuentra sitios indios listos para publicar con tráfico orgánico real, precios transparentes y plazos en los que puedes planificar.",
+      "Encuentra sitios listos para publicar en el Mundo con tráfico orgánico real, precios transparentes y plazos en los que puedes planificar.",
+    rotating: {
+      world: "el Mundo",
+      usa: "EE. UU.",
+      india: "India",
+      spain: "España",
+      uk: "Reino Unido",
+      germany: "Alemania",
+      australia: "Australia",
+      canada: "Canadá",
+      uae: "EAU",
+    },
     ctaBrowse: "Ver sitios verificados",
     ctaShortlist: "Crear mi shortlist",
     trust: {
@@ -272,6 +281,12 @@ export const es: Dictionary = {
       },
     },
   },
+  reviews: {
+    kicker: "Opiniones de clientes",
+    title: "Opiniones de clientes",
+    description:
+      "Comentarios reales de pedidos completados — valoraciones y notas de clientes que finalizaron sus campañas.",
+  },
   cta: {
     kicker: "Shortlist personalizada con IA",
     title: "Dinos cómo se ve una colocación perfecta.",
@@ -392,43 +407,46 @@ export const es: Dictionary = {
   pricing: {
     title: "Precios",
     subtitle:
-      "Elige un plan según tu volumen de colocaciones. Mejora cuando tus campañas crezcan.",
+      "Elige el nivel de autoridad y el volumen de colocaciones que encaje con tu estrategia SEO.",
     month: "mes",
     cta: "Empezar",
     noCard: "No se requiere tarjeta de crédito",
-    compare: "Ver comparación de planes",
+    compare: "Ver comparación detallada de métricas",
     plans: {
       startup: {
-        name: "Startup",
+        name: "Standard Authority",
         description:
-          "Ideal para equipos pequeños y startups que quieren empezar con colocaciones.",
+          "Para equipos pequeños que lanzan sus primeras campañas de outreach.",
+        cta: "Order Placement",
         features: {
-          users: "Hasta 5 asientos de equipo",
-          pages: "Hasta 25 colocaciones / mes",
-          domains: "Acceso al marketplace de India",
-          support: "Soporte por email",
+          dr: "Minimum DR 20-30+ (Ahrefs)",
+          content: "Client supplies content",
+          placement: "1 Placement per purchase",
+          indexation: "Guaranteed indexation",
         },
       },
       growth: {
-        name: "Growth",
+        name: "Growth Authority",
         description:
-          "Perfecto para agencias en crecimiento que necesitan más volumen, informes y velocidad.",
+          "Ideal para agencias en crecimiento que necesitan más autoridad y link juice.",
+        cta: "Order Bundle",
         features: {
-          users: "Hasta 15 asientos de equipo",
-          pages: "Hasta 80 colocaciones / mes",
-          domains: "Entrega prioritaria",
-          support: "Informes de URL en vivo",
+          dr: "Minimum DR 40-50+ (Ahrefs)",
+          content: "Professional content included (800+ words)",
+          placements: "Up to 3 Placements bundle",
+          turnaround: "Priority turnaround (7 days)",
         },
       },
       enterprise: {
-        name: "Enterprise",
+        name: "Enterprise Link Building",
         description:
-          "Herramientas avanzadas para organizaciones grandes con campañas multi-mercado.",
+          "Soluciones de outreach escalables para requisitos SEO de alto volumen.",
+        cta: "Contact for Custom Plan",
         features: {
-          users: "Asientos de equipo ilimitados",
-          pages: "Volumen de colocaciones a medida",
-          domains: "Inventario privado opcional",
-          support: "Gestor de campaña dedicado",
+          dr: "Minimum DR 60+ (Premium Sites)",
+          campaigns: "Multi-link campaigns",
+          content: "Turnkey content & submission",
+          manager: "Dedicated Account Manager",
         },
       },
     },

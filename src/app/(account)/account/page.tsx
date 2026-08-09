@@ -15,6 +15,7 @@ import {
   OrderRowActions,
 } from "@/components/account/order-detail-modal";
 import { getMyOrders } from "@/lib/api/orders";
+import { getMyReviews } from "@/lib/api/reviews";
 import { getBillingProfile } from "@/lib/api/users";
 import type { BillingProfile } from "@/types/order";
 import type { Order } from "@/types/order";
@@ -37,18 +38,21 @@ export default function AccountOverviewPage() {
   const { user } = useAccountAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [profile, setProfile] = useState<BillingProfile | null>(null);
+  const [reviewCount, setReviewCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Order | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [ordersData, billing] = await Promise.all([
+      const [ordersData, billing, reviewsData] = await Promise.all([
         getMyOrders({ limit: 100 }),
         getBillingProfile().catch(() => null),
+        getMyReviews().catch(() => null),
       ]);
       setOrders(ordersData.orders);
       setProfile(billing);
+      setReviewCount(reviewsData?.reviewCount ?? 0);
     } finally {
       setLoading(false);
     }
@@ -89,7 +93,7 @@ export default function AccountOverviewPage() {
     },
     {
       label: "Reviews added",
-      value: "0",
+      value: loading ? "—" : String(reviewCount),
       icon: Star,
       tone: "bg-amber-50 text-amber-600",
     },

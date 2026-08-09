@@ -83,6 +83,7 @@
   --color-surface: var(--surface);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
   --font-devanagari: var(--font-noto-devanagari);
   --font-bengali: var(--font-noto-bengali);
   --breakpoint-phablet: 42.5rem;

@@ -56,6 +56,10 @@ const Pricing = dynamic(
   },
 );
 
+const Reviews = dynamic(
+  () => import("@/components/marketing/reviews").then((m) => m.Reviews),
+);
+
 const Faq = dynamic(
   () => import("@/components/marketing/faq").then((m) => m.Faq),
   {
@@ -113,6 +117,7 @@ export default async function HomePage() {
       <Agency />
       <ProcessSteps />
       <Pricing />
+      <Reviews />
       <Faq />
       <CtaForm />
     </>

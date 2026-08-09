@@ -27,5 +27,12 @@ export const endpoints = {
     detail: (id: string) => `/orders/${id}`,
     status: (id: string) => `/orders/${id}/status`,
   },
+  reviews: {
+    list: "/reviews",
+    me: "/reviews/me",
+    create: "/reviews",
+    admin: "/reviews/admin",
+    adminDetail: (id: string) => `/reviews/admin/${id}`,
+  },
   health: "/health",
 } as const;

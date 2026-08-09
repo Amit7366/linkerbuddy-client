@@ -1,11 +1,18 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/motion/reveal";
+import {
+  HERO_ROTATING_KEYS,
+  RotatingWord,
+  useRotatingWordIndex,
+  withCountrySlot,
+} from "@/components/motion/rotating-word";
 import { HeroProductPreview } from "@/components/marketing/hero-product-preview";
 import { HeroStatsStrip } from "@/components/marketing/hero-stats-strip";
 import { useTranslations } from "@/providers/locale-provider";
@@ -17,7 +24,21 @@ function scrollTo(selector: string) {
 export function Hero() {
   const t = useTranslations();
 
+  const words = useMemo(
+    () => HERO_ROTATING_KEYS.map((key) => t(`hero.rotating.${key}`)),
+    [t],
+  );
+  const wordIndex = useRotatingWordIndex(words.length);
+  const currentWord = words[wordIndex] ?? words[0] ?? "World";
+
   const trust = [t("hero.trust.noFees"), t("hero.trust.replacement"), t("hero.trust.reports")];
+
+  const titleRotator = (
+    <RotatingWord words={words} index={wordIndex} className="text-brand" />
+  );
+  const breadcrumbRotator = (
+    <RotatingWord words={words} index={wordIndex} className="font-semibold text-ink" />
+  );
 
   return (
     <section
@@ -59,7 +80,7 @@ export function Hero() {
             <li className="mx-2 text-[#a6b0c0]" aria-hidden>
               ›
             </li>
-            <li className="font-semibold text-ink">{t("hero.breadcrumbIndia")}</li>
+            <li aria-live="polite">{breadcrumbRotator}</li>
           </ol>
         </nav>
 
@@ -75,10 +96,9 @@ export function Hero() {
             <h1
               id="hero-heading"
               className="my-5 text-[41px] leading-[1.02] font-bold tracking-[-2.3px] text-ink tablet:text-[59px] tablet:tracking-[-3.3px]"
+              aria-label={t("hero.title", { country: currentWord })}
             >
-              {t("hero.titleLine1")}
-              <br />
-              <em className="not-italic text-brand">{t("hero.titleLine2")}</em>
+              {withCountrySlot(t("hero.title"), titleRotator)}
             </h1>
 
             <p className="mx-auto m-0 max-w-[590px] text-[15px] leading-[1.65] text-muted tablet:mx-0 tablet:text-lg">
