@@ -82,9 +82,9 @@ export const en = {
     titleTemplate: "{title} | Linkerbuddy",
     pages: {
       home: {
-        title: "India Guest Post Sites",
+        title: "Guest Post Sites",
         description:
-          "Browse verified Indian guest post and link insertion placements with transparent pricing and fast turnaround.",
+          "Browse verified guest post and link insertion placements with transparent pricing and fast turnaround.",
       },
       inventory: {
         title: "Full inventory",
