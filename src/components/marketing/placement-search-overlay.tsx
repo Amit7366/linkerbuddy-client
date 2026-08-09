@@ -3,11 +3,13 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Search, X } from "lucide-react";
-import { formatTraffic, domainInitials } from "@/config/landing";
+import { Eye, Search, X } from "lucide-react";
+import { formatTraffic, domainInitials, type SiteListing } from "@/config/landing";
 import { listMarketplace } from "@/lib/api/marketplace";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
+import { useShortlist } from "@/providers/shortlist-provider";
 import { useTranslations } from "@/providers/locale-provider";
+import { SiteDetailModal } from "@/components/marketing/site-detail-modal";
 import { cn } from "@/lib/utils";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -37,6 +39,72 @@ function LoadingDots({ className }: { className?: string }) {
   );
 }
 
+function SearchResultRow({
+  site,
+  onView,
+}: {
+  site: SiteListing;
+  onView: (site: SiteListing) => void;
+}) {
+  const t = useTranslations();
+  const { selectedIds, toggle } = useShortlist();
+  const selected = selectedIds.includes(site.id);
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      className="flex w-full cursor-pointer items-center gap-2 rounded-xl border-0 bg-transparent px-3 py-3 text-left transition-colors hover:bg-[#eaf3ff] dark:hover:bg-white/8 tablet:gap-3"
+      onClick={() => onView(site)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onView(site);
+        }
+      }}
+    >
+      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#eaf3ff] text-[11px] font-extrabold text-[#1268f3] dark:bg-[#1a2740] dark:text-brand">
+        {domainInitials(site.domain)}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-[13px] font-bold text-[#1268f3] dark:text-brand">
+          {site.domain}
+        </span>
+        <span className="mt-0.5 block text-[10px] text-[#5a6880] dark:text-muted">
+          {site.niche} · DR {site.dr} · {formatTraffic(site.traffic)} · ${site.guest}
+        </span>
+      </span>
+      <span className="hidden rounded-lg bg-[#eaf3ff] px-2 py-1 text-[10px] font-bold text-[#1268f3] tablet:inline dark:bg-brand/10 dark:text-brand">
+        {site.owner}
+      </span>
+      <div className="flex shrink-0 items-center gap-1.5">
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onView(site);
+          }}
+          aria-label={t("inventory.viewDetails", { domain: site.domain })}
+          className="grid size-9 shrink-0 place-items-center rounded-lg border border-[#dfe6f0] bg-[#f7f9fc] text-[#1268f3] transition-colors hover:border-[#1268f3] hover:bg-[#eaf3ff] dark:border-white/10 dark:bg-white/5 dark:text-brand dark:hover:border-brand dark:hover:bg-white/10"
+        >
+          <Eye className="size-3.5" aria-hidden />
+        </button>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            toggle(site.id);
+          }}
+          data-selected={selected ? "true" : "false"}
+          className="lb-add-site"
+        >
+          {selected ? t("marketplace.selected") : t("marketplace.addSite")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function SearchPanel({ onClose }: { onClose: () => void }) {
   const t = useTranslations();
   const reduce = useReducedMotion();
@@ -45,36 +113,29 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebouncedValue(query, 320);
   const searching = query.trim().length > 0 && query !== debouncedQuery;
-  const [results, setResults] = useState<
-    Array<{
-      id: number;
-      domain: string;
-      niche: string;
-      da: number;
-      dr: number;
-      traffic: number;
-      guest: number;
-      owner: string;
-    }>
-  >([]);
+  const [results, setResults] = useState<SiteListing[]>([]);
   const [loadingResults, setLoadingResults] = useState(false);
+  const [detailSite, setDetailSite] = useState<SiteListing | null>(null);
+  const detailOpen = Boolean(detailSite);
 
   useEffect(() => {
     const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 80);
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-
-    document.addEventListener("keydown", onKeyDown);
     return () => {
       window.clearTimeout(focusTimer);
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", onKeyDown);
     };
-  }, [onClose]);
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !detailOpen) onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [onClose, detailOpen]);
 
   useEffect(() => {
     const q = debouncedQuery.trim();
@@ -192,32 +253,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                     exit={reduce ? undefined : { opacity: 0, y: -6 }}
                     transition={{ duration: 0.22, ease, delay: reduce ? 0 : index * 0.04 }}
                   >
-                    <button
-                      type="button"
-                      className="flex w-full cursor-pointer items-center gap-3 rounded-xl border-0 bg-transparent px-3 py-3 text-left transition-colors hover:bg-[#eaf3ff] dark:hover:bg-white/8"
-                      onClick={() => {
-                        onClose();
-                        document
-                          .querySelector("#marketplace")
-                          ?.scrollIntoView({ behavior: "smooth" });
-                      }}
-                    >
-                      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#eaf3ff] text-[11px] font-extrabold text-[#1268f3] dark:bg-[#1a2740] dark:text-brand">
-                        {domainInitials(site.domain)}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[13px] font-bold text-[#1268f3] dark:text-brand">
-                          {site.domain}
-                        </span>
-                        <span className="mt-0.5 block text-[10px] text-[#5a6880] dark:text-muted">
-                          {site.niche} · DR {site.dr} · {formatTraffic(site.traffic)} · $
-                          {site.guest}
-                        </span>
-                      </span>
-                      <span className="rounded-lg bg-[#eaf3ff] px-2 py-1 text-[10px] font-bold text-[#1268f3] dark:bg-brand/10 dark:text-brand">
-                        {site.owner}
-                      </span>
-                    </button>
+                    <SearchResultRow site={site} onView={setDetailSite} />
                   </motion.li>
                 ))}
               </AnimatePresence>
@@ -225,6 +261,12 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
           )}
         </div>
       </motion.div>
+
+      <SiteDetailModal
+        site={detailSite}
+        open={detailOpen}
+        onClose={() => setDetailSite(null)}
+      />
     </motion.div>
   );
 }
