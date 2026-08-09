@@ -13,6 +13,7 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { useToast } from "@/components/ui/toast";
 import { useTranslations, useLocale } from "@/providers/locale-provider";
 import { useSession } from "@/providers/session-provider";
+import { profileHrefForRole } from "@/lib/auth/home";
 import {
   useActiveHomeNavSection,
   type HomeNavSection,
@@ -42,16 +43,18 @@ function userInitials(name: string) {
 
 function ProfileNavLink({
   name,
+  href,
   className,
   onClick,
 }: {
   name: string;
+  href: string;
   className?: string;
   onClick?: () => void;
 }) {
   return (
     <Link
-      href="/account"
+      href={href}
       onClick={onClick}
       className={cn(
         "inline-flex max-w-[180px] items-center gap-2 no-underline",
@@ -77,6 +80,7 @@ export function Header() {
   const { active, isHome, setActive } = useActiveHomeNavSection();
 
   const displayName = user?.name?.trim() || user?.email?.split("@")[0] || "Account";
+  const profileHref = profileHrefForRole(user?.role);
   const homeHref = withLocalePrefix("/", locale);
 
   const scrollTo = (selector: string) => {
@@ -156,6 +160,7 @@ export function Header() {
             <div className="mt-2 border-t border-white/10 pt-4 tablet:hidden">
               <ProfileNavLink
                 name={displayName}
+                href={profileHref}
                 className="max-w-none"
                 onClick={() => setOpen(false)}
               />
@@ -183,6 +188,7 @@ export function Header() {
           {!loading && user ? (
             <ProfileNavLink
               name={displayName}
+              href={profileHref}
               className="hidden tablet:inline-flex"
             />
           ) : !loading ? (

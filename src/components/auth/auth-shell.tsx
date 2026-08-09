@@ -8,6 +8,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { AuthFormPanel } from "@/components/forms/auth-forms";
 import { AuthBrandPanel } from "@/components/auth/auth-brand-panel";
 import { Logo } from "@/components/ui/logo";
+import { safeRedirectForRole } from "@/lib/auth/home";
 import { useSession } from "@/providers/session-provider";
 import { cn } from "@/lib/utils";
 
@@ -15,11 +16,6 @@ export type AuthMode = "login" | "register";
 
 interface AuthShellProps {
   mode: AuthMode;
-}
-
-function accountHomeForRole(role?: string) {
-  if (role === "SUPER_ADMIN") return "/dashboard/super-admin";
-  return "/account";
 }
 
 function AuthShellInner({ mode }: AuthShellProps) {
@@ -30,12 +26,7 @@ function AuthShellInner({ mode }: AuthShellProps) {
 
   useEffect(() => {
     if (loading || !user) return;
-    const redirect = searchParams.get("redirect");
-    if (redirect && redirect.startsWith("/") && !redirect.startsWith("//")) {
-      router.replace(redirect);
-      return;
-    }
-    router.replace(accountHomeForRole(user.role));
+    router.replace(safeRedirectForRole(searchParams.get("redirect"), user.role));
   }, [loading, user, router, searchParams]);
 
   function switchMode(next: AuthMode) {

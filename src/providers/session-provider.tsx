@@ -91,10 +91,22 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
   const refreshUser = useCallback(async () => {
     try {
+      // Client storage wiped → do not restore from cookie alone
+      if (!readSessionStarted()) {
+        const hasSession = await probeHasSession();
+        if (hasSession) {
+          await apiLogout().catch(() => null);
+        }
+        setAccessToken(null);
+        setUser(null);
+        return null;
+      }
+
       if (!getAccessToken()) {
         const hasSession = await probeHasSession();
         if (!hasSession) {
           setAccessToken(null);
+          clearSessionStarted();
           setUser(null);
           return null;
         }
@@ -102,9 +114,6 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       }
       const me = await getMe();
       setUser(me);
-      if (!readSessionStarted()) {
-        writeSessionStarted(Date.now());
-      }
       return me;
     } catch {
       setAccessToken(null);
@@ -121,9 +130,28 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       try {
         const started = readSessionStarted();
 
-        // Soft-expire client window: try cookie refresh first; only hard-logout if refresh fails
+        // Missing marker = site storage cleared → end cookie session too
+        if (!started) {
+          const hasSession = await probeHasSession();
+          if (cancelled || generation !== bootGeneration.current) return;
+          if (hasSession) {
+            await apiLogout().catch(() => null);
+          }
+          setAccessToken(null);
+          setUser(null);
+          return;
+        }
+
         if (isSessionExpired(started)) {
           clearSessionStarted();
+          const hasSession = await probeHasSession();
+          if (cancelled || generation !== bootGeneration.current) return;
+          if (hasSession) {
+            await apiLogout().catch(() => null);
+          }
+          setAccessToken(null);
+          setUser(null);
+          return;
         }
 
         if (!getAccessToken()) {
@@ -131,6 +159,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
           if (cancelled || generation !== bootGeneration.current) return;
 
           if (!hasSession) {
+            clearSessionStarted();
             setUser(null);
             return;
           }
@@ -142,9 +171,6 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         const me = await getMe();
         if (cancelled || generation !== bootGeneration.current) return;
 
-        if (!readSessionStarted()) {
-          writeSessionStarted(Date.now());
-        }
         setUser(me);
       } catch {
         if (!cancelled && generation === bootGeneration.current) {
@@ -164,13 +190,13 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  // Auto-logout when 2h session window ends
+  // Auto-logout when 2h session window ends or client marker is cleared
   useEffect(() => {
     if (!user) return;
 
     const check = () => {
       const started = readSessionStarted();
-      if (isSessionExpired(started)) {
+      if (!started || isSessionExpired(started)) {
         void signOut();
       }
     };

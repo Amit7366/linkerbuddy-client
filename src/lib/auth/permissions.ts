@@ -5,12 +5,7 @@ export function canAccessCRM(role: Role): boolean {
 }
 
 export function canAccessAccount(role: Role): boolean {
-  return (
-    role === "CUSTOMER" ||
-    role === "STAFF" ||
-    role === "ADMIN" ||
-    role === "SUPER_ADMIN"
-  );
+  return role === "CUSTOMER" || role === "STAFF" || role === "ADMIN";
 }
 
 export function canManageOrders(role: Role): boolean {

@@ -16,6 +16,7 @@ import {
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { login, register } from "@/lib/api/auth";
+import { safeRedirectForRole } from "@/lib/auth/home";
 import { useSession } from "@/providers/session-provider";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -72,16 +73,6 @@ function isEmailValid(email: string) {
   return z.string().email().safeParse(email).success;
 }
 
-function safeRedirect(raw: string | null, role?: string): string {
-  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) {
-    if (role === "SUPER_ADMIN") return "/dashboard/super-admin";
-    return "/account";
-  }
-  if (raw.startsWith("/dashboard")) {
-    return role === "SUPER_ADMIN" ? raw : "/account";
-  }
-  return raw;
-}
 
 interface AuthFieldProps {
   id: string;
@@ -245,7 +236,7 @@ export function LoginForm() {
     try {
       const data = await login(parsed.data.email, parsed.data.password);
       establishSession(data.user);
-      router.push(safeRedirect(searchParams.get("redirect"), data.user.role));
+      router.push(safeRedirectForRole(searchParams.get("redirect"), data.user.role));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {
@@ -333,7 +324,7 @@ export function RegisterForm() {
     try {
       const data = await register(parsed.data.name, parsed.data.email, parsed.data.password);
       establishSession(data.user);
-      router.push(safeRedirect(searchParams.get("redirect"), data.user.role));
+      router.push(safeRedirectForRole(searchParams.get("redirect"), data.user.role));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
     } finally {

@@ -26,6 +26,7 @@ import {
   X,
 } from "lucide-react";
 import { canAccessAccount } from "@/lib/auth/permissions";
+import { homeForRole } from "@/lib/auth/home";
 import { useSession } from "@/providers/session-provider";
 import { siteConfig } from "@/config/site";
 import {
@@ -101,7 +102,7 @@ export function AccountShell({ children }: { children: React.ReactNode }) {
       return;
     }
     if (!canAccessAccount(sessionUser.role)) {
-      router.replace("/login");
+      router.replace(homeForRole(sessionUser.role));
     }
   }, [sessionLoading, sessionUser, pathname, router]);
 
