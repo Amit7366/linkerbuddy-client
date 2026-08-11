@@ -2,17 +2,18 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Check, ChevronDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { locales, localeMeta, type Locale } from "@/i18n/config";
 import { useLocale } from "@/providers/locale-provider";
 import { cn } from "@/lib/utils";
 
 interface LanguageSwitcherProps {
   className?: string;
+  /** @deprecated Trigger is always flag-only; kept for call-site compat. */
   compact?: boolean;
 }
 
-export function LanguageSwitcher({ className, compact = false }: LanguageSwitcherProps) {
+export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
   const { locale, setLocale, t } = useLocale();
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
@@ -48,28 +49,19 @@ export function LanguageSwitcher({ className, compact = false }: LanguageSwitche
       <button
         type="button"
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-2 py-1.5 text-[12px] font-semibold text-[var(--nav-link)] transition-colors hover:border-white/25 hover:bg-white/10 hover:text-white",
+          "inline-flex size-9 items-center justify-center gap-0 rounded-lg border border-white/15 bg-white/5 text-[12px] font-semibold text-[var(--nav-link)] transition-colors hover:border-white/25 hover:bg-white/10 hover:text-white",
           open && "border-white/25 bg-white/10 text-white",
         )}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listId}
-        aria-label={t("common.chooseLanguage")}
+        aria-label={`${t("common.chooseLanguage")}: ${active.nativeName}`}
+        title={active.nativeName}
         onClick={() => setOpen((prev) => !prev)}
       >
-        <span className="text-base leading-none" aria-hidden>
+        <span className="text-lg leading-none" aria-hidden>
           {active.flag}
         </span>
-        {!compact ? (
-          <span className="hidden max-w-[72px] truncate phablet:inline">{active.nativeName}</span>
-        ) : null}
-        <motion.span
-          animate={{ rotate: open ? 180 : 0 }}
-          transition={{ duration: reduce ? 0 : 0.2 }}
-          className="inline-flex"
-        >
-          <ChevronDown className="size-3.5 opacity-80" aria-hidden />
-        </motion.span>
       </button>
 
       <AnimatePresence>

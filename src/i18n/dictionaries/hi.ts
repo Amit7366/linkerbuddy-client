@@ -18,6 +18,9 @@ export const hi: Dictionary = {
     howItWorks: "यह कैसे काम करता है",
     pricing: "मूल्य निर्धारण",
     resources: "संसाधन",
+    more: "और अधिक",
+    aboutUs: "हमारे बारे में",
+    contactUs: "संपर्क करें",
     marketplace: "मार्केटप्लेस",
     chooseMarket: "बाजार चुनें",
   },
@@ -92,9 +95,9 @@ export const hi: Dictionary = {
           "Moz DA, Ahrefs DR, ट्रैफ़िक, कीमत और इंस्टेंट TAT के साथ पूरी गेस्ट पोस्ट इन्वेंटरी ब्राउज़ करें।",
       },
       about: {
-        title: "हमारे बारे में",
+        title: "Linkerbuddy के बारे में",
         description:
-          "जानें कि Linkerbuddy प्लेसमेंट कैसे सत्यापित करता है और टीम्स को भरोसे के साथ गेस्ट पोस्ट खरीदने में कैसे मदद करता है।",
+          "Links that move rankings. असली साइट्स, टारगेटेड ट्रैफ़िक और ग्रोथ के लिए आउटरीच।",
       },
       pricing: {
         title: "मूल्य निर्धारण",
@@ -315,22 +318,21 @@ export const hi: Dictionary = {
     },
   },
   footer: {
-    blurb:
-      "एजेंसियों, रीसेलर्स और महत्वाकांक्षी ब्रांड्स के लिए गेस्ट पोस्ट, निच एडिट और प्लेसमेंट कैम्पेन।",
-    marketplace: "मार्केटप्लेस",
+    contactHeading: "संपर्क",
     company: "कंपनी",
-    legal: "कानूनी",
-    indiaSites: "भारत साइट्स",
-    adminSites: "एडमिन साइट्स",
-    linkInsertions: "लिंक इंसर्शन",
-    howItWorks: "यह कैसे काम करता है",
-    faqs: "FAQs",
+    services: "सेवाएँ",
+    home: "होम",
+    about: "हमारे बारे में",
     contact: "संपर्क",
+    blog: "ब्लॉग",
+    guestPosts: "गेस्ट पोस्ट",
+    linkInsertions: "लिंक इंसर्शन",
+    nicheEdits: "निच एडिट",
+    customCampaigns: "कस्टम कैंपेन",
     privacy: "गोपनीयता",
     terms: "नियम",
     replacement: "रिप्लेसमेंट नीति",
-    legalLine: "गोपनीयता · नियम · रिप्लेसमेंट नीति",
-    copyright: "समीक्षा के लिए प्रोटोटाइप।",
+    copyright: "सर्वाधिकार सुरक्षित।",
   },
   shortlist: {
     selectedOne: "{count} साइट चयनित",
@@ -444,6 +446,85 @@ export const hi: Dictionary = {
           manager: "Dedicated Account Manager",
         },
       },
+    },
+  },
+aboutPage: {
+    heroTitle: "About us",
+    breadcrumb: "About us",
+    introHeading: "About us",
+    introLead: "Links That Move Rankings. Outreach Built for Growth.",
+    getInTouch: "Get in touch",
+    title: "About Linkerbuddy",
+    subtitle: "Links That Move Rankings. Outreach Built for Growth.",
+    tagline: "Links that move rankings.",
+    intro1:
+      "At Linkerbuddy, we connect ambitious brands, SEO agencies, and digital marketers with real, high-authority websites worldwide. We eliminate the middleman hassle and quality guesswork, helping you acquire high-impact link placements that drive organic traffic and push search engine rankings higher.",
+    intro2:
+      "Whether you need targeted Sponsored Content / Guest Posts or high-authority Niche Edits (In-Content Link Insertions) on existing, indexed posts, Linkerbuddy offers verified inventory across regional and global markets.",
+    teamImageAlt: "Linkerbuddy team collaborating on link-building campaigns",
+    processImageAlt: "SEO specialists reviewing placement strategy",
+    whatWeDo: {
+      title: "What we do",
+      body: "We manage and curate quality publishers across multiple regions—including Australia, India, North America, Europe, Southeast Asia, and global markets—ensuring every link placement aligns with your specific country target, organic traffic requirements, and Domain Rating (DR/DA) metrics.",
+      servicesTitle: "Our core services",
+      guestTitle: "Sponsored Guest Posts",
+      guestBody:
+        "Submit your own article or let us publish high-quality, publisher-ready content tailored to your target niche on authentic, high-traffic blogs.",
+      nicheTitle: "Niche Edits (Link Insertions)",
+      nicheBody:
+        "Get contextual links added directly to existing, established articles that are already indexed and ranking on Google.",
+      multiTitle: "Multi-Country Targeting",
+      multiBody:
+        "Filter inventory by location to execute hyper-local or international link-building campaigns seamlessly.",
+    },
+    howWeWork: {
+      title: "Process",
+      kicker: "Direct email negotiation",
+      intro:
+        "We believe link building shouldn’t be rigid or automated by bots that don’t understand your unique campaign needs. We keep our process personal, flexible, and transparent.",
+      cta: "Browse marketplace",
+      step1Title: "Explore",
+      step1Body:
+        "Browse our verified website marketplace filtered by niche, country, DR/DA, and organic traffic.",
+      step2Title: "Define targets",
+      step2Body:
+        "Share your campaign brief—target metrics, budget range, and preferred markets—so we can shortlist the right publishers.",
+      step3Title: "Negotiate",
+      step3Body:
+        "Connect directly with our team via email. We negotiate flexible pricing, bulk discounts, content rules, and turnaround times.",
+      step4Title: "Agree terms",
+      step4Body:
+        "Lock in clear deliverables, anchor guidelines, and timelines tailored to your budget before anything goes live.",
+      step5Title: "Publish",
+      step5Body:
+        "We coordinate publishing with vetted publishers and ensure placements meet the agreed content and quality standards.",
+      step6Title: "Track & report",
+      step6Body:
+        "Receive a live report with verified URLs, anchor text tracking, indexation follow-up, and placement guarantees.",
+    },
+    why: {
+      title: "Why choose us",
+      intro:
+        "Transparent metrics, multi-country inventory, and flexible email negotiation—built for agencies and brands that need links that actually move rankings.",
+      inventoryTitle: "Multi-Country Inventory",
+      inventoryBody:
+        "Access vetted publisher sites targeting audiences around the globe—from local campaigns to international outreach.",
+      metricsTitle: "Transparent Metrics",
+      metricsBody:
+        "Every site is pre-checked for real organic search traffic, Moz DA, and Ahrefs DR. No spam networks or PBNs.",
+      dealsTitle: "Tailored Negotiations",
+      dealsBody:
+        "Get flexible deals directly through email outreach without rigid marketplace surcharges.",
+      policyTitle: "Replacement Assurance",
+      policyBody:
+        "We stand by our inventory with guaranteed indexation and clear placement protection.",
+    },
+    cta: {
+      title: "That’s our story—feel free to say hi!",
+      body: "Have a site list in mind, or need a custom quote for sponsored posts or niche edits? We’re ready when you are.",
+      emailLabel: "Email us directly",
+      browse: "Browse our inventory",
+      contact: "Get in touch",
     },
   },
 };

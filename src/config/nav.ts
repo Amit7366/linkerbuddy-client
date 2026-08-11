@@ -61,27 +61,30 @@ export type MarketplaceCountry = (typeof marketplaceCountries)[number];
 export type MarketplaceCountryCode = MarketplaceCountry["code"];
 
 export const marketingNav = [
+  { title: "How it works", href: "#how-it-works" },
+  { title: "Pricing", href: "#pricing" },
+  { title: "About Us", href: "/about" },
+  { title: "Contact Us", href: "/contact" },
+] as const;
+
+export const marketingMoreNav = [
   { title: "Services", href: "#services" },
   { title: "For Agencies", href: "#agencies" },
-  { title: "How it works", href: "#how-it-works" },
   { title: "Resources", href: "#faq" },
 ] as const;
 
 export const footerNav = {
-  marketplace: [
-    { title: "India sites", href: "#marketplace" },
-    { title: "Admin sites", href: "#marketplace" },
-    { title: "Link insertions", href: "#marketplace" },
-  ],
   company: [
-    { title: "How it works", href: "#how-it-works" },
-    { title: "FAQs", href: "#faq" },
+    { title: "Home", href: "/" },
+    { title: "About Us", href: "/about" },
     { title: "Contact", href: "/contact" },
+    { title: "Blog", href: "/blog" },
   ],
-  legal: [
-    { title: "Privacy", href: "/privacy" },
-    { title: "Terms", href: "/terms" },
-    { title: "Replacement policy", href: "/replacement-policy" },
+  services: [
+    { title: "Guest Posts", href: "#marketplace" },
+    { title: "Link Insertions", href: "#marketplace" },
+    { title: "Niche Edits", href: "#marketplace" },
+    { title: "Custom Campaigns", href: "/contact" },
   ],
 } as const;
 

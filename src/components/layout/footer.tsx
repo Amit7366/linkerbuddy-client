@@ -1,87 +1,196 @@
 "use client";
 
 import Link from "next/link";
-import { FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
+import { FaEnvelope, FaPhone } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaPinterestP,
+  FaXTwitter,
+} from "react-icons/fa6";
 import { siteConfig } from "@/config/site";
-import { Logo } from "@/components/ui/logo";
 import { Container } from "@/components/layout/container";
 import { useTranslations } from "@/providers/locale-provider";
 
+const socials = [
+  {
+    href: siteConfig.links.facebook,
+    label: "Facebook",
+    icon: FaFacebookF,
+    className: "bg-[#1877F2]",
+  },
+  {
+    href: siteConfig.links.twitter,
+    label: "X (Twitter)",
+    icon: FaXTwitter,
+    className: "bg-[#000000]",
+  },
+  {
+    href: siteConfig.links.instagram,
+    label: "Instagram",
+    icon: FaInstagram,
+    className:
+      "bg-[linear-gradient(45deg,#f09433_0%,#e6683c_25%,#dc2743_50%,#cc2366_75%,#bc1888_100%)]",
+  },
+  {
+    href: siteConfig.links.pinterest,
+    label: "Pinterest",
+    icon: FaPinterestP,
+    className: "bg-[#E60023]",
+  },
+  {
+    href: siteConfig.links.linkedin,
+    label: "LinkedIn",
+    icon: FaLinkedinIn,
+    className: "bg-[#0A66C2]",
+  },
+] as const;
+
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="group inline-flex items-start gap-2 text-[14px] leading-snug text-white/90 no-underline transition-colors hover:text-white"
+    >
+      <span
+        aria-hidden
+        className="mt-[2px] shrink-0 text-[13px] font-bold text-brand transition-transform group-hover:translate-x-0.5"
+      >
+        ›
+      </span>
+      <span>{children}</span>
+    </Link>
+  );
+}
+
 export function Footer() {
   const t = useTranslations();
+  const { contact } = siteConfig;
 
-  const columns = [
-    {
-      title: t("footer.marketplace"),
-      links: [
-        { title: t("footer.indiaSites"), href: "#marketplace" },
-        { title: t("footer.adminSites"), href: "#marketplace" },
-        { title: t("footer.linkInsertions"), href: "#marketplace" },
-      ],
-    },
-    {
-      title: t("footer.company"),
-      links: [
-        { title: t("footer.howItWorks"), href: "#how-it-works" },
-        { title: t("footer.faqs"), href: "#faq" },
-        { title: t("footer.contact"), href: "/contact" },
-      ],
-    },
-    {
-      title: t("footer.legal"),
-      links: [
-        { title: t("footer.privacy"), href: "/privacy" },
-        { title: t("footer.terms"), href: "/terms" },
-        { title: t("footer.replacement"), href: "/replacement-policy" },
-      ],
-    },
+  const companyLinks = [
+    { title: t("footer.home"), href: "/" },
+    { title: t("footer.about"), href: "/about" },
+    { title: t("footer.contact"), href: "/contact" },
+    { title: t("footer.blog"), href: "/blog" },
+  ];
+
+  const serviceLinks = [
+    { title: t("footer.guestPosts"), href: "#marketplace" },
+    { title: t("footer.linkInsertions"), href: "#marketplace" },
+    { title: t("footer.nicheEdits"), href: "#marketplace" },
+    { title: t("footer.customCampaigns"), href: "/contact" },
   ];
 
   return (
-    <footer className="bg-[#06152f] px-0 pt-[55px] pb-[22px] text-[#b5c3d8] dark:bg-[#040914]">
+    <footer className="bg-[#06152f] px-0 pt-14 pb-10 text-white dark:bg-[#040914]">
       <Container>
-        <div className="grid grid-cols-2 gap-8 tablet:grid-cols-[1.2fr_1.2fr_0.6fr_0.6fr] tablet:gap-[45px]">
-          <div className="col-span-2 flex flex-col gap-2.5 tablet:col-span-1">
-            <Logo light />
-            <p className="m-0 max-w-sm text-[11px] leading-[1.7]">{t("footer.blurb")}</p>
+        <div className="grid grid-cols-1 gap-10 phablet:grid-cols-2 tablet:grid-cols-4 tablet:gap-8 desktop:gap-12">
+          {/* Contact */}
+          <div className="flex flex-col gap-4">
+            <h2 className="m-0 text-[15px] font-bold tracking-[0.06em] text-white uppercase">
+              {t("footer.contactHeading")}
+            </h2>
+            <p className="m-0 max-w-[240px] text-[14px] leading-[1.55] text-white/90">
+              {contact.address}
+            </p>
+            <a
+              href={`tel:${contact.phoneE164}`}
+              className="inline-flex items-center gap-2.5 text-[14px] text-white/90 no-underline transition-colors hover:text-white"
+            >
+              <span className="grid size-7 shrink-0 place-items-center rounded-full bg-brand text-white">
+                <FaPhone size={11} aria-hidden />
+              </span>
+              {contact.phoneDisplay}
+            </a>
+            <a
+              href={`mailto:${contact.email}`}
+              className="inline-flex items-center gap-2.5 break-all text-[14px] text-white/90 no-underline transition-colors hover:text-white"
+            >
+              <span className="grid size-7 shrink-0 place-items-center rounded-full bg-brand text-white">
+                <FaEnvelope size={11} aria-hidden />
+              </span>
+              {contact.email}
+            </a>
+            <div className="mt-1 flex flex-wrap items-center gap-2.5">
+              {socials.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.label}
+                    className={`grid size-8 place-items-center rounded-md text-white no-underline shadow-sm transition-transform hover:-translate-y-0.5 ${item.className}`}
+                  >
+                    <Icon size={14} aria-hidden />
+                  </a>
+                );
+              })}
+            </div>
           </div>
 
-          {columns.map((column) => (
-            <div key={column.title} className="flex flex-col gap-2.5">
-              <b className="text-[11px] text-white">{column.title}</b>
-              {column.links.map((item) => (
-                <Link
-                  key={item.title}
-                  href={item.href}
-                  className="text-[10px] text-[#9facbf] no-underline hover:text-white"
-                >
+          {/* Company */}
+          <div className="flex flex-col gap-4">
+            <h2 className="m-0 text-[15px] font-bold tracking-[0.06em] text-white uppercase">
+              {t("footer.company")}
+            </h2>
+            <nav className="flex flex-col gap-3" aria-label={t("footer.company")}>
+              {companyLinks.map((item) => (
+                <FooterLink key={item.href + item.title} href={item.href}>
                   {item.title}
-                </Link>
+                </FooterLink>
               ))}
-            </div>
-          ))}
+            </nav>
+          </div>
+
+          {/* Services */}
+          <div className="flex flex-col gap-4">
+            <h2 className="m-0 text-[15px] font-bold tracking-[0.06em] text-white uppercase">
+              {t("footer.services")}
+            </h2>
+            <nav className="flex flex-col gap-3" aria-label={t("footer.services")}>
+              {serviceLinks.map((item) => (
+                <FooterLink key={item.href + item.title} href={item.href}>
+                  {item.title}
+                </FooterLink>
+              ))}
+            </nav>
+          </div>
+
+          {/* Map */}
+          <div className="min-h-[220px] overflow-hidden rounded-md ring-1 ring-white/10 phablet:col-span-2 tablet:col-span-1 tablet:min-h-[240px]">
+            <iframe
+              title={contact.mapLabel}
+              src={contact.mapEmbedUrl}
+              className="h-full min-h-[220px] w-full border-0 tablet:min-h-[240px]"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </div>
         </div>
 
-        <div className="mt-[35px] flex flex-col gap-3 border-t border-white/10 pt-[18px] text-[9px] tablet:flex-row tablet:items-center tablet:justify-between">
+        <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-5 text-[12px] text-white/55 tablet:flex-row tablet:items-center tablet:justify-between">
           <p className="m-0">
             © {new Date().getFullYear()} {siteConfig.name}. {t("footer.copyright")}
           </p>
-          <div className="flex items-center gap-3">
-            <span>{t("footer.legalLine")}</span>
-            <a
-              href={siteConfig.links.linkedin}
-              aria-label="LinkedIn"
-              className="text-[#9facbf] hover:text-white"
+          <div className="flex flex-wrap gap-x-3 gap-y-1">
+            <Link href="/privacy" className="text-white/55 no-underline hover:text-white">
+              {t("footer.privacy")}
+            </Link>
+            <span aria-hidden>·</span>
+            <Link href="/terms" className="text-white/55 no-underline hover:text-white">
+              {t("footer.terms")}
+            </Link>
+            <span aria-hidden>·</span>
+            <Link
+              href="/replacement-policy"
+              className="text-white/55 no-underline hover:text-white"
             >
-              <FaLinkedinIn size={12} />
-            </a>
-            <a
-              href={siteConfig.links.twitter}
-              aria-label="X (Twitter)"
-              className="text-[#9facbf] hover:text-white"
-            >
-              <FaXTwitter size={12} />
-            </a>
+              {t("footer.replacement")}
+            </Link>
           </div>
         </div>
       </Container>

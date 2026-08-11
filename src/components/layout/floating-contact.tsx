@@ -5,14 +5,15 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Mail, MessageCircle, Phone, X } from "lucide-react";
 import { FaTelegram, FaWhatsapp } from "react-icons/fa6";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
+import { siteConfig } from "@/config/site";
 import { useTranslations } from "@/providers/locale-provider";
 import { cn } from "@/lib/utils";
 
 const CONTACT = {
-  email: "linkerbuddy@gmail.com",
-  phoneDisplay: "01709751603",
-  phoneE164: "+8801709751603",
-  whatsappE164: "8801709751603",
+  email: siteConfig.contact.email,
+  phoneDisplay: siteConfig.contact.phoneDisplay,
+  phoneE164: siteConfig.contact.phoneE164,
+  whatsappE164: siteConfig.contact.phoneE164.replace(/^\+/, ""),
   telegram: "https://t.me/linkerbuddy",
 } as const;
 

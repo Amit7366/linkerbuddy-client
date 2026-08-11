@@ -8,6 +8,7 @@ import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { MarketplaceDropdown } from "@/components/layout/marketplace-dropdown";
+import { NavMoreDropdown } from "@/components/layout/nav-more-dropdown";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { useToast } from "@/components/ui/toast";
@@ -21,12 +22,9 @@ import {
 import { withLocalePrefix } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
-const NAV_ITEMS = [
-  { key: "nav.services", href: "#services", section: "services" },
-  { key: "nav.agencies", href: "#agencies", section: "agencies" },
+const PRIMARY_NAV = [
   { key: "nav.howItWorks", href: "#how-it-works", section: "how-it-works" },
   { key: "nav.pricing", href: "#pricing", section: "pricing" },
-  { key: "nav.resources", href: "#faq", section: "faq" },
 ] as const satisfies ReadonlyArray<{
   key: string;
   href: `#${HomeNavSection}`;
@@ -82,6 +80,10 @@ export function Header() {
   const displayName = user?.name?.trim() || user?.email?.split("@")[0] || "Account";
   const profileHref = profileHrefForRole(user?.role);
   const homeHref = withLocalePrefix("/", locale);
+  const aboutHref = withLocalePrefix("/about", locale);
+  const contactHref = withLocalePrefix("/contact", locale);
+  const isAboutActive = pathname === aboutHref || pathname.endsWith("/about");
+  const isContactActive = pathname === contactHref || pathname.endsWith("/contact");
 
   const scrollTo = (selector: string) => {
     document.querySelector(selector)?.scrollIntoView({ behavior: "smooth" });
@@ -104,6 +106,14 @@ export function Header() {
       window.history.replaceState(null, "", `${pathname}#${section}`);
     }
   };
+
+  const navLinkClass = (isActive: boolean) =>
+    cn(
+      "relative text-[13px] font-semibold no-underline transition-colors",
+      isActive
+        ? "text-[var(--orange)] after:absolute after:right-0 after:-bottom-1 after:left-0 after:mx-auto after:h-[2px] after:w-4 after:rounded-full after:bg-[var(--orange)]"
+        : "text-[var(--nav-link)] hover:text-white",
+    );
 
   return (
     <header
@@ -136,25 +146,45 @@ export function Header() {
             }}
           />
 
-          {NAV_ITEMS.map((item) => {
+          {PRIMARY_NAV.map((item) => {
             const isActive = active === item.section;
             return (
               <Link
                 key={item.href}
                 href={`${homeHref}${item.href}`}
                 aria-current={isActive ? "true" : undefined}
-                className={cn(
-                  "relative text-[13px] font-semibold no-underline transition-colors",
-                  isActive
-                    ? "text-[var(--orange)] after:absolute after:right-0 after:-bottom-1 after:left-0 after:mx-auto after:h-[2px] after:w-4 after:rounded-full after:bg-[var(--orange)]"
-                    : "text-[var(--nav-link)] hover:text-white",
-                )}
+                className={navLinkClass(isActive)}
                 onClick={(event) => handleNavClick(event, item.section)}
               >
                 {t(item.key)}
               </Link>
             );
           })}
+
+          <Link
+            href={aboutHref}
+            aria-current={isAboutActive ? "true" : undefined}
+            className={navLinkClass(isAboutActive)}
+            onClick={() => setOpen(false)}
+          >
+            {t("nav.aboutUs")}
+          </Link>
+
+          <Link
+            href={contactHref}
+            aria-current={isContactActive ? "true" : undefined}
+            className={navLinkClass(isContactActive)}
+            onClick={() => setOpen(false)}
+          >
+            {t("nav.contactUs")}
+          </Link>
+
+          <NavMoreDropdown
+            homeHref={homeHref}
+            activeSection={active}
+            fullWidth={open}
+            onNavigate={handleNavClick}
+          />
 
           {open && !loading && user ? (
             <div className="mt-2 border-t border-white/10 pt-4 tablet:hidden">
@@ -178,10 +208,9 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2 phablet:gap-3">
-          <LanguageSwitcher compact className="tablet:hidden" />
+          <LanguageSwitcher />
           <ThemeToggle className="tablet:hidden" />
           <div className="hidden items-center gap-2 tablet:flex">
-            <LanguageSwitcher />
             <ThemeToggle />
           </div>
 

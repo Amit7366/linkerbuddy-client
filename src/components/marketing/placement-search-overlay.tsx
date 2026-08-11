@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Eye, Search, X } from "lucide-react";
+import { Check, Eye, Plus, Search, X } from "lucide-react";
 import { formatTraffic, domainInitials, type SiteListing } from "@/config/landing";
 import { listMarketplace } from "@/lib/api/marketplace";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
@@ -39,6 +39,26 @@ function LoadingDots({ className }: { className?: string }) {
   );
 }
 
+function avatarTone(domain: string): { wrap: string; text: string } {
+  let hash = 0;
+  for (let i = 0; i < domain.length; i++) hash = (hash + domain.charCodeAt(i) * (i + 1)) % 3;
+  const tones = [
+    {
+      wrap: "bg-[#e8f1ff] dark:bg-[#1a2d4d]",
+      text: "text-[#1a4a9e] dark:text-[#7db4ff]",
+    },
+    {
+      wrap: "bg-[#eee8ff] dark:bg-[#2a1f4a]",
+      text: "text-[#5b3d9e] dark:text-[#c4b5fd]",
+    },
+    {
+      wrap: "bg-[#e6f7f0] dark:bg-[#14352c]",
+      text: "text-[#0a7a55] dark:text-[#6ee7b7]",
+    },
+  ] as const;
+  return tones[hash]!;
+}
+
 function SearchResultRow({
   site,
   onView,
@@ -49,56 +69,89 @@ function SearchResultRow({
   const t = useTranslations();
   const { selectedIds, toggle } = useShortlist();
   const selected = selectedIds.includes(site.id);
+  const tone = avatarTone(site.domain);
 
   return (
     <div
-      role="button"
-      tabIndex={0}
-      className="flex w-full cursor-pointer items-center gap-2 rounded-xl border-0 bg-transparent px-3 py-3 text-left transition-colors hover:bg-[#eaf3ff] dark:hover:bg-white/8 tablet:gap-3"
-      onClick={() => onView(site)}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          onView(site);
-        }
-      }}
+      className={cn(
+        "flex w-full items-center gap-3 rounded-2xl border px-3.5 py-3 transition-colors",
+        "border-[#d6e6fb] bg-[#f7fbff] hover:border-[#b7d2f7] hover:bg-[#eef6ff]",
+        "dark:border-white/10 dark:bg-[#0f1829] dark:hover:border-white/18 dark:hover:bg-[#152238]",
+        selected &&
+          "border-brand/40 bg-[#eaf3ff] dark:border-brand/40 dark:bg-[#15233a]",
+      )}
     >
-      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#eaf3ff] text-[11px] font-extrabold text-[#1268f3] dark:bg-[#1a2740] dark:text-brand">
+      <span
+        className={cn(
+          "grid size-11 shrink-0 place-items-center rounded-xl text-[12px] font-extrabold tracking-wide",
+          tone.wrap,
+          tone.text,
+        )}
+        aria-hidden
+      >
         {domainInitials(site.domain)}
       </span>
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-bold text-[#1268f3] dark:text-brand">
-          {site.domain}
-        </span>
-        <span className="mt-0.5 block text-[10px] text-[#5a6880] dark:text-muted">
-          {site.niche} · DR {site.dr} · {formatTraffic(site.traffic)} · ${site.guest}
-        </span>
-      </span>
-      <span className="hidden rounded-lg bg-[#eaf3ff] px-2 py-1 text-[10px] font-bold text-[#1268f3] tablet:inline dark:bg-brand/10 dark:text-brand">
-        {site.owner}
-      </span>
-      <div className="flex shrink-0 items-center gap-1.5">
+
+      <div className="min-w-0 flex-1 basis-[140px]">
+        <p className="m-0 truncate text-[14px] font-bold text-ink">{site.domain}</p>
+        <p className="m-0 mt-0.5 truncate text-[12px] text-muted">
+          {site.niche} · {site.country}
+        </p>
+      </div>
+
+      <div className="hidden shrink-0 items-center gap-5 phablet:flex">
+        <div className="min-w-[36px] text-center">
+          <span className="block text-[10px] font-medium tracking-wide text-muted uppercase">
+            {t("marketplace.columns.dr")}
+          </span>
+          <strong className="mt-0.5 block text-[15px] font-bold text-ink">{site.dr}</strong>
+        </div>
+        <div className="min-w-[52px] text-center">
+          <span className="block text-[10px] font-medium tracking-wide text-muted uppercase">
+            {t("inventory.modal.traffic")}
+          </span>
+          <strong className="mt-0.5 block text-[15px] font-bold text-ink">
+            {formatTraffic(site.traffic)}
+          </strong>
+        </div>
+      </div>
+
+      <strong className="hidden min-w-[64px] shrink-0 text-right text-[16px] font-bold text-ink tablet:block">
+        ${site.guest}+
+      </strong>
+
+      <div className="ml-auto flex shrink-0 items-center gap-2">
+        <span className="text-[13px] font-bold text-ink phablet:hidden">${site.guest}+</span>
         <button
           type="button"
-          onClick={(event) => {
-            event.stopPropagation();
-            onView(site);
-          }}
+          onClick={() => onView(site)}
           aria-label={t("inventory.viewDetails", { domain: site.domain })}
-          className="grid size-9 shrink-0 place-items-center rounded-lg border border-[#dfe6f0] bg-[#f7f9fc] text-[#1268f3] transition-colors hover:border-[#1268f3] hover:bg-[#eaf3ff] dark:border-white/10 dark:bg-white/5 dark:text-brand dark:hover:border-brand dark:hover:bg-white/10"
+          className={cn(
+            "grid size-10 shrink-0 place-items-center rounded-[10px] border transition-colors",
+            "border-[#d0dceb] bg-white text-brand hover:border-brand hover:bg-sky",
+            "dark:border-white/12 dark:bg-white/5 dark:text-brand dark:hover:border-brand dark:hover:bg-white/10",
+          )}
         >
-          <Eye className="size-3.5" aria-hidden />
+          <Eye className="size-4" aria-hidden />
         </button>
         <button
           type="button"
-          onClick={(event) => {
-            event.stopPropagation();
-            toggle(site.id);
-          }}
+          onClick={() => toggle(site.id)}
           data-selected={selected ? "true" : "false"}
-          className="lb-add-site"
+          aria-label={selected ? t("marketplace.selected") : t("marketplace.addSite")}
+          aria-pressed={selected}
+          className={cn(
+            "grid size-10 shrink-0 place-items-center rounded-[10px] border-0 text-white shadow-[var(--shadow-btn)] transition-colors",
+            selected
+              ? "bg-green hover:brightness-110"
+              : "bg-brand hover:bg-brand-hover",
+          )}
         >
-          {selected ? t("marketplace.selected") : t("marketplace.addSite")}
+          {selected ? (
+            <Check className="size-4" aria-hidden strokeWidth={3} />
+          ) : (
+            <Plus className="size-5" aria-hidden strokeWidth={2.5} />
+          )}
         </button>
       </div>
     </div>
@@ -187,7 +240,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
       />
 
       <motion.div
-        className="relative z-10 w-full max-w-[720px] overflow-hidden rounded-2xl border border-[#d6e3f5] bg-white shadow-[0_30px_80px_#071b3d40] backdrop-blur-2xl dark:border-white/10 dark:bg-[#121a2b]/95 dark:shadow-[0_30px_80px_#00000080]"
+        className="relative z-10 w-full max-w-[780px] overflow-hidden rounded-2xl border border-[#d6e3f5] bg-white shadow-[0_30px_80px_#071b3d40] backdrop-blur-2xl dark:border-white/10 dark:bg-[#121a2b]/95 dark:shadow-[0_30px_80px_#00000080]"
         initial={reduce ? { opacity: 1 } : { opacity: 0, y: 24, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={reduce ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.98 }}
@@ -223,17 +276,17 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
           </div>
         </div>
 
-        <div className="max-h-[min(58vh,420px)] overflow-y-auto p-2">
+        <div className="max-h-[min(58vh,480px)] overflow-y-auto p-2.5">
           {!query.trim() ? (
             <p className="px-3 py-8 text-center text-[12px] text-[#63708a] dark:text-muted">
               {t("search.hint")}
             </p>
           ) : results.length === 0 && showLoading ? (
-            <div className="space-y-2 px-2 py-3">
+            <div className="space-y-2.5 px-0.5 py-1">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="h-14 animate-pulse rounded-xl bg-[#e8eef6] dark:bg-white/5"
+                  className="h-[68px] animate-pulse rounded-2xl bg-[#e8eef6] dark:bg-white/5"
                 />
               ))}
             </div>
@@ -242,7 +295,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
               {t("search.empty", { query: debouncedQuery })}
             </p>
           ) : (
-            <ul className="m-0 list-none space-y-1 p-0">
+            <ul className="m-0 list-none space-y-2.5 p-0">
               <AnimatePresence mode="popLayout">
                 {results.map((site, index) => (
                   <motion.li

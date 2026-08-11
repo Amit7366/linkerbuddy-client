@@ -13,6 +13,7 @@ export const localizedMarketingPrefixes = [
   "/",
   "/inventory",
   "/about",
+  "/about-us",
   "/pricing",
   "/blog",
   "/contact",
