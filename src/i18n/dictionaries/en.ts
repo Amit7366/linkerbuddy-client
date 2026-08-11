@@ -259,25 +259,41 @@ export const en = {
   },
   faq: {
     kicker: "Common questions",
-    title: "Know exactly what you're ordering.",
+    title: "Everything You Need to Know Before You Get Backlinks",
     description: "Clear answers before you commit a campaign budget.",
     contact: "Still unsure? Talk to our team →",
     items: {
-      verified: {
-        q: "How are websites and traffic verified?",
-        a: "Inventory is reviewed for organic visibility, traffic trend, editorial quality, outbound-link patterns, and publishing history. The final production site should connect these values to your live verification process.",
+      safe: {
+        q: "Are your backlinks safe? Will they cause a Google penalty?",
+        a: "Yes, our backlinks are 100% safe. We strictly place links on real, publisher-ready websites with authentic organic search traffic and strong domain authority (DR/DA). We do not use low-quality Private Blog Networks (PBNs), automated link networks, or spam sites, ensuring your domain remains fully compliant with Google guidelines.",
       },
-      dofollow: {
-        q: "Are the links permanent and dofollow?",
-        a: "This prototype demonstrates where policy details and buying objections will be answered clearly before checkout.",
+      turnaround: {
+        q: "How long does it take to get backlinks live?",
+        a: "Turnaround time depends on the placement type. Niche edits (link insertions into existing articles) typically go live within 24 to 48 hours. Sponsored guest posts usually take between 3 to 7 business days, depending on publisher content approvals and editorial review schedules.",
+      },
+      chooseSites: {
+        q: "Can I choose which websites my links are placed on?",
+        a: "Yes, absolutely! You have full control over site selection. You can browse our marketplace inventory or request a custom site shortlist based on your preferred metrics (DR/DA, target country, organic traffic, and niche). You approve the site before any placement is finalized.",
+      },
+      whiteLabel: {
+        q: "Do you offer white-label link building for agencies?",
+        a: "Yes, we provide fully white-label link building solutions for agencies and resellers. All our reporting dashboards and placement reports come unbranded or white-labeled so you can deliver live link reports directly to your clients.",
+      },
+      replacement: {
+        q: "What happens if a link goes down?",
+        a: "We offer a guaranteed 7-Day / 30-Day Replacement Policy. If an eligible backlink is removed, lost, or marked as nofollow by a publisher within the guarantee period, our team will re-engage the publisher or replace it on an equivalent authority website at zero extra cost.",
+      },
+      anchorText: {
+        q: "What anchor text strategy do you use?",
+        a: "We recommend maintaining a natural link profile by blending exact-match, partial-match, branded, and URL anchors. When negotiating via email, you provide your preferred anchor text and target URL, and our editorial team ensures the anchor fits contextually within the post.",
+      },
+      howMany: {
+        q: "How many backlinks do I need to rank?",
+        a: "The number of backlinks required depends on your industry niche, keyword difficulty, and current domain authority relative to top-ranking competitors. We can analyze your target pages during email negotiations and recommend an effective campaign size.",
       },
       niches: {
-        q: "Can I order casino, crypto or CBD placements?",
-        a: "This prototype demonstrates where policy details and buying objections will be answered clearly before checkout.",
-      },
-      discounts: {
-        q: "Do you provide content and bulk discounts?",
-        a: "This prototype demonstrates where policy details and buying objections will be answered clearly before checkout.",
+        q: "Do you work with any niche or industry?",
+        a: "We cover almost all major niches, including Tech, Business, Finance, Lifestyle, Health, Travel, E-commerce, Real Estate, and more. For specialized or sensitive niches (e.g., iGaming, Crypto), please reach out directly via email so we can curate a custom publisher shortlist.",
       },
     },
   },

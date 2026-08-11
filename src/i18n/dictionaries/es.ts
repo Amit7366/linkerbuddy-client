@@ -262,25 +262,41 @@ export const es: Dictionary = {
   },
   faq: {
     kicker: "Preguntas frecuentes",
-    title: "Sabe exactamente qué estás pidiendo.",
+    title: "Todo lo que necesitas saber antes de conseguir backlinks",
     description: "Respuestas claras antes de comprometer el presupuesto de campaña.",
     contact: "¿Aún tienes dudas? Habla con el equipo →",
     items: {
-      verified: {
-        q: "¿Cómo se verifican los sitios y el tráfico?",
-        a: "El inventario se revisa por visibilidad orgánica, tendencia de tráfico, calidad editorial, patrones de enlaces salientes e historial de publicación.",
+      safe: {
+        q: "¿Sus backlinks son seguros? ¿Pueden causar una penalización de Google?",
+        a: "Sí, nuestros backlinks son 100% seguros. Colocamos enlaces solo en sitios reales, listos para publicar, con tráfico orgánico auténtico y fuerte autoridad de dominio (DR/DA). No usamos PBNs de baja calidad, redes automatizadas ni sitios spam, para que tu dominio siga cumpliendo las directrices de Google.",
       },
-      dofollow: {
-        q: "¿Los enlaces son permanentes y dofollow?",
-        a: "Este prototipo muestra dónde se responderán con claridad las políticas y objeciones de compra antes del checkout.",
+      turnaround: {
+        q: "¿Cuánto tardan en publicarse los backlinks?",
+        a: "El tiempo depende del tipo de placement. Los niche edits (inserción de enlaces en artículos existentes) suelen publicarse en 24 a 48 horas. Los guest posts patrocinados suelen tardar entre 3 y 7 días hábiles, según de las aprobaciones de contenido y la revisión editorial del publisher.",
+      },
+      chooseSites: {
+        q: "¿Puedo elegir en qué sitios se colocan mis enlaces?",
+        a: "¡Por supuesto! Tienes control total sobre la selección. Puedes explorar nuestro marketplace o pedir una shortlist personalizada según tus métricas (DR/DA, país objetivo, tráfico orgánico y nicho). Apruebas el sitio antes de finalizar cualquier placement.",
+      },
+      whiteLabel: {
+        q: "¿Ofrecen link building white-label para agencias?",
+        a: "Sí, ofrecemos soluciones white-label completas para agencias y revendedores. Nuestros dashboards e informes de placement llegan sin marca o white-labeled para que puedas entregar reportes de enlaces en vivo directamente a tus clientes.",
+      },
+      replacement: {
+        q: "¿Qué pasa si un enlace se cae?",
+        a: "Ofrecemos una Política de Reemplazo garantizada de 7 / 30 días. Si un backlink elegible se elimina, se pierde o pasa a nofollow dentro del periodo de garantía, nuestro equipo recontactará al publisher o lo reemplazará en un sitio de autoridad equivalente sin coste extra.",
+      },
+      anchorText: {
+        q: "¿Qué estrategia de anchor text usan?",
+        a: "Recomendamos un perfil natural mezclando anchors exact-match, partial-match, de marca y URL. En la negociación por email indiques tu anchor preferido y la URL objetivo, y nuestro equipo editorial asegura que el anchor encaje de forma contextual en el post.",
+      },
+      howMany: {
+        q: "¿Cuántos backlinks necesito para rankear?",
+        a: "La cantidad depende de tu nicho, la dificultad de la keyword y la autoridad de dominio frente a los competidores que ya rankean. Durante la negociación por email podemos analizar tus páginas objetivo y recomendar un tamaño de campaña efectivo.",
       },
       niches: {
-        q: "¿Puedo pedir colocaciones de casino, crypto o CBD?",
-        a: "Este prototipo muestra dónde se responderán con claridad las políticas y objeciones de compra antes del checkout.",
-      },
-      discounts: {
-        q: "¿Ofrecen contenido y descuentos por volumen?",
-        a: "Este prototipo muestra dónde se responderán con claridad las políticas y objeciones de compra antes del checkout.",
+        q: "¿Trabajan con cualquier nicho o industria?",
+        a: "Cubrimos casi todos los nichos principales: Tech, Business, Finance, Lifestyle, Health, Travel, E-commerce, Real Estate y más. Para nichos especializados o sensibles (p. ej. iGaming, Crypto), escríbenos por email para curar una shortlist de publishers a medida.",
       },
     },
   },

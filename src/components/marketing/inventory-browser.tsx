@@ -1,10 +1,9 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { SORT_OPTIONS, type SiteListing } from "@/config/landing";
 import type { SortValue } from "@/lib/site-listings";
@@ -32,6 +31,8 @@ function InventoryBrowserInner() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [listError, setListError] = useState(false);
   const [detailSite, setDetailSite] = useState<SiteListing | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const loadingMoreRef = useRef(false);
   const {
     sort,
     constrained,
@@ -80,14 +81,35 @@ function InventoryBrowserInner() {
   const remaining = Math.max(0, safeTotal - sites.length);
 
   const loadMore = useCallback(async () => {
-    if (loadingMore || !hasMore) return;
+    if (loadingMoreRef.current || !hasMore || initialLoading || listError) return;
+    loadingMoreRef.current = true;
     setLoadingMore(true);
     try {
       await fetchPage(page + 1, false);
+    } catch {
+      // Keep existing rows; user can scroll again to retry.
     } finally {
+      loadingMoreRef.current = false;
       setLoadingMore(false);
     }
-  }, [fetchPage, hasMore, loadingMore, page]);
+  }, [fetchPage, hasMore, initialLoading, listError, page]);
+
+  useEffect(() => {
+    const node = loadMoreRef.current;
+    if (!node || initialLoading || listError || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          void loadMore();
+        }
+      },
+      { root: null, rootMargin: "280px 0px", threshold: 0 },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [hasMore, initialLoading, listError, loadMore, sites.length]);
 
   return (
     <div className="pb-16 pt-8 tablet:pt-12">
@@ -226,7 +248,7 @@ function InventoryBrowserInner() {
               </AnimatePresence>
 
               {loadingMore ? (
-                <InventorySkeletonList count={Math.min(PAGE_SIZE, remaining)} />
+                <InventorySkeletonList count={Math.min(PAGE_SIZE, remaining || PAGE_SIZE)} />
               ) : null}
             </>
           )}
@@ -234,21 +256,20 @@ function InventoryBrowserInner() {
 
         <div className="mt-6 flex flex-col items-center gap-3">
           {!initialLoading && !listError && hasMore ? (
-            <Button
-              variant="ghost"
-              disabled={loadingMore}
-              className="min-w-[200px] border border-line px-5 py-3 text-[12px] font-bold text-ink shadow-none disabled:opacity-70"
-              onClick={() => void loadMore()}
+            <div
+              ref={loadMoreRef}
+              className="flex min-h-10 w-full items-center justify-center py-2"
+              aria-hidden={!loadingMore}
             >
               {loadingMore ? (
-                <span className="inline-flex items-center gap-2">
+                <span className="inline-flex items-center gap-2 text-[12px] text-muted">
                   <Loader2 className="size-4 animate-spin" aria-hidden />
                   {t("inventory.loading")}
                 </span>
               ) : (
-                t("inventory.loadMore", { count: Math.min(PAGE_SIZE, remaining) })
+                <span className="sr-only">{t("inventory.loading")}</span>
               )}
-            </Button>
+            </div>
           ) : null}
 
           {!initialLoading && !listError && sites.length > 0 && !hasMore ? (
