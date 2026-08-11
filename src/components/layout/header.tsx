@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
@@ -70,12 +70,18 @@ function ProfileNavLink({
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
   const { showToast } = useToast();
   const t = useTranslations();
   const { locale } = useLocale();
   const { user, loading } = useSession();
   const pathname = usePathname();
   const { active, isHome, setActive } = useActiveHomeNavSection();
+
+  // Avoid auth-dependent HTML differing between SSR and the first client paint.
+  useEffect(() => {
+    setAuthReady(true);
+  }, []);
 
   const displayName = user?.name?.trim() || user?.email?.split("@")[0] || "Account";
   const profileHref = profileHrefForRole(user?.role);
@@ -84,6 +90,7 @@ export function Header() {
   const contactHref = withLocalePrefix("/contact", locale);
   const isAboutActive = pathname === aboutHref || pathname.endsWith("/about");
   const isContactActive = pathname === contactHref || pathname.endsWith("/contact");
+  const showAuth = authReady && !loading;
 
   const scrollTo = (selector: string) => {
     document.querySelector(selector)?.scrollIntoView({ behavior: "smooth" });
@@ -186,7 +193,7 @@ export function Header() {
             onNavigate={handleNavClick}
           />
 
-          {open && !loading && user ? (
+          {open && showAuth && user ? (
             <div className="mt-2 border-t border-white/10 pt-4 tablet:hidden">
               <ProfileNavLink
                 name={displayName}
@@ -196,7 +203,7 @@ export function Header() {
               />
             </div>
           ) : null}
-          {open && !loading && !user ? (
+          {open && showAuth && !user ? (
             <Link
               href="/login"
               className="mt-2 border-t border-white/10 pt-4 text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white tablet:hidden"
@@ -214,20 +221,22 @@ export function Header() {
             <ThemeToggle />
           </div>
 
-          {!loading && user ? (
+          {!showAuth ? (
+            <span className="hidden h-8 w-[4.5rem] tablet:inline-block" aria-hidden />
+          ) : user ? (
             <ProfileNavLink
               name={displayName}
               href={profileHref}
               className="hidden tablet:inline-flex"
             />
-          ) : !loading ? (
+          ) : (
             <Link
               href="/login"
               className="hidden text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white tablet:inline"
             >
               {t("common.signIn")}
             </Link>
-          ) : null}
+          )}
 
           <Button
             size="sm"
