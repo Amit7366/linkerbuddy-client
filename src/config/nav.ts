@@ -64,6 +64,7 @@ export const marketingNav = [
   { title: "How it works", href: "#how-it-works" },
   { title: "Pricing", href: "#pricing" },
   { title: "About Us", href: "/about" },
+  { title: "Blog", href: "/blog" },
   { title: "Contact Us", href: "/contact" },
 ] as const;
 

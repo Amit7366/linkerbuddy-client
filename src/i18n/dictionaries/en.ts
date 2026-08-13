@@ -21,6 +21,7 @@ export const en = {
     more: "More",
     aboutUs: "About Us",
     contactUs: "Contact Us",
+    blog: "Blog",
     marketplace: "Marketplace",
     chooseMarket: "Choose a market",
   },
@@ -101,11 +102,13 @@ export const en = {
       },
       pricing: {
         title: "Pricing",
-        description: "Simple placement plans for startups, agencies, and enterprise SEO teams.",
+        description:
+          "Simple, transparent pricing for guest posts and link insertions — single orders, growth packs, and agency bulk.",
       },
       blog: {
         title: "Blog",
-        description: "Guides and updates on guest posts, link building, and marketplace buying.",
+        description:
+          "Guides on guest posts, niche edits, and link building — including when each strategy drives faster SEO results.",
       },
       contact: {
         title: "Contact",
@@ -420,48 +423,88 @@ export const en = {
     loading: "Preparing placements…",
   },
   pricing: {
-    title: "Pricing",
-    subtitle:
-      "Choose the authority level and placement volume that matches your SEO strategy.",
+    title: "Simple, Transparent Pricing",
+    subtitle: "Choose the perfect package for your link-building needs.",
     month: "month",
     cta: "Get started",
     noCard: "No credit card required",
-    compare: "View Detailed Metric Comparison",
+    popular: "Popular",
+    compare: "View terms & service requirements",
+    rateCard: {
+      title: "Direct Special Offer Rate Card",
+      note: "Single Site / Website Specific",
+      guest: "General Guest Post",
+      guestPrice: "$50",
+      grey: "Grey Niche (Crypto, Casino, CBD, Gambling)",
+      greyPrice: "$100",
+      insertion: "Link Insertion",
+      insertionGeneral: "General: $50",
+      insertionGrey: "Grey niche: $100",
+      tat: "Turnaround Time",
+      tatValue: "Instant (No delays or waiting)",
+      sitesNote:
+        "We have 50+ good quality websites — all website prices are the same for you.",
+      dashboardCta: "Access all websites Dashboard",
+    },
     plans: {
-      startup: {
-        name: "Standard Authority",
-        description: "For small teams launching their first outreach campaigns.",
+      single: {
+        name: "Single Order",
+        price: "$50",
+        unit: "/ link",
+        description: "General Niche Rate",
         cta: "Order Placement",
         features: {
-          dr: "Minimum DR 20-30+ (Ahrefs)",
-          content: "Client supplies content",
-          placement: "1 Placement per purchase",
-          indexation: "Guaranteed indexation",
+          guest: "$50 General Guest Post",
+          insertion: "$50 General Link Insertion",
+          grey: "$100 Grey Niche (Casino/Crypto)",
+          tat: "Instant Turnaround Time",
+          links: "Max 2 Dofollow Links",
+          quality: "Copyscape & Grammarly Pass",
         },
       },
       growth: {
-        name: "Growth Authority",
-        description:
-          "Ideal for growing agencies that require more link juice and authority.",
+        name: "Growth Pack",
+        price: "$225",
+        unit: "/ 5 links",
+        description: "$45/link • Save $25",
         cta: "Order Bundle",
         features: {
-          dr: "Minimum DR 40-50+ (Ahrefs)",
-          content: "Professional content included (800+ words)",
-          placements: "Up to 3 Placements bundle",
-          turnaround: "Priority turnaround (7 days)",
+          posts: "5 Guest Posts or Link Insertions",
+          mix: "Mix General or Grey Niches ($450)",
+          dr: "High DR 30 - DR 70+ Sites",
+          tat: "Instant Publishing (TAT)",
+          indexing: "Guaranteed Indexing",
+          dashboard: "Full 50+ Site Dashboard Access",
         },
       },
-      enterprise: {
-        name: "Enterprise Link Building",
-        description: "Scalable outreach solutions for high-volume SEO requirements.",
+      agency: {
+        name: "Agency Bulk",
+        price: "$400",
+        unit: "/ 10 links",
+        description: "$40/link • Save $100",
         cta: "Contact for Custom Plan",
         features: {
-          dr: "Minimum DR 60+ (Premium Sites)",
-          campaigns: "Multi-link campaigns",
-          content: "Turnkey content & submission",
+          posts: "10 Guest Posts or Link Insertions",
+          mix: "Mix General or Grey Niches ($800)",
+          traffic: "High Traffic Sites (up to 60K+)",
+          tat: "Instant Publishing (TAT)",
           manager: "Dedicated Account Manager",
+          shortlist: "Custom Shortlist Support",
         },
       },
+    },
+    terms: {
+      title: "Terms & Service Requirements",
+      quality:
+        "Article Quality: Minimum 500 words. Must pass Copyscape and Grammarly.",
+      links:
+        "Allowed Links: Maximum of 2 do-follow links. Unique articles only. No hyperlinks without anchor text.",
+      payment:
+        "Payment Methods: PayPal Invoice, Payoneer, Cryptocurrency (Binance USDT).",
+      guarantees:
+        "Guarantees: Lifetime link status (Minimum 3 Years guarantee), Indexing guarantee & unlimited revisions.",
+      sponsored: "No Sponsored Tag: Articles will NOT be marked with a sponsored tag.",
+      prohibited: "Prohibited: Adult content & adult links are strictly not allowed.",
     },
   },
   aboutPage: {
@@ -541,6 +584,148 @@ export const en = {
       emailLabel: "Email us directly",
       browse: "Browse our inventory",
       contact: "Get in touch",
+    },
+  },
+  blogIndex: {
+    heroTitle: "Blog",
+    breadcrumb: "Blog",
+    subtitle:
+      "Guides on guest posts, niche edits, and link building that actually move rankings.",
+    featuredLabel: "Featured",
+    readArticle: "Read the guide",
+    readTime: "{minutes} min read",
+  },
+  blogArticle: {
+    category: "Link building",
+    breadcrumb: "Niche Edits vs. Guest Posts",
+    title: "Niche Edits vs. Guest Posts",
+    subtitle:
+      "Which Link Building Strategy Drives Faster SEO Results for Your Brand & Clients?",
+    readTime: "{minutes} min read",
+    tocTitle: "On this page",
+    toc: {
+      intro: "Off-page SEO",
+      definitions: "Guest posts vs niche edits",
+      guestBenefits: "Guest post benefits",
+      nicheBenefits: "Niche edit benefits",
+      compare: "Comparison",
+      when: "When to use each",
+      why: "Why Linkerbuddy",
+      workflow: "How it works",
+      combine: "Combine both",
+    },
+    intro: {
+      kicker: "Understanding Off-Page SEO",
+      title: "Backlinks still move rankings. The strategy you choose decides how fast.",
+      body: "Backlinks build domain authority, push organic rankings higher, and drive targeted traffic. Here is how to choose the right strategy.",
+    },
+    guest: {
+      kicker: "Sponsored content",
+      title: "What is a Guest Post?",
+      body: "A Sponsored Guest Post involves creating a completely new article to be published on an authority third-party website.",
+      point1: "Custom content written specifically around your target keyword and niche.",
+      point2: "Contextual backlink placed naturally within the newly published body text.",
+      point3: "Ideal for establishing thought leadership and full narrative control.",
+      point4: "Helps build long-term brand identity across regional and global blogs.",
+    },
+    niche: {
+      kicker: "In-content link insertions",
+      title: "What is a Niche Edit?",
+      body: "A Niche Edit places your backlink into an existing, already-indexed article that already holds Google ranking authority.",
+      point1:
+        "Instead of publishing new content, publishers naturally insert your contextual link and anchor text into an established post.",
+      point2:
+        "That post already receives organic search traffic — so your link inherits existing authority.",
+    },
+    guestBenefits: {
+      title: "Key Benefits of Guest Posts",
+      controlTitle: "Full Control",
+      controlBody:
+        "Complete control over article topic, tone, content length, and surrounding anchor text structure.",
+      brandTitle: "Brand Equity",
+      brandBody:
+        "Publish valuable industry insights, building authority and thought leadership with new audiences.",
+      nicheTitle: "Niche Relevance",
+      nicheBody:
+        "Articles are custom-crafted specifically to align with your targeted products and market segment.",
+    },
+    nicheBenefits: {
+      title: "Key Benefits of Niche Edits",
+      authorityTitle: "Instant Authority",
+      authorityBody:
+        "Leverages aged pages that are already indexed and carrying historical Google page authority.",
+      speedTitle: "Fast Turnaround",
+      speedBody:
+        "No article writing required. Link placements can go live in a fraction of standard publishing time.",
+      costTitle: "Cost Effective",
+      costBody:
+        "Eliminates content creation expenses, making it ideal for scaling backlink volume on budget.",
+    },
+    compare: {
+      title: "Side-by-Side Comparison",
+      feature: "Feature",
+      guest: "Guest Posts",
+      niche: "Niche Edits (Link Insertions)",
+      content: "Content Requirement",
+      contentGuest: "New article (800+ words)",
+      contentNiche: "Existing, aged article",
+      indexing: "Indexing Speed",
+      indexingGuest: "Standard (starts from zero)",
+      indexingNiche: "Faster (page already indexed)",
+      turnaround: "Turnaround Time",
+      turnaroundGuest: "Days to weeks",
+      turnaroundNiche: "Fast / Priority TAT",
+      control: "Context Control",
+      controlGuest: "High (full article writing)",
+      controlNiche: "Moderate (paragraph placement)",
+      objective: "Campaign Objective",
+      objectiveGuest: "Brand authority & storytelling",
+      objectiveNiche: "Quick ranking impact & budget scale",
+    },
+    when: {
+      title: "Choosing the Right Strategy",
+      nicheTitle: "When to Use Niche Edits",
+      nicheBody:
+        "Best when you need fast indexing, are targeting competitive keyword terms, want to tap into pages with existing search traffic, or need budget-friendly volume.",
+      guestTitle: "When to Use Guest Posts",
+      guestBody:
+        "Best when you want to publish fresh branded stories, maintain absolute control over the surrounding text, and establish authority on top-tier niche publications.",
+    },
+    why: {
+      title: "Why Choose Linkerbuddy?",
+      inventoryTitle: "Multi-Country Inventory",
+      inventoryBody:
+        "Access pre-vetted publisher sites across Australia, India, US, UK, and global regions.",
+      metricsTitle: "Verified Metrics",
+      metricsBody:
+        "Every site is checked for real organic traffic, Moz DA, and Ahrefs DR—no PBNs or spam.",
+      dealsTitle: "Direct Email Deals",
+      dealsBody:
+        "Flexible negotiations via email for custom packages, bulk discounts, and fast turnaround.",
+    },
+    workflow: {
+      title: "Our 4-Step Email Workflow",
+      step1Title: "Select",
+      step1Body: "Browse inventory or share target DR, traffic & niche requirements.",
+      step2Title: "Negotiate",
+      step2Body: "Discuss custom pricing, bulk orders & guidelines directly via email.",
+      step3Title: "Publish",
+      step3Body: "Our team coordinates content insertion or guest post publishing.",
+      step4Title: "Report",
+      step4Body: "Receive live URLs, anchor tracking, and placement guarantees.",
+    },
+    combine: {
+      kicker: "100% Verified Organic Traffic",
+      title: "Combine Both for Maximum Results",
+      body: "The strongest SEO campaigns don't rely on a single link type. Combining contextual Niche Edits for speed and Sponsored Guest Posts for brand authority creates a natural, powerful backlink profile search engines love.",
+      cta: "Drive Scalable SEO Growth",
+    },
+    cta: {
+      title: "Ready to Scale Your Rankings?",
+      body: "Get in touch with our team for custom site shortlists and bulk pricing negotiations.",
+      contact: "Get in touch",
+      browse: "Browse inventory",
+      emailLabel: "Email us directly",
     },
   },
 } as const;

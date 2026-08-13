@@ -21,6 +21,7 @@ export const bn: Dictionary = {
     more: "আরও",
     aboutUs: "আমাদের সম্পর্কে",
     contactUs: "যোগাযোগ",
+    blog: "ব্লগ",
     marketplace: "মার্কেটপ্লেস",
     chooseMarket: "বাজার বেছে নিন",
   },
@@ -107,7 +108,7 @@ export const bn: Dictionary = {
       blog: {
         title: "ব্লগ",
         description:
-          "গেস্ট পোস্ট, লিংক বিল্ডিং এবং মার্কেটপ্লেস কেনার গাইড ও আপডেট।",
+          "গেস্ট পোস্ট, নিশ এডিট এবং লিংক বিল্ডিং গাইড — কোন কৌশল দ্রুত SEO ফল দেয়।",
       },
       contact: {
         title: "যোগাযোগ",
@@ -420,48 +421,88 @@ export const bn: Dictionary = {
     loading: "প্লেসমেন্ট প্রস্তুত হচ্ছে…",
   },
   pricing: {
-    title: "প্রাইসিং",
-    subtitle:
-      "আপনার SEO কৌশল অনুযায়ী অথরিটি লেভেল ও প্লেসমেন্ট ভলিউম বেছে নিন।",
+    title: "Simple, Transparent Pricing",
+    subtitle: "Choose the perfect package for your link-building needs.",
     month: "মাস",
     cta: "শুরু করুন",
     noCard: "ক্রেডিট কার্ডের প্রয়োজন নেই",
-    compare: "View Detailed Metric Comparison",
+    popular: "Popular",
+    compare: "View terms & service requirements",
+    rateCard: {
+      title: "Direct Special Offer Rate Card",
+      note: "Single Site / Website Specific",
+      guest: "General Guest Post",
+      guestPrice: "$50",
+      grey: "Grey Niche (Crypto, Casino, CBD, Gambling)",
+      greyPrice: "$100",
+      insertion: "Link Insertion",
+      insertionGeneral: "General: $50",
+      insertionGrey: "Grey niche: $100",
+      tat: "Turnaround Time",
+      tatValue: "Instant (No delays or waiting)",
+      sitesNote:
+        "We have 50+ good quality websites — all website prices are the same for you.",
+      dashboardCta: "Access all websites Dashboard",
+    },
     plans: {
-      startup: {
-        name: "Standard Authority",
-        description: "For small teams launching their first outreach campaigns.",
+      single: {
+        name: "Single Order",
+        price: "$50",
+        unit: "/ link",
+        description: "General Niche Rate",
         cta: "Order Placement",
         features: {
-          dr: "Minimum DR 20-30+ (Ahrefs)",
-          content: "Client supplies content",
-          placement: "1 Placement per purchase",
-          indexation: "Guaranteed indexation",
+          guest: "$50 General Guest Post",
+          insertion: "$50 General Link Insertion",
+          grey: "$100 Grey Niche (Casino/Crypto)",
+          tat: "Instant Turnaround Time",
+          links: "Max 2 Dofollow Links",
+          quality: "Copyscape & Grammarly Pass",
         },
       },
       growth: {
-        name: "Growth Authority",
-        description:
-          "Ideal for growing agencies that require more link juice and authority.",
+        name: "Growth Pack",
+        price: "$225",
+        unit: "/ 5 links",
+        description: "$45/link • Save $25",
         cta: "Order Bundle",
         features: {
-          dr: "Minimum DR 40-50+ (Ahrefs)",
-          content: "Professional content included (800+ words)",
-          placements: "Up to 3 Placements bundle",
-          turnaround: "Priority turnaround (7 days)",
+          posts: "5 Guest Posts or Link Insertions",
+          mix: "Mix General or Grey Niches ($450)",
+          dr: "High DR 30 - DR 70+ Sites",
+          tat: "Instant Publishing (TAT)",
+          indexing: "Guaranteed Indexing",
+          dashboard: "Full 50+ Site Dashboard Access",
         },
       },
-      enterprise: {
-        name: "Enterprise Link Building",
-        description: "Scalable outreach solutions for high-volume SEO requirements.",
+      agency: {
+        name: "Agency Bulk",
+        price: "$400",
+        unit: "/ 10 links",
+        description: "$40/link • Save $100",
         cta: "Contact for Custom Plan",
         features: {
-          dr: "Minimum DR 60+ (Premium Sites)",
-          campaigns: "Multi-link campaigns",
-          content: "Turnkey content & submission",
+          posts: "10 Guest Posts or Link Insertions",
+          mix: "Mix General or Grey Niches ($800)",
+          traffic: "High Traffic Sites (up to 60K+)",
+          tat: "Instant Publishing (TAT)",
           manager: "Dedicated Account Manager",
+          shortlist: "Custom Shortlist Support",
         },
       },
+    },
+    terms: {
+      title: "Terms & Service Requirements",
+      quality:
+        "Article Quality: Minimum 500 words. Must pass Copyscape and Grammarly.",
+      links:
+        "Allowed Links: Maximum of 2 do-follow links. Unique articles only. No hyperlinks without anchor text.",
+      payment:
+        "Payment Methods: PayPal Invoice, Payoneer, Cryptocurrency (Binance USDT).",
+      guarantees:
+        "Guarantees: Lifetime link status (Minimum 3 Years guarantee), Indexing guarantee & unlimited revisions.",
+      sponsored: "No Sponsored Tag: Articles will NOT be marked with a sponsored tag.",
+      prohibited: "Prohibited: Adult content & adult links are strictly not allowed.",
     },
   },
 aboutPage: {
@@ -541,6 +582,148 @@ aboutPage: {
       emailLabel: "Email us directly",
       browse: "Browse our inventory",
       contact: "Get in touch",
+    },
+  },
+  blogIndex: {
+    heroTitle: "ব্লগ",
+    breadcrumb: "ব্লগ",
+    subtitle:
+      "গেস্ট পোস্ট, নিশ এডিট এবং লিংক বিল্ডিং গাইড যা সত্যিই র‍্যাঙ্কিং এগিয়ে নেয়।",
+    featuredLabel: "ফিচার্ড",
+    readArticle: "গাইড পড়ুন",
+    readTime: "{minutes} মিনিটের পড়া",
+  },
+  blogArticle: {
+    category: "লিংক বিল্ডিং",
+    breadcrumb: "নিশ এডিট বনাম গেস্ট পোস্ট",
+    title: "নিশ এডিট বনাম গেস্ট পোস্ট",
+    subtitle:
+      "আপনার ব্র্যান্ড ও ক্লায়েন্টদের জন্য কোন লিংক বিল্ডিং কৌশল দ্রুত SEO ফল দেয়?",
+    readTime: "{minutes} মিনিটের পড়া",
+    tocTitle: "এই পেজে",
+    toc: {
+      intro: "অফ-পেজ SEO",
+      definitions: "গেস্ট পোস্ট বনাম নিশ এডিট",
+      guestBenefits: "গেস্ট পোস্টের সুবিধা",
+      nicheBenefits: "নিশ এডিটের সুবিধা",
+      compare: "তুলনা",
+      when: "কখন কোনটা ব্যবহার করবেন",
+      why: "কেন Linkerbuddy",
+      workflow: "কীভাবে কাজ করে",
+      combine: "দুটোই মিলিয়ে নিন",
+    },
+    intro: {
+      kicker: "অফ-পেজ SEO বোঝা",
+      title: "ব্যাকলিংক এখনও র‍্যাঙ্কিং চালায়। কৌশল ঠিক করে কত দ্রুত।",
+      body: "ব্যাকলিংক ডোমেইন অথরিটি বাড়ায়, অর্গানিক র‍্যাঙ্কিং উপরে তোলে এবং টার্গেটেড ট্রাফিক আনে। সঠিক কৌশল এভাবে বেছে নিন।",
+    },
+    guest: {
+      kicker: "স্পনসর্ড কনটেন্ট",
+      title: "গেস্ট পোস্ট কী?",
+      body: "স্পনসর্ড গেস্ট পোস্টে একটি সম্পূর্ণ নতুন আর্টিকেল লেখা হয় এবং তা একটি অথরিটি থার্ড-পার্টি ওয়েবসাইটে প্রকাশিত হয়।",
+      point1: "আপনার টার্গেট কিওয়ার্ড ও নিশ ঘিরে কাস্টম কনটেন্ট।",
+      point2: "নতুন প্রকাশিত আর্টিকেলের বডি টেক্সটে স্বাভাবিক কনটেক্সচুয়াল ব্যাকলিংক।",
+      point3: "থট লিডারশিপ ও পুরো ন্যারেটিভ কন্ট্রোলের জন্য আদর্শ।",
+      point4: "রিজিওনাল ও গ্লোবাল ব্লগে দীর্ঘমেয়াদি ব্র্যান্ড পরিচয় গড়ে তোলে।",
+    },
+    niche: {
+      kicker: "ইন-কনটেন্ট লিংক ইনসার্শন",
+      title: "নিশ এডিট কী?",
+      body: "নিশ এডিট আপনার ব্যাকলিংক একটি বিদ্যমান, ইতিমধ্যে ইন্ডেক্সড আর্টিকেলে রাখে, যার আগে থেকেই Google র‍্যাঙ্কিং অথরিটি আছে।",
+      point1:
+        "নতুন কনটেন্ট প্রকাশের বদলে পাবলিশার আপনার কনটেক্সচুয়াল লিংক ও অ্যাংকর টেক্সট একটি প্রতিষ্ঠিত পোস্টে স্বাভাবিকভাবে যোগ করেন।",
+      point2:
+        "সেই পোস্ট আগে থেকেই অর্গানিক সার্চ ট্রাফিক পায় — তাই আপনার লিংক বিদ্যমান অথরিটি পায়।",
+    },
+    guestBenefits: {
+      title: "গেস্ট পোস্টের মূল সুবিধা",
+      controlTitle: "পূর্ণ নিয়ন্ত্রণ",
+      controlBody:
+        "আর্টিকেলের বিষয়, টোন, দৈর্ঘ্য এবং আশপাশের অ্যাংকর টেক্সট স্ট্রাকচারের উপর সম্পূর্ণ নিয়ন্ত্রণ।",
+      brandTitle: "ব্র্যান্ড ইকুইটি",
+      brandBody:
+        "মূল্যবান ইন্ডাস্ট্রি ইনসাইট প্রকাশ করুন এবং নতুন অডিয়েন্সের সঙ্গে অথরিটি গড়ুন।",
+      nicheTitle: "নিশ প্রাসঙ্গিকতা",
+      nicheBody:
+        "আর্টিকেল আপনার টার্গেট প্রোডাক্ট ও মার্কেট সেগমেন্ট অনুযায়ী কাস্টম করে লেখা হয়।",
+    },
+    nicheBenefits: {
+      title: "নিশ এডিটের মূল সুবিধা",
+      authorityTitle: "তাৎক্ষণিক অথরিটি",
+      authorityBody:
+        "আগে থেকে ইন্ডেক্সড এবং ঐতিহাসিক Google পেজ অথরিটি থাকা পুরোনো পেজ ব্যবহার করে।",
+      speedTitle: "দ্রুত টার্নঅ্যারাউন্ড",
+      speedBody:
+        "আর্টিকেল লেখার দরকার নেই। লিংক প্লেসমেন্ট সাধারণ প্রকাশনার তুলনায় অনেক দ্রুত লাইভ হতে পারে।",
+      costTitle: "সাশ্রয়ী",
+      costBody:
+        "কনটেন্ট তৈরির খরচ বাদ যায় — বাজেটে ব্যাকলিংক ভলিউম বাড়ানোর জন্য আদর্শ।",
+    },
+    compare: {
+      title: "পাশাপাশি তুলনা",
+      feature: "ফিচার",
+      guest: "গেস্ট পোস্ট",
+      niche: "নিশ এডিট (লিংক ইনসার্শন)",
+      content: "কনটেন্টের প্রয়োজন",
+      contentGuest: "নতুন আর্টিকেল (৮০০+ শব্দ)",
+      contentNiche: "বিদ্যমান, পুরোনো আর্টিকেল",
+      indexing: "ইন্ডেক্সিং স্পিড",
+      indexingGuest: "স্ট্যান্ডার্ড (শূন্য থেকে শুরু)",
+      indexingNiche: "দ্রুত (পেজ আগে থেকে ইন্ডেক্সড)",
+      turnaround: "টার্নঅ্যারাউন্ড টাইম",
+      turnaroundGuest: "দিন থেকে সপ্তাহ",
+      turnaroundNiche: "দ্রুত / প্রায়োরিটি TAT",
+      control: "কনটেক্সট কন্ট্রোল",
+      controlGuest: "উচ্চ (পূর্ণ আর্টিকেল)",
+      controlNiche: "মাঝারি (প্যারাগ্রাফ প্লেসমেন্ট)",
+      objective: "ক্যাম্পেইনের লক্ষ্য",
+      objectiveGuest: "ব্র্যান্ড অথরিটি ও স্টোরিটেলিং",
+      objectiveNiche: "দ্রুত র‍্যাঙ্কিং ইমপ্যাক্ট ও বাজেট স্কেল",
+    },
+    when: {
+      title: "সঠিক কৌশল কীভাবে বেছে নেবেন",
+      nicheTitle: "কখন নিশ এডিট ব্যবহার করবেন",
+      nicheBody:
+        "যখন দ্রুত ইন্ডেক্সিং দরকার, কম্পিটিটিভ কিওয়ার্ড টার্গেট করছেন, বিদ্যমান সার্চ ট্রাফিকের পেজ চান, বা বাজেট-ফ্রেন্ডলি ভলিউম চান।",
+      guestTitle: "কখন গেস্ট পোস্ট ব্যবহার করবেন",
+      guestBody:
+        "যখন নতুন ব্র্যান্ডেড স্টোরি প্রকাশ করতে চান, আশপাশের টেক্সটের উপর পূর্ণ নিয়ন্ত্রণ রাখতে চান, এবং টপ-টিয়ার নিশ পাবলিকেশনে অথরিটি গড়তে চান।",
+    },
+    why: {
+      title: "কেন Linkerbuddy?",
+      inventoryTitle: "মাল্টি-কান্ট্রি ইনভেন্টরি",
+      inventoryBody:
+        "অস্ট্রেলিয়া, ভারত, যুক্তরাষ্ট্র, যুক্তরাজ্য ও গ্লোবাল অঞ্চলের প্রি-ভেটেড পাবলিশার সাইট।",
+      metricsTitle: "ভেরিফায়েড মেট্রিক্স",
+      metricsBody:
+        "প্রতিটি সাইট আসল অর্গানিক ট্রাফিক, Moz DA ও Ahrefs DR-এর জন্য চেক করা হয় — কোনো PBN বা স্প্যাম নয়।",
+      dealsTitle: "ডাইরেক্ট ইমেইল ডিল",
+      dealsBody:
+        "কাস্টম প্যাকেজ, বাল্ক ডিসকাউন্ট ও দ্রুত টার্নঅ্যারাউন্ডের জন্য ইমেইলে নমনীয় আলোচনা।",
+    },
+    workflow: {
+      title: "আমাদের ৪-ধাপের ইমেইল ওয়ার্কফ্লো",
+      step1Title: "সিলেক্ট",
+      step1Body: "ইনভেন্টরি ব্রাউজ করুন অথবা টার্গেট DR, ট্রাফিক ও নিশ জানান।",
+      step2Title: "নেগোসিয়েট",
+      step2Body: "কাস্টম প্রাইসিং, বাল্ক অর্ডার ও গাইডলাইন সরাসরি ইমেইলে আলোচনা করুন।",
+      step3Title: "পাবলিশ",
+      step3Body: "আমাদের টিম কনটেন্ট ইনসার্শন বা গেস্ট পোস্ট পাবলিশিং সমন্বয় করে।",
+      step4Title: "রিপোর্ট",
+      step4Body: "লাইভ URL, অ্যাংকর ট্র্যাকিং ও প্লেসমেন্ট গ্যারান্টি পান।",
+    },
+    combine: {
+      kicker: "১০০% ভেরিফায়েড অর্গানিক ট্রাফিক",
+      title: "সর্বোচ্চ ফলের জন্য দুটোই মিলিয়ে নিন",
+      body: "সবচেয়ে শক্তিশালী SEO ক্যাম্পেইন একটিমাত্র লিংক টাইপের উপর নির্ভর করে না। স্পিডের জন্য কনটেক্সচুয়াল নিশ এডিট এবং ব্র্যান্ড অথরিটির জন্য স্পনসর্ড গেস্ট পোস্ট মিলিয়ে একটি স্বাভাবিক, শক্তিশালী ব্যাকলিংক প্রোফাইল তৈরি হয় যা সার্চ ইঞ্জিন পছন্দ করে।",
+      cta: "স্কেলেবল SEO গ্রোথ চালান",
+    },
+    cta: {
+      title: "র‍্যাঙ্কিং স্কেল করতে প্রস্তুত?",
+      body: "কাস্টম সাইট শর্টলিস্ট ও বাল্ক প্রাইসিং নিয়ে আমাদের টিমের সঙ্গে কথা বলুন।",
+      contact: "যোগাযোগ করুন",
+      browse: "ইনভেন্টরি দেখুন",
+      emailLabel: "সরাসরি ইমেইল করুন",
     },
   },
 };

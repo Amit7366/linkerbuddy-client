@@ -87,8 +87,10 @@ export function Header() {
   const profileHref = profileHrefForRole(user?.role);
   const homeHref = withLocalePrefix("/", locale);
   const aboutHref = withLocalePrefix("/about", locale);
+  const blogHref = withLocalePrefix("/blog", locale);
   const contactHref = withLocalePrefix("/contact", locale);
   const isAboutActive = pathname === aboutHref || pathname.endsWith("/about");
+  const isBlogActive = pathname === blogHref || pathname.startsWith(`${blogHref}/`);
   const isContactActive = pathname === contactHref || pathname.endsWith("/contact");
   const showAuth = authReady && !loading;
 
@@ -175,6 +177,15 @@ export function Header() {
             onClick={() => setOpen(false)}
           >
             {t("nav.aboutUs")}
+          </Link>
+
+          <Link
+            href={blogHref}
+            aria-current={isBlogActive ? "true" : undefined}
+            className={navLinkClass(isBlogActive)}
+            onClick={() => setOpen(false)}
+          >
+            {t("nav.blog")}
           </Link>
 
           <Link

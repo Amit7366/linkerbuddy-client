@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { blogPosts } from "@/content/blog/posts";
 import { siteConfig } from "@/config/site";
 import { locales } from "@/i18n/config";
 import { withLocalePrefix } from "@/i18n/routing";
@@ -6,7 +7,7 @@ import { withLocalePrefix } from "@/i18n/routing";
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = siteConfig.url;
   const marketingPaths = ["/", "/about", "/pricing", "/blog", "/contact", "/inventory"];
-  const blogSlugs = ["launch-your-landing-page", "scale-to-ecommerce"];
+  const blogSlugs = blogPosts.map((post) => post.slug);
 
   const entries: MetadataRoute.Sitemap = [];
 

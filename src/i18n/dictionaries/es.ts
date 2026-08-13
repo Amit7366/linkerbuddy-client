@@ -21,6 +21,7 @@ export const es: Dictionary = {
     more: "Más",
     aboutUs: "Sobre nosotros",
     contactUs: "Contáctanos",
+    blog: "Blog",
     marketplace: "Marketplace",
     chooseMarket: "Elige un mercado",
   },
@@ -107,7 +108,7 @@ export const es: Dictionary = {
       blog: {
         title: "Blog",
         description:
-          "Guías y novedades sobre guest posts, link building y compras en el marketplace.",
+          "Guías sobre guest posts, niche edits y link building, y cuándo cada estrategia impulsa resultados SEO más rápido.",
       },
       contact: {
         title: "Contacto",
@@ -423,50 +424,88 @@ export const es: Dictionary = {
     loading: "Preparando colocaciones…",
   },
   pricing: {
-    title: "Precios",
-    subtitle:
-      "Elige el nivel de autoridad y el volumen de colocaciones que encaje con tu estrategia SEO.",
+    title: "Precios simples y transparentes",
+    subtitle: "Elige el paquete perfecto para tus necesidades de link building.",
     month: "mes",
     cta: "Empezar",
     noCard: "No se requiere tarjeta de crédito",
-    compare: "Ver comparación detallada de métricas",
+    popular: "Popular",
+    compare: "Ver términos y requisitos del servicio",
+    rateCard: {
+      title: "Direct Special Offer Rate Card",
+      note: "Single Site / Website Specific",
+      guest: "General Guest Post",
+      guestPrice: "$50",
+      grey: "Grey Niche (Crypto, Casino, CBD, Gambling)",
+      greyPrice: "$100",
+      insertion: "Link Insertion",
+      insertionGeneral: "General: $50",
+      insertionGrey: "Grey niche: $100",
+      tat: "Turnaround Time",
+      tatValue: "Instant (No delays or waiting)",
+      sitesNote:
+        "We have 50+ good quality websites — all website prices are the same for you.",
+      dashboardCta: "Access all websites Dashboard",
+    },
     plans: {
-      startup: {
-        name: "Standard Authority",
-        description:
-          "Para equipos pequeños que lanzan sus primeras campañas de outreach.",
+      single: {
+        name: "Single Order",
+        price: "$50",
+        unit: "/ link",
+        description: "General Niche Rate",
         cta: "Order Placement",
         features: {
-          dr: "Minimum DR 20-30+ (Ahrefs)",
-          content: "Client supplies content",
-          placement: "1 Placement per purchase",
-          indexation: "Guaranteed indexation",
+          guest: "$50 General Guest Post",
+          insertion: "$50 General Link Insertion",
+          grey: "$100 Grey Niche (Casino/Crypto)",
+          tat: "Instant Turnaround Time",
+          links: "Max 2 Dofollow Links",
+          quality: "Copyscape & Grammarly Pass",
         },
       },
       growth: {
-        name: "Growth Authority",
-        description:
-          "Ideal para agencias en crecimiento que necesitan más autoridad y link juice.",
+        name: "Growth Pack",
+        price: "$225",
+        unit: "/ 5 links",
+        description: "$45/link • Save $25",
         cta: "Order Bundle",
         features: {
-          dr: "Minimum DR 40-50+ (Ahrefs)",
-          content: "Professional content included (800+ words)",
-          placements: "Up to 3 Placements bundle",
-          turnaround: "Priority turnaround (7 days)",
+          posts: "5 Guest Posts or Link Insertions",
+          mix: "Mix General or Grey Niches ($450)",
+          dr: "High DR 30 - DR 70+ Sites",
+          tat: "Instant Publishing (TAT)",
+          indexing: "Guaranteed Indexing",
+          dashboard: "Full 50+ Site Dashboard Access",
         },
       },
-      enterprise: {
-        name: "Enterprise Link Building",
-        description:
-          "Soluciones de outreach escalables para requisitos SEO de alto volumen.",
+      agency: {
+        name: "Agency Bulk",
+        price: "$400",
+        unit: "/ 10 links",
+        description: "$40/link • Save $100",
         cta: "Contact for Custom Plan",
         features: {
-          dr: "Minimum DR 60+ (Premium Sites)",
-          campaigns: "Multi-link campaigns",
-          content: "Turnkey content & submission",
+          posts: "10 Guest Posts or Link Insertions",
+          mix: "Mix General or Grey Niches ($800)",
+          traffic: "High Traffic Sites (up to 60K+)",
+          tat: "Instant Publishing (TAT)",
           manager: "Dedicated Account Manager",
+          shortlist: "Custom Shortlist Support",
         },
       },
+    },
+    terms: {
+      title: "Terms & Service Requirements",
+      quality:
+        "Article Quality: Minimum 500 words. Must pass Copyscape and Grammarly.",
+      links:
+        "Allowed Links: Maximum of 2 do-follow links. Unique articles only. No hyperlinks without anchor text.",
+      payment:
+        "Payment Methods: PayPal Invoice, Payoneer, Cryptocurrency (Binance USDT).",
+      guarantees:
+        "Guarantees: Lifetime link status (Minimum 3 Years guarantee), Indexing guarantee & unlimited revisions.",
+      sponsored: "No Sponsored Tag: Articles will NOT be marked with a sponsored tag.",
+      prohibited: "Prohibited: Adult content & adult links are strictly not allowed.",
     },
   },
 aboutPage: {
@@ -546,6 +585,148 @@ aboutPage: {
       emailLabel: "Email us directly",
       browse: "Browse our inventory",
       contact: "Get in touch",
+    },
+  },
+  blogIndex: {
+    heroTitle: "Blog",
+    breadcrumb: "Blog",
+    subtitle:
+      "Guías sobre guest posts, niche edits y link building que realmente mejoran tus rankings.",
+    featuredLabel: "Destacado",
+    readArticle: "Leer la guía",
+    readTime: "{minutes} min de lectura",
+  },
+  blogArticle: {
+    category: "Link building",
+    breadcrumb: "Niche Edits vs. Guest Posts",
+    title: "Niche Edits vs. Guest Posts",
+    subtitle:
+      "¿Qué estrategia de link building impulsa resultados SEO más rápidos para tu marca y tus clientes?",
+    readTime: "{minutes} min de lectura",
+    tocTitle: "En esta página",
+    toc: {
+      intro: "SEO off-page",
+      definitions: "Guest posts vs niche edits",
+      guestBenefits: "Ventajas del guest post",
+      nicheBenefits: "Ventajas del niche edit",
+      compare: "Comparación",
+      when: "Cuándo usar cada una",
+      why: "Por qué Linkerbuddy",
+      workflow: "Cómo funciona",
+      combine: "Combina ambas",
+    },
+    intro: {
+      kicker: "Entender el SEO off-page",
+      title: "Los backlinks siguen moviendo rankings. La estrategia decide la velocidad.",
+      body: "Los backlinks construyen autoridad de dominio, suben el ranking orgánico y atraen tráfico cualificado. Así eliges la estrategia correcta.",
+    },
+    guest: {
+      kicker: "Contenido patrocinado",
+      title: "¿Qué es un Guest Post?",
+      body: "Un Guest Post patrocinado consiste en crear un artículo nuevo que se publica en un sitio de autoridad de terceros.",
+      point1: "Contenido a medida, escrito alrededor de tu keyword y nicho objetivo.",
+      point2: "Backlink contextual insertado de forma natural en el cuerpo del artículo.",
+      point3: "Ideal para thought leadership y control total de la narrativa.",
+      point4: "Ayuda a construir identidad de marca a largo plazo en blogs regionales y globales.",
+    },
+    niche: {
+      kicker: "Inserciones de enlace in-content",
+      title: "¿Qué es un Niche Edit?",
+      body: "Un Niche Edit coloca tu backlink en un artículo existente, ya indexado, que ya tiene autoridad de ranking en Google.",
+      point1:
+        "En lugar de publicar contenido nuevo, el editor inserta de forma natural tu enlace contextual y el texto ancla en un post establecido.",
+      point2:
+        "Ese post ya recibe tráfico orgánico, así que tu enlace hereda autoridad existente.",
+    },
+    guestBenefits: {
+      title: "Ventajas clave de los Guest Posts",
+      controlTitle: "Control total",
+      controlBody:
+        "Control completo sobre el tema, el tono, la extensión y la estructura del texto ancla.",
+      brandTitle: "Equidad de marca",
+      brandBody:
+        "Publica insights de valor y construye autoridad y thought leadership con nuevas audiencias.",
+      nicheTitle: "Relevancia de nicho",
+      nicheBody:
+        "Los artículos se redactan a medida para alinearlos con tus productos y segmento de mercado.",
+    },
+    nicheBenefits: {
+      title: "Ventajas clave de los Niche Edits",
+      authorityTitle: "Autoridad inmediata",
+      authorityBody:
+        "Aprovecha páginas antiguas ya indexadas y con autoridad histórica en Google.",
+      speedTitle: "Entrega rápida",
+      speedBody:
+        "No hace falta redactar un artículo. Las colocaciones pueden publicarse en una fracción del tiempo habitual.",
+      costTitle: "Más económico",
+      costBody:
+        "Elimina el coste de creación de contenido: ideal para escalar volumen de backlinks con presupuesto.",
+    },
+    compare: {
+      title: "Comparación lado a lado",
+      feature: "Característica",
+      guest: "Guest Posts",
+      niche: "Niche Edits (inserciones)",
+      content: "Contenido requerido",
+      contentGuest: "Artículo nuevo (800+ palabras)",
+      contentNiche: "Artículo existente y envejecido",
+      indexing: "Velocidad de indexación",
+      indexingGuest: "Estándar (parte de cero)",
+      indexingNiche: "Más rápida (página ya indexada)",
+      turnaround: "Tiempo de entrega",
+      turnaroundGuest: "Días a semanas",
+      turnaroundNiche: "Rápido / TAT prioritario",
+      control: "Control del contexto",
+      controlGuest: "Alto (artículo completo)",
+      controlNiche: "Moderado (párrafo de inserción)",
+      objective: "Objetivo de campaña",
+      objectiveGuest: "Autoridad de marca y storytelling",
+      objectiveNiche: "Impacto rápido en ranking y escala de presupuesto",
+    },
+    when: {
+      title: "Cómo elegir la estrategia correcta",
+      nicheTitle: "Cuándo usar Niche Edits",
+      nicheBody:
+        "Mejor cuando necesitas indexación rápida, atacas keywords competitivas, quieres páginas con tráfico existente o buscas volumen con presupuesto contenido.",
+      guestTitle: "Cuándo usar Guest Posts",
+      guestBody:
+        "Mejor cuando quieres historias de marca nuevas, control absoluto del texto alrededor del enlace y autoridad en publicaciones top de nicho.",
+    },
+    why: {
+      title: "¿Por qué Linkerbuddy?",
+      inventoryTitle: "Inventario multi-país",
+      inventoryBody:
+        "Accede a sitios pre-verificados en Australia, India, EE. UU., Reino Unido y regiones globales.",
+      metricsTitle: "Métricas verificadas",
+      metricsBody:
+        "Cada sitio se revisa por tráfico orgánico real, Moz DA y Ahrefs DR. Sin PBN ni spam.",
+      dealsTitle: "Tratos directos por email",
+      dealsBody:
+        "Negociación flexible por email para paquetes a medida, descuentos por volumen y entregas rápidas.",
+    },
+    workflow: {
+      title: "Nuestro flujo de 4 pasos por email",
+      step1Title: "Seleccionar",
+      step1Body: "Explora el inventario o comparte DR, tráfico y nicho objetivo.",
+      step2Title: "Negociar",
+      step2Body: "Habla precios a medida, pedidos masivos y guidelines por email.",
+      step3Title: "Publicar",
+      step3Body: "Coordinamos la inserción de contenido o la publicación del guest post.",
+      step4Title: "Informar",
+      step4Body: "Recibes URLs en vivo, tracking de anclas y garantías de colocación.",
+    },
+    combine: {
+      kicker: "100% tráfico orgánico verificado",
+      title: "Combina ambas para el máximo resultado",
+      body: "Las campañas SEO más fuertes no dependen de un solo tipo de enlace. Combinar Niche Edits contextuales por velocidad y Guest Posts patrocinados por autoridad de marca crea un perfil de backlinks natural que a los buscadores les encanta.",
+      cta: "Impulsa un crecimiento SEO escalable",
+    },
+    cta: {
+      title: "¿Listo para escalar tus rankings?",
+      body: "Habla con nuestro equipo para shortlists a medida y negociación de precios por volumen.",
+      contact: "Contáctanos",
+      browse: "Ver inventario",
+      emailLabel: "Escríbenos directamente",
     },
   },
 };
