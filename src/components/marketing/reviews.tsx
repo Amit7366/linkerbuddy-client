@@ -169,11 +169,11 @@ export function Reviews() {
   return (
     <section
       id="reviews"
-      className="lb-section overflow-hidden bg-background"
+      className="lb-section lb-abstract-grid overflow-hidden"
       aria-labelledby="reviews-heading"
       aria-roledescription="carousel"
     >
-      <Container>
+      <Container className="relative z-[1]">
         <div className="max-w-xl">
           <span
             className="mb-3 block h-1 w-10 rounded-full bg-brand"
@@ -331,7 +331,7 @@ export function Reviews() {
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   className="relative z-[1] m-0 pt-12"
                 >
-                  <p className="font-serif text-[clamp(1.25rem,2.6vw,1.75rem)] leading-[1.55] text-ink italic">
+                  <p className="text-[15px] leading-[1.75] font-normal text-ink not-italic tablet:text-[16px]">
                     {current.description}
                   </p>
                 </motion.blockquote>

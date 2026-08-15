@@ -12,6 +12,7 @@ import {
 import { countryCodeToFilterParam, normalizeCountryParam } from "@/lib/marketplace-filters";
 import { stripLocalePrefix, withLocalePrefix } from "@/i18n/routing";
 import { useTranslations } from "@/providers/locale-provider";
+import { scrollToHomeSection } from "@/hooks/use-active-home-nav";
 import { cn } from "@/lib/utils";
 
 interface MarketplaceDropdownProps {
@@ -111,7 +112,7 @@ function MarketplaceDropdownInner({
         : `${withLocalePrefix("/", activeLocale)}#marketplace`,
     );
     window.setTimeout(() => {
-      document.querySelector("#marketplace")?.scrollIntoView({ behavior: "smooth" });
+      scrollToHomeSection("marketplace");
     }, 80);
   };
 

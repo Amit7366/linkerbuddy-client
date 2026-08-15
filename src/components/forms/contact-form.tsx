@@ -3,19 +3,30 @@
 import { useState } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { createLead } from "@/lib/api/leads";
+import { cn } from "@/lib/utils";
 
 const contactSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email"),
-  phone: z.string().optional(),
+  subject: z.string().min(1, "Subject is required"),
   message: z.string().optional(),
+  privacyAccepted: z
+    .boolean()
+    .refine((value) => value === true, "Please agree to the privacy policy"),
 });
 
+const inputClass =
+  "mt-1.5 flex h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-ink placeholder:text-muted outline-none transition focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/25";
+
 export function ContactForm() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+    privacyAccepted: false,
+  });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -32,9 +43,16 @@ export function ContactForm() {
 
     setLoading(true);
     try {
-      await createLead({ ...parsed.data, source: "contact_form" });
+      await createLead({
+        name: parsed.data.name,
+        email: parsed.data.email,
+        subject: parsed.data.subject,
+        message: parsed.data.message,
+        privacyAccepted: true,
+        source: "contact_form",
+      });
       setSuccess(true);
-      setForm({ name: "", email: "", phone: "", message: "" });
+      setForm({ name: "", email: "", subject: "", message: "", privacyAccepted: false });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -44,55 +62,89 @@ export function ContactForm() {
 
   if (success) {
     return (
-      <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
-        Thank you! We&apos;ll be in touch soon.
+      <div className="rounded-2xl border border-green/30 bg-green/10 p-5 text-sm leading-relaxed text-ink">
+        Thank you. We received your message and will get back to you shortly.
       </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid gap-4 phablet:grid-cols-2">
+        <div>
+          <label htmlFor="name" className="text-[13px] font-semibold text-ink">
+            Name
+          </label>
+          <input
+            id="name"
+            className={inputClass}
+            placeholder="Your Name"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className="text-[13px] font-semibold text-ink">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            className={inputClass}
+            placeholder="Your Email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
+          />
+        </div>
+      </div>
       <div>
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
+        <label htmlFor="subject" className="text-[13px] font-semibold text-ink">
+          Subject
+        </label>
+        <input
+          id="subject"
+          className={inputClass}
+          placeholder="Subject"
+          value={form.subject}
+          onChange={(e) => setForm({ ...form, subject: e.target.value })}
           required
         />
       </div>
       <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          required
-        />
-      </div>
-      <div>
-        <Label htmlFor="phone">Phone (optional)</Label>
-        <Input
-          id="phone"
-          value={form.phone}
-          onChange={(e) => setForm({ ...form, phone: e.target.value })}
-        />
-      </div>
-      <div>
-        <Label htmlFor="message">Message</Label>
+        <label htmlFor="message" className="text-[13px] font-semibold text-ink">
+          Message
+        </label>
         <textarea
           id="message"
-          rows={4}
-          className="flex w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
+          rows={5}
+          placeholder="Message"
+          className={cn(inputClass, "h-auto min-h-[132px] py-3")}
           value={form.message}
           onChange={(e) => setForm({ ...form, message: e.target.value })}
         />
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <Button type="submit" disabled={loading}>
-        {loading ? "Sending..." : "Send message"}
-      </Button>
+      <div className="flex flex-col gap-3 pt-1 phablet:flex-row phablet:items-center phablet:justify-between">
+        <label className="flex items-start gap-2 text-[13px] text-muted">
+          <input
+            type="checkbox"
+            className="mt-0.5 size-4 accent-[var(--blue)]"
+            checked={form.privacyAccepted}
+            onChange={(e) => setForm({ ...form, privacyAccepted: e.target.checked })}
+          />
+          <span>
+            I agree to the{" "}
+            <a href="/privacy" className="font-semibold text-brand no-underline hover:underline">
+              privacy policy
+            </a>
+          </span>
+        </label>
+        <Button type="submit" disabled={loading} className="rounded-xl px-6">
+          {loading ? "Sending..." : "Send Message"}
+        </Button>
+      </div>
+      {error ? <p className="text-sm text-red-600">{error}</p> : null}
     </form>
   );
 }

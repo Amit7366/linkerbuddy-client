@@ -187,10 +187,7 @@ export function AboutPageContent() {
       <section className="pb-16 tablet:pb-20">
         <Container>
           <MotionSection className="mx-auto mb-10 max-w-2xl text-center tablet:mb-14">
-            <h2 className="m-0 text-[clamp(1.75rem,3.5vw,2.25rem)] font-bold tracking-[-0.04em] text-ink">
-              {page.introHeading}
-            </h2>
-            <p className="mt-3 m-0 text-[15px] leading-relaxed text-muted tablet:text-[16px]">
+            <p className="m-0 text-[15px] leading-relaxed text-muted tablet:text-[16px]">
               {page.introLead}
             </p>
           </MotionSection>

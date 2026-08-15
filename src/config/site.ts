@@ -10,6 +10,7 @@ export const siteConfig = {
     phoneDisplay: "+880 1709-751603",
     phoneE164: "+8801709751603",
     email: "linkerbuddy@gmail.com",
+    workHours: "Mon–Fri 10 am – 6 pm (GMT+6)",
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Dhaka%2C%20Bangladesh&z=13&output=embed",
     mapLabel: "Linkerbuddy",

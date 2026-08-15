@@ -7,13 +7,18 @@ import type { SortValue } from "@/lib/site-listings";
 import {
   buildMarketplaceSearchParams,
   countryCodeToFilterParam,
+  customFilterToSearchParams,
+  EMPTY_CUSTOM_FILTER,
   hasMarketplaceConstraints,
+  isCustomFilterApplied,
   parseActiveFilters,
   parseCountryParam,
+  parseCustomFilter,
   parseSortParam,
   searchParamsToListParams,
   toggleActiveFilter,
   type ActiveFilterKey,
+  type CustomMarketplaceFilter,
 } from "@/lib/marketplace-filters";
 
 interface UseMarketplaceFiltersOptions {
@@ -34,6 +39,14 @@ export function useMarketplaceFilters(options: UseMarketplaceFiltersOptions = {}
   const country = useMemo(() => parseCountryParam(searchParams), [searchParams]);
   const constrained = useMemo(
     () => hasMarketplaceConstraints(searchParams),
+    [searchParams],
+  );
+  const customFilter = useMemo(
+    () => parseCustomFilter(searchParams),
+    [searchParams],
+  );
+  const customActive = useMemo(
+    () => isCustomFilterApplied(searchParams),
     [searchParams],
   );
 
@@ -82,27 +95,102 @@ export function useMarketplaceFilters(options: UseMarketplaceFiltersOptions = {}
 
   const setSort = useCallback(
     (nextSort: SortValue) => {
+      if (customActive) {
+        replaceParams(customFilterToSearchParams(customFilter, nextSort));
+        return;
+      }
       setFilters(active, nextSort);
     },
-    [active, setFilters],
+    [active, customActive, customFilter, replaceParams, setFilters],
   );
 
   const setCountryFromNav = useCallback(
     (countryCode: string) => {
       const param = countryCodeToFilterParam(countryCode);
+      if (customActive) {
+        replaceParams(
+          customFilterToSearchParams({ ...customFilter, country: param }, sort),
+        );
+        return;
+      }
       const next = buildMarketplaceSearchParams({
         active: active.filter((key) => key !== "India"),
         sort,
         country: param,
       });
-      // India code should also light up the India chip via country=india
       if (param.toLowerCase() === "india") {
         next.set("country", "india");
       }
       replaceParams(next);
     },
-    [active, replaceParams, sort],
+    [active, customActive, customFilter, replaceParams, sort],
   );
+
+  const toggleCountry = useCallback(
+    (countryCode: string | null) => {
+      if (customActive) {
+        if (!countryCode) {
+          replaceParams(
+            customFilterToSearchParams({ ...customFilter, country: "" }, sort),
+          );
+          return;
+        }
+        const param = countryCodeToFilterParam(countryCode);
+        const alreadyOn = country?.toLowerCase() === param.toLowerCase();
+        replaceParams(
+          customFilterToSearchParams(
+            { ...customFilter, country: alreadyOn ? "" : param },
+            sort,
+          ),
+        );
+        return;
+      }
+
+      if (!countryCode) {
+        const next = buildMarketplaceSearchParams({
+          active: active.filter((key) => key !== "India"),
+          sort,
+          country: null,
+        });
+        replaceParams(next);
+        return;
+      }
+
+      const param = countryCodeToFilterParam(countryCode);
+      const alreadyOn = country?.toLowerCase() === param.toLowerCase();
+      if (alreadyOn) {
+        const next = buildMarketplaceSearchParams({
+          active: active.filter((key) => key !== "India"),
+          sort,
+          country: null,
+        });
+        replaceParams(next);
+        return;
+      }
+
+      setCountryFromNav(countryCode);
+    },
+    [active, country, customActive, customFilter, replaceParams, setCountryFromNav, sort],
+  );
+
+  const isCountrySelected = useCallback(
+    (countryCode: string) => {
+      if (!country) return false;
+      return country.toLowerCase() === countryCodeToFilterParam(countryCode).toLowerCase();
+    },
+    [country],
+  );
+
+  const applyCustomFilter = useCallback(
+    (filter: CustomMarketplaceFilter) => {
+      replaceParams(customFilterToSearchParams(filter, sort));
+    },
+    [replaceParams, sort],
+  );
+
+  const clearCustomFilter = useCallback(() => {
+    replaceParams(customFilterToSearchParams(EMPTY_CUSTOM_FILTER, sort));
+  }, [replaceParams, sort]);
 
   const toApiParams = useCallback(
     (page?: number, limit?: number) =>
@@ -115,10 +203,16 @@ export function useMarketplaceFilters(options: UseMarketplaceFiltersOptions = {}
     sort,
     country,
     constrained,
+    customFilter,
+    customActive,
+    applyCustomFilter,
+    clearCustomFilter,
     toggleFilter,
     clearFilters,
     setSort,
     setCountryFromNav,
+    toggleCountry,
+    isCountrySelected,
     toApiParams,
     isSelected: (key: FilterKey) =>
       key === "all" ? !constrained : active.includes(key as ActiveFilterKey),

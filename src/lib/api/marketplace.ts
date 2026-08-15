@@ -44,7 +44,10 @@ export interface ListMarketplaceParams {
   dr?: string;
   priceMax?: number;
   trafficMin?: number;
+  trafficMax?: number;
   daMin?: number;
+  daMax?: number;
+  priceMin?: number;
   sort?: MarketplaceSort;
   page?: number;
   limit?: number;
@@ -62,6 +65,9 @@ function toQuery(params: ListMarketplaceParams = {}): string {
   if (params.priceMax !== undefined) search.set("priceMax", String(params.priceMax));
   if (params.trafficMin !== undefined) search.set("trafficMin", String(params.trafficMin));
   if (params.daMin !== undefined) search.set("daMin", String(params.daMin));
+  if (params.daMax !== undefined) search.set("daMax", String(params.daMax));
+  if (params.trafficMax !== undefined) search.set("trafficMax", String(params.trafficMax));
+  if (params.priceMin !== undefined) search.set("priceMin", String(params.priceMin));
   if (params.sort) search.set("sort", params.sort);
   if (params.page) search.set("page", String(params.page));
   if (params.limit) search.set("limit", String(params.limit));
@@ -78,6 +84,10 @@ export async function listMarketplace(params?: ListMarketplaceParams) {
 
 export async function getMarketplaceStats() {
   return apiClient<MarketplaceStats>(endpoints.marketplace.stats);
+}
+
+export async function getMarketplaceFacets() {
+  return apiClient<{ countries: string[]; niches: string[] }>(endpoints.marketplace.facets);
 }
 
 export async function getMarketplaceListing(id: number) {

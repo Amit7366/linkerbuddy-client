@@ -97,6 +97,7 @@ export const shopNav = [
 export const crmNav = [
   { title: "Dashboard", href: "/crm/dashboard" },
   { title: "Leads", href: "/crm/leads" },
+  { title: "Calls", href: "/crm/calls" },
   { title: "Customers", href: "/crm/customers" },
   { title: "Deals", href: "/crm/deals" },
   { title: "Orders", href: "/crm/orders" },

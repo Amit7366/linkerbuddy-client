@@ -76,7 +76,7 @@ export function Header() {
   const { locale } = useLocale();
   const { user, loading } = useSession();
   const pathname = usePathname();
-  const { active, isHome, setActive } = useActiveHomeNavSection();
+  const { active, isHome, setActive, scrollToSection } = useActiveHomeNavSection();
 
   // Avoid auth-dependent HTML differing between SSR and the first client paint.
   useEffect(() => {
@@ -94,8 +94,8 @@ export function Header() {
   const isContactActive = pathname === contactHref || pathname.endsWith("/contact");
   const showAuth = authReady && !loading;
 
-  const scrollTo = (selector: string) => {
-    document.querySelector(selector)?.scrollIntoView({ behavior: "smooth" });
+  const scrollTo = (id: string) => {
+    scrollToSection(id);
     setOpen(false);
   };
 
@@ -111,7 +111,7 @@ export function Header() {
     event.preventDefault();
     const el = document.getElementById(section);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+      scrollToSection(section);
       window.history.replaceState(null, "", `${pathname}#${section}`);
     }
   };
@@ -252,7 +252,7 @@ export function Header() {
           <Button
             size="sm"
             className="hidden phablet:inline-flex"
-            onClick={() => scrollTo("#custom-list")}
+            onClick={() => scrollTo("custom-list")}
           >
             {t("common.getCustomList")}
           </Button>

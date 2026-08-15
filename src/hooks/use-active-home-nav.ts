@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { stripLocalePrefix } from "@/i18n/routing";
 
@@ -20,8 +20,23 @@ const PATH_ACTIVE: Partial<Record<string, HomeNavSection>> = {
   "/inventory": "marketplace",
 };
 
+const LOCK_MS = 1200;
+
 function isHomeNavSection(value: string): value is HomeNavSection {
   return (HOME_NAV_SECTIONS as readonly string[]).includes(value);
+}
+
+function headerOffset() {
+  const header = document.querySelector("header[role='banner']");
+  return (header?.getBoundingClientRect().height ?? 74) + 10;
+}
+
+export function scrollToHomeSection(id: string, behavior: ScrollBehavior = "smooth") {
+  const el = document.getElementById(id);
+  if (!el) return false;
+  const top = el.getBoundingClientRect().top + window.scrollY - headerOffset();
+  window.scrollTo({ top: Math.max(0, top), behavior });
+  return true;
 }
 
 function sectionFromHash(): HomeNavSection | null {
@@ -30,18 +45,33 @@ function sectionFromHash(): HomeNavSection | null {
   return isHomeNavSection(hash) ? hash : null;
 }
 
-/** Last section whose top has crossed the sticky-header marker. */
-function sectionFromScroll(headerOffset: number): HomeNavSection | null {
-  let current: HomeNavSection | null = null;
+/** Section occupying the reading line just below the sticky header. */
+function sectionFromScroll(): HomeNavSection | null {
+  const spyY = headerOffset() + Math.min(96, Math.max(48, window.innerHeight * 0.18));
 
-  for (const id of HOME_NAV_SECTIONS) {
+  const measured = HOME_NAV_SECTIONS.map((id) => {
     const el = document.getElementById(id);
-    if (!el) continue;
-    if (el.getBoundingClientRect().top - headerOffset <= 0) {
-      current = id;
-    }
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    return { id, top: rect.top, bottom: rect.bottom };
+  })
+    .filter((item): item is { id: HomeNavSection; top: number; bottom: number } => item !== null)
+    .sort((a, b) => a.top - b.top);
+
+  if (measured.length === 0) return null;
+
+  const doc = document.documentElement;
+  if (window.scrollY + window.innerHeight >= doc.scrollHeight - 64) {
+    return measured[measured.length - 1]!.id;
   }
 
+  const containing = measured.find((section) => section.top <= spyY && section.bottom > spyY);
+  if (containing) return containing.id;
+
+  let current: HomeNavSection | null = null;
+  for (const section of measured) {
+    if (section.top <= spyY) current = section.id;
+  }
   return current;
 }
 
@@ -50,32 +80,50 @@ export function useActiveHomeNavSection() {
   const { pathname: bare } = stripLocalePrefix(pathname);
   const isHome = bare === "/";
   const pathActive = PATH_ACTIVE[bare] ?? null;
-  const [active, setActive] = useState<HomeNavSection | null>(pathActive);
+  const [active, setActiveState] = useState<HomeNavSection | null>(pathActive);
+  const lockRef = useRef<{ section: HomeNavSection | null; until: number }>({
+    section: null,
+    until: 0,
+  });
+
+  const setActive = useCallback((section: HomeNavSection | null) => {
+    setActiveState(section);
+    if (section) {
+      lockRef.current = { section, until: performance.now() + LOCK_MS };
+    } else {
+      lockRef.current = { section: null, until: 0 };
+    }
+  }, []);
 
   useEffect(() => {
     if (!isHome) {
-      setActive(pathActive);
+      setActiveState(pathActive);
+      lockRef.current = { section: null, until: 0 };
       return;
     }
 
-    const headerOffset = () => {
-      const header = document.querySelector("header[role='banner']");
-      return (header?.getBoundingClientRect().height ?? 74) + 12;
-    };
+    let frame = 0;
+    let scrolledForHash: string | null = null;
 
     const sync = () => {
-      const fromScroll = sectionFromScroll(headerOffset());
-      setActive(fromScroll ?? sectionFromHash());
+      const lock = lockRef.current;
+      if (lock.section && performance.now() < lock.until) {
+        setActiveState(lock.section);
+        return;
+      }
+      lockRef.current = { section: null, until: 0 };
+      setActiveState(sectionFromScroll());
     };
 
-    let scrolledForHash: string | null = null;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(sync);
+    };
 
     const scrollHashIntoViewOnce = () => {
       const hash = sectionFromHash();
       if (!hash || scrolledForHash === hash) return false;
-      const el = document.getElementById(hash);
-      if (!el) return false;
-      el.scrollIntoView();
+      if (!scrollToHomeSection(hash, "auto")) return false;
       setActive(hash);
       scrolledForHash = hash;
       return true;
@@ -83,32 +131,47 @@ export function useActiveHomeNavSection() {
 
     const onHashChange = () => {
       scrolledForHash = null;
-      scrollHashIntoViewOnce();
+      const hash = sectionFromHash();
+      if (hash) {
+        scrollToHomeSection(hash);
+        setActive(hash);
+        return;
+      }
+      lockRef.current = { section: null, until: 0 };
+      sync();
+    };
+
+    const onScrollEnd = () => {
+      lockRef.current = { section: null, until: 0 };
       sync();
     };
 
     sync();
     scrollHashIntoViewOnce();
 
-    window.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scrollend", onScrollEnd);
     window.addEventListener("hashchange", onHashChange);
-    window.addEventListener("resize", sync);
+    window.addEventListener("resize", onScroll);
 
-    // Home sections are dynamically imported; poll briefly as they mount.
     const poll = window.setInterval(() => {
       scrollHashIntoViewOnce();
-      sync();
+      if (!(lockRef.current.section && performance.now() < lockRef.current.until)) {
+        sync();
+      }
     }, 400);
     const stop = window.setTimeout(() => window.clearInterval(poll), 4000);
 
     return () => {
-      window.removeEventListener("scroll", sync);
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scrollend", onScrollEnd);
       window.removeEventListener("hashchange", onHashChange);
-      window.removeEventListener("resize", sync);
+      window.removeEventListener("resize", onScroll);
       window.clearInterval(poll);
       window.clearTimeout(stop);
     };
-  }, [isHome, pathActive]);
+  }, [isHome, pathActive, setActive]);
 
-  return { active, isHome, setActive };
+  return { active, isHome, setActive, scrollToSection: scrollToHomeSection };
 }

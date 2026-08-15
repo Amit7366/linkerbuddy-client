@@ -11,10 +11,23 @@ export const endpoints = {
   leads: {
     create: "/leads",
     list: "/leads",
+    detail: (id: string) => `/leads/${id}`,
+    reply: (id: string) => `/leads/${id}/reply`,
+  },
+  calls: {
+    slots: "/calls/slots",
+    create: "/calls",
+    list: "/calls",
+    detail: (id: string) => `/calls/${id}`,
+    availability: "/calls/availability",
+    manage: (token: string) => `/calls/manage/${token}`,
+    cancel: (token: string) => `/calls/manage/${token}/cancel`,
+    reschedule: (token: string) => `/calls/manage/${token}/reschedule`,
   },
   marketplace: {
     list: "/marketplace",
     stats: "/marketplace/stats",
+    facets: "/marketplace/facets",
     detail: (id: number | string) => `/marketplace/${id}`,
   },
   orders: {

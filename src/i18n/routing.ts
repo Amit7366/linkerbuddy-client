@@ -17,6 +17,8 @@ export const localizedMarketingPrefixes = [
   "/pricing",
   "/blog",
   "/contact",
+  "/privacy",
+  "/schedule",
   "/checkout",
 ] as const;
 

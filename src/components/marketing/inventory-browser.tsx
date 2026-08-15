@@ -37,10 +37,16 @@ function InventoryBrowserInner() {
     sort,
     constrained,
     toggleFilter,
+    toggleCountry,
+    isCountrySelected,
     clearFilters,
     setSort,
     toApiParams,
     isSelected,
+    customFilter,
+    customActive,
+    applyCustomFilter,
+    clearCustomFilter,
   } = useMarketplaceFilters();
 
   const fetchPage = useCallback(
@@ -138,6 +144,12 @@ function InventoryBrowserInner() {
           className="mb-5"
           isSelected={isSelected}
           onToggle={toggleFilter}
+          isCountrySelected={isCountrySelected}
+          onSelectCountry={toggleCountry}
+          customActive={customActive}
+          customFilter={customFilter}
+          onApplyCustom={applyCustomFilter}
+          onResetCustom={clearCustomFilter}
         />
 
         <div className="mb-3 flex flex-col items-start justify-between gap-2.5 text-[11px] tablet:flex-row tablet:items-center">

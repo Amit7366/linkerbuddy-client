@@ -41,10 +41,16 @@ function MarketplaceInner() {
     sort,
     constrained,
     toggleFilter,
+    toggleCountry,
+    isCountrySelected,
     clearFilters,
     setSort,
     toApiParams,
     isSelected,
+    customFilter,
+    customActive,
+    applyCustomFilter,
+    clearCustomFilter,
   } = useMarketplaceFilters({ hash: "#marketplace" });
   const searchParams = useSearchParams();
 
@@ -123,6 +129,12 @@ function MarketplaceInner() {
             className="mt-[29px] mb-[23px]"
             isSelected={isSelected}
             onToggle={toggleFilter}
+            isCountrySelected={isCountrySelected}
+            onSelectCountry={toggleCountry}
+            customActive={customActive}
+            customFilter={customFilter}
+            onApplyCustom={applyCustomFilter}
+            onResetCustom={clearCustomFilter}
           />
         </Reveal>
 

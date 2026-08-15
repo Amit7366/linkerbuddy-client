@@ -17,9 +17,7 @@ import { HeroProductPreview } from "@/components/marketing/hero-product-preview"
 import { HeroStatsStrip } from "@/components/marketing/hero-stats-strip";
 import { useTranslations } from "@/providers/locale-provider";
 
-function scrollTo(selector: string) {
-  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth" });
-}
+import { scrollToHomeSection } from "@/hooks/use-active-home-nav";
 
 export function Hero() {
   const t = useTranslations();
@@ -106,11 +104,17 @@ export function Hero() {
             </p>
 
             <div className="mt-[29px] flex flex-col justify-center gap-3 tablet:flex-row tablet:justify-start">
-              <ButtonLink href="#marketplace">
+              <ButtonLink
+                href="#marketplace"
+                onClick={(event) => {
+                  event.preventDefault();
+                  scrollToHomeSection("marketplace");
+                }}
+              >
                 {t("hero.ctaBrowse")}
                 <ArrowUpRight className="size-4" aria-hidden />
               </ButtonLink>
-              <Button variant="ghost" onClick={() => scrollTo("#custom-list")}>
+              <Button variant="ghost" onClick={() => scrollToHomeSection("custom-list")}>
                 {t("hero.ctaShortlist")}
               </Button>
             </div>

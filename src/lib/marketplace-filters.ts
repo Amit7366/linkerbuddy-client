@@ -51,8 +51,12 @@ const FILTER_QUERY_KEYS = [
   "niche",
   "dr",
   "priceMax",
+  "priceMin",
   "trafficMin",
+  "trafficMax",
   "daMin",
+  "daMax",
+  "custom",
   "filter",
 ] as const;
 
@@ -126,6 +130,97 @@ export function parseActiveFilters(params: URLSearchParams): ActiveFilterKey[] {
   return TOGGLEABLE_FILTERS.filter((key) => active.has(key));
 }
 
+export type CustomMarketplaceFilter = {
+  country: string;
+  niche: string;
+  drMin: string;
+  drMax: string;
+  daMin: string;
+  daMax: string;
+  trafficMin: string;
+  trafficMax: string;
+  priceMin: string;
+  priceMax: string;
+};
+
+export const EMPTY_CUSTOM_FILTER: CustomMarketplaceFilter = {
+  country: "",
+  niche: "",
+  drMin: "",
+  drMax: "",
+  daMin: "",
+  daMax: "",
+  trafficMin: "",
+  trafficMax: "",
+  priceMin: "",
+  priceMax: "",
+};
+
+function numericParam(params: URLSearchParams, key: string) {
+  const value = params.get(key)?.trim();
+  return value && !Number.isNaN(Number(value)) ? value : "";
+}
+
+export function parseCustomFilter(params: URLSearchParams): CustomMarketplaceFilter {
+  let drMin = "";
+  let drMax = "";
+  const dr = params.get("dr")?.trim() ?? "";
+  const range = /^(\d+)\s*-\s*(\d+)$/.exec(dr);
+  if (range) {
+    drMin = range[1] ?? "";
+    drMax = range[2] ?? "";
+  } else if (/^\d+$/.test(dr)) {
+    drMin = dr;
+  }
+
+  return {
+    country: params.get("country")?.trim() ?? "",
+    niche: params.get("niche")?.trim() ?? "",
+    drMin,
+    drMax,
+    daMin: numericParam(params, "daMin"),
+    daMax: numericParam(params, "daMax"),
+    trafficMin: numericParam(params, "trafficMin"),
+    trafficMax: numericParam(params, "trafficMax"),
+    priceMin: numericParam(params, "priceMin"),
+    priceMax: numericParam(params, "priceMax"),
+  };
+}
+
+export function customFilterToSearchParams(
+  filter: CustomMarketplaceFilter,
+  sort: SortValue,
+): URLSearchParams {
+  const next = new URLSearchParams();
+  if (filter.country.trim()) next.set("country", filter.country.trim());
+  if (filter.niche.trim()) next.set("niche", filter.niche.trim());
+
+  const drMin = filter.drMin.trim();
+  const drMax = filter.drMax.trim();
+  if (drMin && drMax) next.set("dr", `${drMin}-${drMax}`);
+  else if (drMin) next.set("dr", drMin);
+  else if (drMax) next.set("dr", `0-${drMax}`);
+
+  if (filter.daMin.trim()) next.set("daMin", filter.daMin.trim());
+  if (filter.daMax.trim()) next.set("daMax", filter.daMax.trim());
+  if (filter.trafficMin.trim()) next.set("trafficMin", filter.trafficMin.trim());
+  if (filter.trafficMax.trim()) next.set("trafficMax", filter.trafficMax.trim());
+  if (filter.priceMin.trim()) next.set("priceMin", filter.priceMin.trim());
+  if (filter.priceMax.trim()) next.set("priceMax", filter.priceMax.trim());
+
+  if (customFilterIsActive(filter)) next.set("custom", "1");
+  if (sort && sort !== "recommended") next.set("sort", sort);
+  return next;
+}
+
+export function customFilterIsActive(filter: CustomMarketplaceFilter) {
+  return Object.values(filter).some((value) => value.trim() !== "");
+}
+
+export function isCustomFilterApplied(params: URLSearchParams) {
+  return params.get("custom") === "1";
+}
+
 export function parseSortParam(params: URLSearchParams): SortValue {
   const sort = params.get("sort");
   if (
@@ -193,7 +288,7 @@ export function searchParamsToListParams(
   };
 
   const country = params.get("country")?.trim();
-  if (country) api.country = normalizeCountryParam(country);
+  if (country) api.country = country;
 
   const niche = params.get("niche")?.trim();
   if (niche) api.niche = niche;
@@ -214,6 +309,21 @@ export function searchParamsToListParams(
   const daMin = params.get("daMin");
   if (daMin !== null && daMin !== "" && !Number.isNaN(Number(daMin))) {
     api.daMin = Number(daMin);
+  }
+
+  const daMax = params.get("daMax");
+  if (daMax !== null && daMax !== "" && !Number.isNaN(Number(daMax))) {
+    api.daMax = Number(daMax);
+  }
+
+  const trafficMax = params.get("trafficMax");
+  if (trafficMax !== null && trafficMax !== "" && !Number.isNaN(Number(trafficMax))) {
+    api.trafficMax = Number(trafficMax);
+  }
+
+  const priceMin = params.get("priceMin");
+  if (priceMin !== null && priceMin !== "" && !Number.isNaN(Number(priceMin))) {
+    api.priceMin = Number(priceMin);
   }
 
   const filtersCsv = params.get("filters")?.trim();
@@ -245,8 +355,12 @@ export function hasMarketplaceConstraints(params: URLSearchParams): boolean {
     Boolean(params.get("niche")?.trim()) ||
     Boolean(params.get("dr")?.trim()) ||
     Boolean(params.get("priceMax")?.trim()) ||
+    Boolean(params.get("priceMin")?.trim()) ||
     Boolean(params.get("trafficMin")?.trim()) ||
+    Boolean(params.get("trafficMax")?.trim()) ||
     Boolean(params.get("daMin")?.trim()) ||
+    Boolean(params.get("daMax")?.trim()) ||
+    params.get("custom") === "1" ||
     Boolean(params.get("filters")?.trim())
   );
 }
