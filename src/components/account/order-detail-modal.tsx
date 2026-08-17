@@ -127,7 +127,8 @@ export function OrderDetailModal({
                     <p className="font-semibold text-ink">{item.domain}</p>
                     <p className="text-xs text-muted">
                       {item.serviceType === "GUEST" ? "Guest post" : "Link insert"} ×{" "}
-                      {item.quantity} — {formatCents(item.lineTotalCents)}
+                      {item.quantity} · {formatCents(item.unitPriceCents, order.currency)} each —{" "}
+                      {formatCents(item.lineTotalCents, order.currency)}
                     </p>
                   </li>
                 ))}
@@ -150,18 +151,51 @@ export function OrderDetailModal({
                 {order.country}
               </p>
             </div>
-            <div className="flex items-center justify-between rounded-lg border border-line bg-surface px-3 py-2">
-              <div>
-                <p className="text-xs text-muted">Payment</p>
-                <p className="text-sm font-semibold text-ink">
-                  {paymentLabel(order.paymentStatus)}
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs text-muted">Total</p>
-                <p className="text-lg font-extrabold text-ink">
-                  {formatCents(order.totalCents, order.currency)}
-                </p>
+            <div className="space-y-2 rounded-lg border border-line bg-surface px-3 py-2">
+              {(order.discountCents ?? 0) > 0 || order.subtotalCents !== order.totalCents ? (
+                <>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted">Subtotal</span>
+                    <span className="font-semibold text-ink">
+                      {formatCents(order.subtotalCents, order.currency)}
+                    </span>
+                  </div>
+                  {(order.discountCents ?? 0) > 0 ? (
+                    <div className="flex items-center justify-between text-sm text-emerald-700">
+                      <span>
+                        Discount
+                        {order.promoCodeLabel ? ` (${order.promoCodeLabel})` : ""}
+                      </span>
+                      <span>−{formatCents(order.discountCents ?? 0, order.currency)}</span>
+                    </div>
+                  ) : null}
+                  {order.manualTotalCents != null &&
+                  order.manualTotalCents !== order.subtotalCents - (order.discountCents ?? 0) ? (
+                    <div className="flex items-center justify-between text-sm text-muted">
+                      <span>Adjustment</span>
+                      <span>
+                        {formatCents(
+                          order.totalCents - (order.subtotalCents - (order.discountCents ?? 0)),
+                          order.currency,
+                        )}
+                      </span>
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted">Payment</p>
+                  <p className="text-sm font-semibold text-ink">
+                    {paymentLabel(order.paymentStatus)}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-muted">Total</p>
+                  <p className="text-lg font-extrabold text-ink">
+                    {formatCents(order.totalCents, order.currency)}
+                  </p>
+                </div>
               </div>
             </div>
             {error ? (

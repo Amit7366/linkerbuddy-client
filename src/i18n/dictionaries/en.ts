@@ -403,7 +403,7 @@ export const en = {
   },
   checkout: {
     title: "Checkout",
-    subtitle: "Confirm billing details and pay securely with Stripe.",
+    subtitle: "Confirm your billing details and place your order.",
     empty: "Your cart is empty.",
     browse: "Browse marketplace",
     loginRequired: "Please sign in to complete checkout.",
@@ -619,6 +619,9 @@ export const en = {
     featuredLabel: "Featured",
     readArticle: "Read the guide",
     readTime: "{minutes} min read",
+    homeTitle: "From the blog",
+    browseAll: "Browse all articles",
+    openArticle: "Read article",
   },
   blogArticle: {
     category: "Link building",

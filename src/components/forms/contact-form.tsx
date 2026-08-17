@@ -63,7 +63,8 @@ export function ContactForm() {
   if (success) {
     return (
       <div className="rounded-2xl border border-green/30 bg-green/10 p-5 text-sm leading-relaxed text-ink">
-        Thank you. We received your message and will get back to you shortly.
+        Thank you. We received your message and will get back to you shortly. We
+        will let you know within 3 business days.
       </div>
     );
   }

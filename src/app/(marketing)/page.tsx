@@ -60,6 +60,17 @@ const Reviews = dynamic(
   () => import("@/components/marketing/reviews").then((m) => m.Reviews),
 );
 
+const HomeBlog = dynamic(
+  () => import("@/components/marketing/home-blog").then((m) => m.HomeBlog),
+  {
+    loading: () => (
+      <section className="lb-section">
+        <HomeSkeleton />
+      </section>
+    ),
+  },
+);
+
 const Faq = dynamic(
   () => import("@/components/marketing/faq").then((m) => m.Faq),
   {
@@ -118,6 +129,7 @@ export default async function HomePage() {
       <ProcessSteps />
       <Pricing />
       <Reviews />
+      <HomeBlog />
       <Faq />
       <CtaForm />
     </>

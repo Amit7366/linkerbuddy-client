@@ -40,12 +40,16 @@ export const endpoints = {
     detail: (id: string) => `/orders/${id}`,
     status: (id: string) => `/orders/${id}/status`,
   },
-  reviews: {
+    reviews: {
     list: "/reviews",
     me: "/reviews/me",
     create: "/reviews",
     admin: "/reviews/admin",
     adminDetail: (id: string) => `/reviews/admin/${id}`,
+  },
+  promos: {
+    list: "/promos",
+    detail: (id: string) => `/promos/${id}`,
   },
   health: "/health",
 } as const;

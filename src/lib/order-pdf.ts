@@ -93,11 +93,30 @@ export function downloadOrderPdf(order: Order) {
     (doc as jsPDF & { lastAutoTable?: { finalY: number } }).lastAutoTable
       ?.finalY ?? y + 80;
 
+  let totalsY = finalY + 28;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(51, 65, 85);
+  doc.text("Subtotal", 400, totalsY);
+  doc.text(formatCents(order.subtotalCents, order.currency), 547, totalsY, { align: "right" });
+  totalsY += 16;
+  if ((order.discountCents ?? 0) > 0) {
+    doc.text(
+      order.promoCodeLabel ? `Discount (${order.promoCodeLabel})` : "Discount",
+      400,
+      totalsY,
+    );
+    doc.text(`-${formatCents(order.discountCents ?? 0, order.currency)}`, 547, totalsY, {
+      align: "right",
+    });
+    totalsY += 16;
+  }
+
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
   doc.setTextColor(7, 27, 61);
-  doc.text("Total", 400, finalY + 28);
-  doc.text(formatCents(order.totalCents, order.currency), 547, finalY + 28, {
+  doc.text("Total", 400, totalsY);
+  doc.text(formatCents(order.totalCents, order.currency), 547, totalsY, {
     align: "right",
   });
 
@@ -105,7 +124,7 @@ export function downloadOrderPdf(order: Order) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9);
     doc.setTextColor(100, 116, 139);
-    doc.text(`Notes: ${order.notes}`, marginX, finalY + 52, {
+    doc.text(`Notes: ${order.notes}`, marginX, totalsY + 24, {
       maxWidth: 500,
     });
   }

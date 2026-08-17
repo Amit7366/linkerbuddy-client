@@ -17,6 +17,16 @@ export const ACTIVE_ORDER_STATUSES: OrderStatus[] = [
   "DELIVERING",
 ];
 
+export function centsToDollarsInput(cents: number) {
+  return (cents / 100).toFixed(2);
+}
+
+export function dollarsInputToCents(value: string) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount) || amount < 0) return 0;
+  return Math.round(amount * 100);
+}
+
 export function formatCents(cents: number, currency = "usd") {
   return new Intl.NumberFormat("en-US", {
     style: "currency",

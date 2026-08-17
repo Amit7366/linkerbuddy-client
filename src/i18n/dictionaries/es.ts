@@ -404,7 +404,7 @@ export const es: Dictionary = {
   },
   checkout: {
     title: "Checkout",
-    subtitle: "Confirma la facturación y paga con Stripe.",
+    subtitle: "Confirma tus datos de facturación y realiza el pedido.",
     empty: "Tu carrito está vacío.",
     browse: "Ver marketplace",
     loginRequired: "Inicia sesión para completar el pedido.",
@@ -620,6 +620,9 @@ aboutPage: {
     featuredLabel: "Destacado",
     readArticle: "Leer la guía",
     readTime: "{minutes} min de lectura",
+    homeTitle: "Del blog",
+    browseAll: "Ver todos los artículos",
+    openArticle: "Leer artículo",
   },
   blogArticle: {
     category: "Link building",

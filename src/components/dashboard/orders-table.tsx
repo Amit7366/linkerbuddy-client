@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import {
   listAdminOrders,
@@ -9,12 +10,11 @@ import {
 } from "@/lib/api/orders";
 import type { Order, OrderStatus } from "@/types/order";
 import {
-  allowedNextStatuses,
   formatCents,
   paymentLabel,
   statusLabel,
 } from "@/lib/orders-ui";
-import { OrderTimeline } from "@/components/orders/order-timeline";
+import { OrderManageModal } from "@/components/dashboard/order-manage-modal";
 import { cn } from "@/lib/utils";
 
 const PAGE_SIZE = 15;
@@ -41,26 +41,27 @@ function statusTone(status: Order["status"]) {
 }
 
 export function OrdersTable() {
+  return (
+    <Suspense fallback={<p className="text-sm text-zinc-500">Loading orders…</p>}>
+      <OrdersTableInner />
+    </Suspense>
+  );
+}
+
+function OrdersTableInner() {
+  const searchParams = useSearchParams();
+  const deepLink = searchParams.get("order")?.trim() ?? "";
+  const openedRef = useRef<string | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [q, setQ] = useState("");
-  const [search, setSearch] = useState("");
+  const [q, setQ] = useState(deepLink);
+  const [search, setSearch] = useState(deepLink);
   const [status, setStatus] = useState<OrderStatus | "">("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selected, setSelected] = useState<Order | null>(null);
   const [saving, setSaving] = useState(false);
-  const [editBilling, setEditBilling] = useState({
-    billingName: "",
-    billingPhone: "",
-    addressLine1: "",
-    city: "",
-    state: "",
-    postalCode: "",
-    country: "",
-    notes: "",
-  });
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -85,18 +86,18 @@ export function OrdersTable() {
     void load();
   }, [load]);
 
+  useEffect(() => {
+    if (!deepLink || loading || openedRef.current === deepLink) return;
+    const match = orders.find(
+      (order) => order.orderNumber === deepLink || order.id === deepLink,
+    );
+    if (!match) return;
+    openedRef.current = deepLink;
+    setSelected(match);
+  }, [deepLink, loading, orders]);
+
   function openOrder(order: Order) {
     setSelected(order);
-    setEditBilling({
-      billingName: order.billingName,
-      billingPhone: order.billingPhone,
-      addressLine1: order.addressLine1,
-      city: order.city,
-      state: order.state,
-      postalCode: order.postalCode,
-      country: order.country,
-      notes: order.notes ?? "",
-    });
   }
 
   async function changeStatus(next: OrderStatus) {
@@ -114,30 +115,23 @@ export function OrdersTable() {
     }
   }
 
-  async function saveEdits() {
+  async function saveEdits(payload: Record<string, unknown>) {
     if (!selected) return;
     setSaving(true);
     setError(null);
     try {
-      const updated = await updateAdminOrder(selected.id, {
-        ...editBilling,
-        notes: editBilling.notes || null,
-      });
+      const updated = await updateAdminOrder(selected.id, payload);
       setSelected(updated);
       await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Update failed");
+      throw err;
     } finally {
       setSaving(false);
     }
   }
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  const locked =
-    selected?.status === "COMPLETE" ||
-    selected?.status === "REJECTED" ||
-    selected?.status === "CANCELLED";
-  const nextStatuses = selected ? allowedNextStatuses(selected.status) : [];
 
   return (
     <div className="space-y-4">
@@ -275,148 +269,13 @@ export function OrdersTable() {
       </div>
 
       {selected ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <button
-            type="button"
-            className="absolute inset-0 bg-black/50"
-            aria-label="Close"
-            onClick={() => setSelected(null)}
-          />
-          <div className="relative z-10 max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold tracking-wide text-zinc-500 uppercase">
-                  Manage order
-                </p>
-                <h2 className="mt-1 font-mono text-xl font-bold text-zinc-900">
-                  {selected.orderNumber}
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelected(null)}
-                className="rounded-lg px-3 py-1.5 text-sm text-zinc-500 hover:bg-zinc-100"
-              >
-                Close
-              </button>
-            </div>
-
-            <div className="mt-6 grid gap-6 lg:grid-cols-2">
-              <div>
-                <h3 className="text-sm font-bold text-zinc-900">Status timeline</h3>
-                <OrderTimeline status={selected.status} events={selected.statusEvents} />
-                {nextStatuses.length > 0 ? (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {nextStatuses.map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        disabled={saving}
-                        onClick={() => void changeStatus(s)}
-                        className={cn(
-                          "rounded-lg px-3 py-2 text-sm font-semibold text-white",
-                          s === "REJECTED" || s === "FAILED"
-                            ? "bg-red-600 hover:bg-red-700"
-                            : "bg-[#1a3d2e] hover:bg-[#245240]",
-                        )}
-                      >
-                        Mark {statusLabel(s)}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="mt-3 text-xs text-zinc-500">
-                    No further status changes available.
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-sm font-bold text-zinc-900">Items</h3>
-                  <ul className="mt-2 space-y-2">
-                    {selected.items.map((item) => (
-                      <li
-                        key={item.id}
-                        className="rounded-lg border border-zinc-200 px-3 py-2 text-sm"
-                      >
-                        <p className="font-semibold">{item.domain}</p>
-                        <p className="text-xs text-zinc-500">
-                          {item.serviceType} × {item.quantity} —{" "}
-                          {formatCents(item.lineTotalCents)}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-bold text-zinc-900">Edit billing</h3>
-                  {locked ? (
-                    <p className="mt-2 text-xs text-amber-700">
-                      {selected.status === "COMPLETE"
-                        ? "Completed orders are locked."
-                        : "This order is locked until reset to Pending."}
-                    </p>
-                  ) : null}
-                  <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                    {(
-                      [
-                        ["billingName", "Name"],
-                        ["billingPhone", "Phone"],
-                        ["addressLine1", "Address"],
-                        ["city", "City"],
-                        ["state", "State"],
-                        ["postalCode", "Postal"],
-                        ["country", "Country"],
-                      ] as const
-                    ).map(([key, label]) => (
-                      <label key={key} className="block text-xs text-zinc-500">
-                        {label}
-                        <input
-                          disabled={locked || saving}
-                          className="mt-1 h-9 w-full rounded-lg border border-zinc-200 px-2 text-sm text-zinc-900 disabled:bg-zinc-50"
-                          value={editBilling[key]}
-                          onChange={(e) =>
-                            setEditBilling((prev) => ({
-                              ...prev,
-                              [key]: e.target.value,
-                            }))
-                          }
-                        />
-                      </label>
-                    ))}
-                    <label className="block text-xs text-zinc-500 sm:col-span-2">
-                      Notes
-                      <textarea
-                        disabled={locked || saving}
-                        rows={2}
-                        className="mt-1 w-full rounded-lg border border-zinc-200 px-2 py-1.5 text-sm disabled:bg-zinc-50"
-                        value={editBilling.notes}
-                        onChange={(e) =>
-                          setEditBilling((prev) => ({
-                            ...prev,
-                            notes: e.target.value,
-                          }))
-                        }
-                      />
-                    </label>
-                  </div>
-                  {!locked ? (
-                    <button
-                      type="button"
-                      disabled={saving}
-                      onClick={() => void saveEdits()}
-                      className="mt-3 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-800 disabled:opacity-50"
-                    >
-                      {saving ? "Saving…" : "Save changes"}
-                    </button>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <OrderManageModal
+          order={selected}
+          saving={saving}
+          onClose={() => setSelected(null)}
+          onStatus={(status) => void changeStatus(status)}
+          onSave={saveEdits}
+        />
       ) : null}
     </div>
   );

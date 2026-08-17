@@ -401,7 +401,7 @@ export const hi: Dictionary = {
   },
   checkout: {
     title: "चेकआउट",
-    subtitle: "बिलिंग विवरण पुष्टि करें और Stripe से भुगतान करें।",
+    subtitle: "बिलिंग विवरण भरें और अपना ऑर्डर सबमिट करें।",
     empty: "आपका कार्ट खाली है।",
     browse: "मार्केटप्लेस देखें",
     loginRequired: "चेकआउट के लिए साइन इन करें।",
@@ -617,6 +617,9 @@ aboutPage: {
     featuredLabel: "फ़ीचर्ड",
     readArticle: "गाइड पढ़ें",
     readTime: "{minutes} मिनट का पढ़ना",
+    homeTitle: "ब्लॉग से",
+    browseAll: "सभी लेख देखें",
+    openArticle: "लेख पढ़ें",
   },
   blogArticle: {
     category: "लिंक बिल्डिंग",

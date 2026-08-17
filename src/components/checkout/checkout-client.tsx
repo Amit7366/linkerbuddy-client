@@ -149,7 +149,7 @@ function StatusCard({
 function CheckoutSteps({ step }: { step: CheckoutStep }) {
   const steps = [
     { id: "details" as const, label: "Details", icon: UserRound },
-    { id: "payment" as const, label: "Payment", icon: CreditCard },
+    // { id: "payment" as const, label: "Payment", icon: CreditCard },
   ];
   const activeIndex = steps.findIndex((s) => s.id === step);
 
@@ -289,7 +289,9 @@ export function CheckoutClient() {
   const checkoutSuccessPath = withLocalePrefix("/checkout/success", locale);
   const homePath = withLocalePrefix("/", locale);
   const loginHref = `/login?redirect=${encodeURIComponent(checkoutPath)}`;
-  const step: CheckoutStep = clientSecret ? "payment" : "details";
+  // PAYMENT DISABLED: stay on details and submit the order from this step.
+  // const step: CheckoutStep = clientSecret ? "payment" : "details";
+  const step: CheckoutStep = "details";
 
   useEffect(() => {
     if (authLoading) return;
@@ -352,8 +354,15 @@ export function CheckoutClient() {
         },
         saveBillingToProfile: saveProfile,
       });
-      setClientSecret(data.clientSecret);
+      // PAYMENT DISABLED: skip Stripe PaymentElement (step 2). Restore these
+      // two lines and remove the redirect below to bring payment back.
+      // setClientSecret(data.clientSecret);
+      // setOrderMeta({ id: data.orderId, number: data.orderNumber });
       setOrderMeta({ id: data.orderId, number: data.orderNumber });
+      clear();
+      router.push(
+        `${checkoutSuccessPath}?order=${encodeURIComponent(data.orderNumber)}`,
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to start checkout");
     } finally {
@@ -407,19 +416,20 @@ export function CheckoutClient() {
     );
   }
 
-  if (!stripePromise || !publishableKey) {
-    return (
-      <StatusCard
-        title={t("checkout.title")}
-        description="Stripe is not configured. Set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY."
-        action={
-          <ButtonLink href={homePath} className="inline-flex">
-            {t("checkout.backHome")}
-          </ButtonLink>
-        }
-      />
-    );
-  }
+  // PAYMENT DISABLED: Stripe publishable key is not required to place an order.
+  // if (!stripePromise || !publishableKey) {
+  //   return (
+  //     <StatusCard
+  //       title={t("checkout.title")}
+  //       description="Stripe is not configured. Set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY."
+  //       action={
+  //         <ButtonLink href={homePath} className="inline-flex">
+  //           {t("checkout.backHome")}
+  //         </ButtonLink>
+  //       }
+  //     />
+  //   );
+  // }
 
   const summary = (
     <div className="space-y-5">
@@ -481,10 +491,12 @@ export function CheckoutClient() {
           <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-green" />
           Secure checkout with bank-grade encryption.
         </p>
+        {/* PAYMENT DISABLED
         <p className="flex items-start gap-2">
           <Lock className="mt-0.5 size-3.5 shrink-0 text-brand" />
           Card details never touch Linkerbuddy servers.
         </p>
+        */}
         <p>
           Update saved details in{" "}
           <Link href="/account/settings/billing" className="font-semibold text-navy underline-offset-2 hover:underline">
@@ -726,7 +738,7 @@ export function CheckoutClient() {
                   <p className="text-xs text-muted">
                     {!canCreateIntent
                       ? "Complete required fields to continue."
-                      : "Next: secure payment with Stripe."}
+                      : "Your order will be sent to our team for review."}
                   </p>
                   <Button
                     className="h-12 min-w-[200px] justify-center"
@@ -737,7 +749,7 @@ export function CheckoutClient() {
                       t("checkout.processing")
                     ) : (
                       <>
-                        Continue to payment
+                        Place order
                         <ArrowRight className="ml-2 size-4" />
                       </>
                     )}
@@ -745,6 +757,8 @@ export function CheckoutClient() {
                 </div>
               </>
             ) : (
+              /* PAYMENT DISABLED — restore this Stripe PaymentElement step later */
+              false && (
               <>
                 <div className="flex items-start gap-3 border-b border-line pb-5">
                   <span className="grid size-10 place-items-center rounded-xl bg-sky text-brand">
@@ -753,7 +767,7 @@ export function CheckoutClient() {
                   <div className="min-w-0 flex-1">
                     <h2 className="text-lg font-bold text-ink">Payment</h2>
                     <p className="mt-0.5 text-sm text-muted">
-                      Order {orderMeta?.number ? `#${orderMeta.number}` : "ready"} · ${total}
+                      Order {orderMeta?.number ? `#${orderMeta?.number}` : "ready"} · ${total}
                     </p>
                   </div>
                   <button
@@ -788,8 +802,8 @@ export function CheckoutClient() {
                     }}
                   >
                     <PaymentForm
-                      orderId={orderMeta!.id}
-                      orderNumber={orderMeta!.number}
+                      orderId={orderMeta?.id ?? ""}
+                      orderNumber={orderMeta?.number ?? ""}
                       successPath={checkoutSuccessPath}
                       amount={total}
                       onSuccess={handleSuccess}
@@ -797,6 +811,7 @@ export function CheckoutClient() {
                   </Elements>
                 </div>
               </>
+              )
             )}
           </motion.section>
 
