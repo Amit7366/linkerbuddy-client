@@ -4,6 +4,7 @@ export const siteConfig = {
   description:
     "Browse verified guest post and link insertion placements with transparent pricing and fast turnaround.",
   url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+  mark: "/brand/linkerbuddy.svg",
   ogImage: "/og/default.png",
   contact: {
     address: "Dhaka, Bangladesh",

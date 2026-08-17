@@ -25,7 +25,7 @@ function formatReviewDate(value: string) {
 }
 
 function avatarUrl(name: string) {
-  return `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(name)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+  return `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(name)}&backgroundColor=c0aede,d1d4f9,ffd5dc,ffdfbf`;
 }
 
 function wrappedOffset(index: number, active: number, total: number) {
@@ -79,9 +79,9 @@ function ReviewerAvatar({
   return (
     <span
       className={cn(
-        "relative shrink-0 overflow-hidden rounded-full bg-sky ring-2 ring-white",
+        "relative shrink-0 overflow-hidden rounded-full bg-[#483EF4]/10 ring-2 ring-white",
         size === "lg" ? "size-[72px]" : "size-[52px]",
-        active && "shadow-[0_14px_32px_#1268f330] ring-[3px] ring-white",
+        active && "shadow-[0_14px_32px_#483EF430] ring-[3px] ring-white",
       )}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -176,7 +176,7 @@ export function Reviews() {
       <Container className="relative z-[1]">
         <div className="max-w-xl">
           <span
-            className="mb-3 block h-1 w-10 rounded-full bg-brand"
+            className="mb-3 block h-1 w-10 rounded-full bg-[#483EF4]"
             aria-hidden
           />
           <h2
@@ -201,7 +201,7 @@ export function Reviews() {
             }}
           >
             <svg
-              className="pointer-events-none absolute top-1/2 left-2 h-[340px] w-[140px] -translate-y-1/2 text-[color-mix(in_srgb,var(--blue)_28%,var(--line))]"
+              className="pointer-events-none absolute top-1/2 left-2 h-[340px] w-[140px] -translate-y-1/2 text-[color-mix(in_srgb,#483EF4_28%,var(--line))]"
               viewBox="0 0 140 340"
               fill="none"
               aria-hidden
@@ -227,7 +227,7 @@ export function Reviews() {
                     aria-label={`${review.authorName}, ${review.rating} stars`}
                     className={cn(
                       "absolute top-1/2 left-0 flex items-center gap-3 text-left will-change-transform",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#483EF4]/40 focus-visible:ring-offset-2",
                       !isActive && "cursor-pointer",
                     )}
                     initial={false}

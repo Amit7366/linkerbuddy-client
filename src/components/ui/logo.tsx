@@ -28,18 +28,18 @@ export function Logo({ href, className, light = false }: LogoProps) {
       )}
     >
       <Image
-        src="/brand/mark.svg"
+        src={siteConfig.mark}
         alt=""
         width={35}
         height={35}
-        className="-rotate-12"
+        className="size-[35px] object-contain"
         priority
         unoptimized
       />
       <span className="flex flex-col leading-none">
         <span>
           Linker
-          <span className={light ? "text-[var(--logo-accent)]" : "text-brand"}>buddy</span>
+          <span className={light ? "text-[#F00E58]" : "text-brand"}>buddy</span>
         </span>
         <small
           className={cn(

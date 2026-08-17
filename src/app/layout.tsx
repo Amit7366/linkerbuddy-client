@@ -72,6 +72,10 @@ export async function generateMetadata(): Promise<Metadata> {
       description: dict.seo.pages.home.description,
     },
     robots: { index: true, follow: true },
+    icons: {
+      icon: siteConfig.mark,
+      apple: siteConfig.mark,
+    },
   };
 }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { siteConfig } from "@/config/site";
 import { useTranslations } from "@/providers/locale-provider";
@@ -135,37 +136,19 @@ export function PagePreloader() {
                 aria-hidden
               />
               <motion.div
-                className="relative grid size-[58px] place-items-center rounded-[18px] bg-white/10 text-[var(--logo-mark)] shadow-[0_0_40px_color-mix(in_srgb,var(--blue)_40%,transparent)]"
-                animate={reduce ? undefined : { rotate: [-14, -8, -14] }}
+                className="relative grid size-[58px] place-items-center"
+                animate={reduce ? undefined : { scale: [1, 1.04, 1] }}
                 transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
               >
-                <svg
-                  width="34"
-                  height="34"
-                  viewBox="0 0 35 35"
-                  fill="none"
-                  aria-hidden
-                >
-                  <rect
-                    x="1"
-                    y="1"
-                    width="33"
-                    height="33"
-                    rx="11"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                  <motion.path
-                    d="M12 23L23 12M23 12H14.5M23 12V20.5"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    initial={reduce ? false : { pathLength: 0, opacity: 0.4 }}
-                    animate={{ pathLength: 1, opacity: 1 }}
-                    transition={{ duration: 1.1, ease, delay: 0.15 }}
-                  />
-                </svg>
+                <Image
+                  src={siteConfig.mark}
+                  alt=""
+                  width={58}
+                  height={58}
+                  className="size-[58px] object-contain drop-shadow-[0_0_28px_color-mix(in_srgb,var(--blue)_45%,transparent)]"
+                  priority
+                  unoptimized
+                />
               </motion.div>
             </div>
 
@@ -176,7 +159,7 @@ export function PagePreloader() {
               transition={{ duration: 0.45, ease, delay: 0.18 }}
             >
               Linker
-              <span className="text-[var(--logo-accent)]">buddy</span>
+              <span className="text-[#F00E58]">buddy</span>
             </motion.p>
 
             <motion.p

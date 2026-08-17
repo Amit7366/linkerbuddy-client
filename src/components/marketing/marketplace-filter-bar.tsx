@@ -71,8 +71,8 @@ export function MarketplaceFilterBar({
 
   const chipClass = (pressed: boolean) =>
     cn(
-      "flex min-w-[132px] cursor-pointer items-center gap-2.5 rounded-[10px] border border-line bg-card px-2.5 py-3 text-left transition-colors hover:border-[#72a9f8] hover:bg-sky hover:shadow-[0_5px_18px_#2067d317] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand tablet:min-w-0",
-      pressed && "border-[#72a9f8] bg-sky shadow-[0_5px_18px_#2067d317]",
+      "flex min-w-[132px] cursor-pointer items-center gap-2.5 rounded-[10px] border border-line bg-card px-2.5 py-3 text-left transition-colors hover:border-[#483EF4] hover:bg-[#483EF4]/8 hover:shadow-[0_5px_18px_#483EF417] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#483EF4] tablet:min-w-0",
+      pressed && "border-[#483EF4] bg-[#483EF4]/8 shadow-[0_5px_18px_#483EF417]",
     );
 
   return (
@@ -83,7 +83,7 @@ export function MarketplaceFilterBar({
         disabled={!canPrev}
         onClick={() => scrollByPage(-1)}
         className={cn(
-          "absolute top-1/2 left-0 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border border-line bg-card text-brand shadow-[0_6px_16px_#1268f328] tablet:hidden",
+          "absolute top-1/2 left-0 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border border-line bg-card text-[#483EF4] shadow-[0_6px_16px_#483EF428] tablet:hidden",
           canPrev ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       >
@@ -95,7 +95,7 @@ export function MarketplaceFilterBar({
         disabled={!canNext}
         onClick={() => scrollByPage(1)}
         className={cn(
-          "absolute top-1/2 right-0 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border border-line bg-card text-brand shadow-[0_6px_16px_#1268f328] tablet:hidden",
+          "absolute top-1/2 right-0 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border border-line bg-card text-[#483EF4] shadow-[0_6px_16px_#483EF428] tablet:hidden",
           canNext ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       >
@@ -126,8 +126,8 @@ export function MarketplaceFilterBar({
             >
               <span
                 className={cn(
-                  "grid size-[29px] place-items-center rounded-lg bg-sky font-extrabold text-brand",
-                  pressed && "bg-brand text-white",
+                  "grid size-[29px] place-items-center rounded-lg bg-[#483EF4]/10 font-extrabold text-[#483EF4]",
+                  pressed && "bg-[#483EF4] text-white",
                 )}
                 aria-hidden
               >
@@ -155,8 +155,8 @@ export function MarketplaceFilterBar({
           >
             <span
               className={cn(
-                "grid size-[29px] place-items-center rounded-lg bg-sky text-brand",
-                customActive && "bg-brand text-white",
+                "grid size-[29px] place-items-center rounded-lg bg-[#483EF4]/10 text-[#483EF4]",
+                customActive && "bg-[#483EF4] text-white",
               )}
               aria-hidden
             >
@@ -183,8 +183,8 @@ export function MarketplaceFilterBar({
             className={cn(
               "shrink-0 cursor-pointer rounded-full border px-3 py-1.5 text-[11px] font-bold transition-colors",
               !marketplaceCountries.some((item) => isCountrySelected(item.code))
-                ? "border-brand bg-sky text-brand"
-                : "border-line bg-card text-ink hover:border-[#72a9f8] hover:bg-sky",
+                ? "border-[#483EF4] bg-[#483EF4]/10 text-[#483EF4]"
+                : "border-line bg-card text-ink hover:border-[#483EF4] hover:bg-[#483EF4]/8",
             )}
           >
             {t("marketplace.allCountries")}
@@ -200,8 +200,8 @@ export function MarketplaceFilterBar({
                 className={cn(
                   "inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-bold transition-colors",
                   pressed
-                    ? "border-brand bg-sky text-brand"
-                    : "border-line bg-card text-ink hover:border-[#72a9f8] hover:bg-sky",
+                    ? "border-[#483EF4] bg-[#483EF4]/10 text-[#483EF4]"
+                    : "border-line bg-card text-ink hover:border-[#483EF4] hover:bg-[#483EF4]/8",
                 )}
               >
                 <span aria-hidden>{item.flag}</span>

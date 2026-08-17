@@ -35,7 +35,7 @@ export function Benefits() {
           {BENEFIT_KEYS.map((benefit) => (
             <StaggerItem key={benefit.key}>
               <article className="h-full rounded-[14px] border border-line bg-card p-[25px] shadow-[var(--shadow-benefit)]">
-                <span className="grid size-10 place-items-center rounded-[10px] bg-sky text-xl text-brand">
+                <span className="grid size-10 place-items-center rounded-[10px] bg-[#483EF4]/10 text-xl text-[#483EF4]">
                   {benefit.icon}
                 </span>
                 <h3 className="mt-[18px] mb-2.5 text-[15px] font-bold text-ink">

@@ -33,7 +33,7 @@ export function ProcessSteps() {
                   index === 2 && "tablet:border-l-0 desktop:border-l",
                 )}
               >
-                <span className="rounded-full bg-sky px-2.5 py-1.5 text-[10px] font-extrabold text-brand">
+                <span className="rounded-full bg-[#483EF4]/10 px-2.5 py-1.5 text-[10px] font-extrabold text-[#483EF4]">
                   {step}
                 </span>
                 <h3 className="mt-[18px] mb-2.5 text-[15px] font-bold text-ink">

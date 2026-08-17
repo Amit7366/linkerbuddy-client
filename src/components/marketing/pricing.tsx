@@ -73,11 +73,11 @@ export function Pricing() {
       aria-labelledby="pricing-heading"
     >
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] bg-[radial-gradient(120%_80%_at_50%_100%,color-mix(in_srgb,var(--blue)_10%,transparent),transparent_70%)] dark:bg-[radial-gradient(120%_80%_at_50%_100%,color-mix(in_srgb,var(--blue)_18%,transparent),transparent_70%)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] bg-[radial-gradient(120%_80%_at_50%_100%,color-mix(in_srgb,#483EF4_10%,transparent),transparent_70%)] dark:bg-[radial-gradient(120%_80%_at_50%_100%,color-mix(in_srgb,#483EF4_18%,transparent),transparent_70%)]"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-[-18%] h-[55%] rounded-[100%] bg-[color-mix(in_srgb,var(--line)_55%,transparent)] dark:bg-[color-mix(in_srgb,var(--blue)_12%,transparent)]"
+        className="pointer-events-none absolute inset-x-0 bottom-[-18%] h-[55%] rounded-[100%] bg-[color-mix(in_srgb,var(--line)_55%,transparent)] dark:bg-[color-mix(in_srgb,#483EF4_12%,transparent)]"
         aria-hidden
       />
 
@@ -109,7 +109,7 @@ export function Pricing() {
                 <p className="m-0 text-[12px] font-semibold uppercase tracking-wide text-muted">
                   {t("pricing.rateCard.guest")}
                 </p>
-                <p className="m-0 mt-1 text-[22px] font-bold tracking-tight text-brand">
+                <p className="m-0 mt-1 text-[22px] font-bold tracking-tight text-[#483EF4]">
                   {t("pricing.rateCard.guestPrice")}
                 </p>
               </div>
@@ -117,7 +117,7 @@ export function Pricing() {
                 <p className="m-0 text-[12px] font-semibold uppercase tracking-wide text-muted">
                   {t("pricing.rateCard.grey")}
                 </p>
-                <p className="m-0 mt-1 text-[22px] font-bold tracking-tight text-brand">
+                <p className="m-0 mt-1 text-[22px] font-bold tracking-tight text-[#483EF4]">
                   {t("pricing.rateCard.greyPrice")}
                 </p>
               </div>
@@ -146,7 +146,7 @@ export function Pricing() {
               </p>
               <a
                 href="#marketplace"
-                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-[13px] font-bold text-white no-underline shadow-[var(--shadow-btn)] transition-transform hover:-translate-y-0.5"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#483EF4] px-4 py-2.5 text-[13px] font-bold text-white no-underline shadow-[var(--shadow-btn)] transition-transform hover:-translate-y-0.5"
               >
                 <LayoutDashboard className="size-4" aria-hidden />
                 {t("pricing.rateCard.dashboardCta")}
@@ -174,13 +174,13 @@ export function Pricing() {
                     className={cn(
                       "relative flex h-full flex-col overflow-hidden rounded-[22px] p-7 transition-[transform,box-shadow,border-color] duration-300",
                       active
-                        ? "z-[2] border border-transparent text-white shadow-[0_24px_60px_color-mix(in_srgb,var(--blue)_33%,transparent)] tablet:scale-[1.03]"
+                        ? "z-[2] border border-transparent text-white shadow-[0_24px_60px_color-mix(in_srgb,#483EF4_33%,transparent)] tablet:scale-[1.03]"
                         : "z-[1] border border-line bg-card text-ink shadow-[var(--shadow-product)]",
                     )}
                   >
                     <motion.span
                       aria-hidden
-                      className="pointer-events-none absolute inset-0 rounded-[22px] bg-brand"
+                      className="pointer-events-none absolute inset-0 rounded-[22px] bg-[#483EF4]"
                       initial={false}
                       animate={
                         tabletUp
@@ -219,7 +219,7 @@ export function Pricing() {
                             "rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
                             active
                               ? "bg-white/20 text-white"
-                              : "bg-brand text-white",
+                              : "bg-[#483EF4] text-white",
                           )}
                         >
                           {t("pricing.popular")}
@@ -244,7 +244,7 @@ export function Pricing() {
                     <p
                       className={cn(
                         "relative z-[1] mt-2 mb-0 text-[13px] font-semibold leading-relaxed transition-colors duration-300",
-                        active ? "text-sky" : "text-[color-mix(in_srgb,var(--brand)_85%,#0f766e)]",
+                        active ? "text-white/85" : "text-[color-mix(in_srgb,#483EF4_85%,#0f766e)]",
                       )}
                     >
                       {t(`pricing.plans.${planId}.description`)}
@@ -290,8 +290,8 @@ export function Pricing() {
                         className={cn(
                           "inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[14px] font-bold no-underline transition-[transform,background-color,color,box-shadow] duration-300 hover:-translate-y-0.5",
                           active
-                            ? "bg-white text-brand shadow-[0_8px_24px_#00000022]"
-                            : "bg-brand text-white shadow-[var(--shadow-btn)]",
+                            ? "bg-white text-[#483EF4] shadow-[0_8px_24px_#00000022]"
+                            : "bg-[#483EF4] text-white shadow-[var(--shadow-btn)]",
                         )}
                       >
                         {t(`pricing.plans.${planId}.cta`)}
@@ -308,7 +308,7 @@ export function Pricing() {
         <Reveal delay={0.15} className="mx-auto mt-10 max-w-5xl">
           <div
             id="pricing-terms"
-            className="rounded-2xl border border-line border-l-[4px] border-l-brand bg-[color-mix(in_srgb,var(--sky)_55%,var(--card))] px-5 py-5 tablet:px-6 dark:bg-[color-mix(in_srgb,var(--blue)_12%,var(--card))]"
+            className="rounded-2xl border border-line border-l-[4px] border-l-[#483EF4] bg-[color-mix(in_srgb,#483EF4_8%,var(--card))] px-5 py-5 tablet:px-6 dark:bg-[color-mix(in_srgb,#483EF4_12%,var(--card))]"
           >
             <h3 className="m-0 mb-3 text-[15px] font-bold text-ink">
               {t("pricing.terms.title")}
@@ -329,7 +329,7 @@ export function Pricing() {
         <Reveal delay={0.2} className="mt-8 text-center">
           <a
             href="#pricing-terms"
-            className="inline-flex items-center justify-center rounded-full border border-line bg-card px-5 py-2.5 text-[13px] font-semibold text-ink no-underline shadow-sm transition-colors hover:border-brand/30 hover:bg-sky"
+            className="inline-flex items-center justify-center rounded-full border border-line bg-card px-5 py-2.5 text-[13px] font-semibold text-ink no-underline shadow-sm transition-colors hover:border-[#483EF4]/30 hover:bg-[#483EF4]/8"
           >
             {t("pricing.compare")}
           </a>

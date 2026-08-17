@@ -32,7 +32,7 @@ export function Hero() {
   const trust = [t("hero.trust.noFees"), t("hero.trust.replacement"), t("hero.trust.reports")];
 
   const titleRotator = (
-    <RotatingWord words={words} index={wordIndex} className="text-brand" />
+    <RotatingWord words={words} index={wordIndex} className="text-[#483EF4]" />
   );
   const breadcrumbRotator = (
     <RotatingWord words={words} index={wordIndex} className="font-semibold text-ink" />
@@ -47,14 +47,14 @@ export function Hero() {
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.14] dark:opacity-[0.08]"
         style={{
-          backgroundImage: "radial-gradient(#91bdf7 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(color-mix(in srgb, #483EF4 45%, white) 1px, transparent 1px)",
           backgroundSize: "25px 25px",
         }}
         aria-hidden
       />
       <div
         className="hero-orb absolute -top-[190px] -right-[120px] size-[480px] rounded-full opacity-80 blur-[2px]"
-        style={{ background: "radial-gradient(circle, #428cff29, transparent 68%)" }}
+        style={{ background: "radial-gradient(circle, #483EF429, transparent 68%)" }}
         aria-hidden
       />
       <div
@@ -106,6 +106,7 @@ export function Hero() {
             <div className="mt-[29px] flex flex-col justify-center gap-3 tablet:flex-row tablet:justify-start">
               <ButtonLink
                 href="#marketplace"
+                className="bg-[#483EF4] hover:bg-[#3b32d6]"
                 onClick={(event) => {
                   event.preventDefault();
                   scrollToHomeSection("marketplace");
