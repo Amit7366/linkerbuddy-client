@@ -49,7 +49,7 @@ export function SectionHeading({
           <p
             className={cn(
               "m-0 text-[15px] leading-relaxed",
-              light ? "text-[#b6c5db]" : "text-muted",
+              light ? "text-white/70" : "text-muted",
             )}
           >
             {description}
@@ -58,7 +58,7 @@ export function SectionHeading({
         {children}
       </div>
       {badge ? (
-        <span className="rounded-full border border-[#e0e6ed] bg-[#f2f5f9] px-3 py-2 text-[10px] text-[#59677e]">
+        <span className="rounded-full border border-line bg-surface px-3 py-2 text-[10px] text-muted">
           {badge}
         </span>
       ) : null}

@@ -33,7 +33,7 @@ const infoCards = [
     title: "Work Hours",
     body: siteConfig.contact.workHours,
     icon: Clock3,
-    tone: "bg-[#efe7ff] text-[#6d4aff] dark:bg-[#2a2150] dark:text-[#c4b5fd]",
+    tone: "bg-navy/10 text-navy dark:bg-navy/25 dark:text-[var(--logo-accent)]",
   },
   {
     title: "Email",

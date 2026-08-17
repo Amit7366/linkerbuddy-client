@@ -47,12 +47,12 @@ export function HomeBlog() {
           >
             <div
               aria-hidden
-              className="absolute inset-0 bg-[#061428] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              className="absolute inset-0 bg-navy transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             >
-              <div className="absolute inset-0 bg-[linear-gradient(128deg,#0b2a63_0%,#071b3d_42%,#0a3d32_100%)]" />
-              <div className="absolute -top-[18%] left-[8%] size-[520px] rounded-full bg-[#1268f3]/45 blur-[90px]" />
-              <div className="absolute top-[12%] right-[-8%] size-[380px] rounded-full bg-[#62a8ff]/28 blur-[80px]" />
-              <div className="absolute right-[8%] bottom-[-22%] size-[420px] rounded-full bg-[#0a9d70]/30 blur-[90px]" />
+              <div className="absolute inset-0 bg-[image:var(--blog-gradient)]" />
+              <div className="absolute -top-[18%] left-[8%] size-[520px] rounded-full bg-brand/45 blur-[90px]" />
+              <div className="absolute top-[12%] right-[-8%] size-[380px] rounded-full bg-[var(--logo-accent)]/28 blur-[80px]" />
+              <div className="absolute right-[8%] bottom-[-22%] size-[420px] rounded-full bg-green/30 blur-[90px]" />
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_20%,#ffffff22_0%,transparent_42%)]" />
               <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] [background-size:72px_72px]" />
             </div>
@@ -64,7 +64,7 @@ export function HomeBlog() {
 
             <span
               aria-hidden
-              className="absolute top-4 right-4 grid size-11 place-items-center rounded-full bg-white text-[#0b1830] shadow-[0_8px_24px_#00000033] transition-transform duration-300 group-hover:rotate-45 tablet:top-6 tablet:right-6 tablet:size-12"
+              className="absolute top-4 right-4 grid size-11 place-items-center rounded-full bg-white text-ink shadow-[0_8px_24px_#00000033] transition-transform duration-300 group-hover:rotate-45 tablet:top-6 tablet:right-6 tablet:size-12"
             >
               <ArrowUpRight className="size-5" strokeWidth={2.25} />
             </span>

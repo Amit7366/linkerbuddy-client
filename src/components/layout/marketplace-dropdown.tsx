@@ -163,13 +163,13 @@ function MarketplaceDropdownInner({
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6, scale: 0.97 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
-              "z-[70] overflow-hidden rounded-xl border border-white/10 bg-[#0a2147] p-1.5 shadow-[0_20px_50px_#03122880] dark:bg-[#071528]",
+              "z-[70] overflow-hidden rounded-xl border border-white/10 bg-navy p-1.5 shadow-[var(--shadow-overlay)]",
               fullWidth
                 ? "relative mt-2 w-full"
                 : "absolute top-[calc(100%+12px)] left-1/2 w-[280px] -translate-x-1/2 tablet:left-0 tablet:translate-x-0",
             )}
           >
-            <div className="mb-1 px-2.5 pt-1.5 pb-1 text-[9px] font-bold tracking-[1.2px] text-[#7f93b3] uppercase">
+            <div className="mb-1 px-2.5 pt-1.5 pb-1 text-[9px] font-bold tracking-[1.2px] text-white/50 uppercase">
               {t("nav.chooseMarket")}
             </div>
 
@@ -195,7 +195,7 @@ function MarketplaceDropdownInner({
                         "flex w-full cursor-pointer items-center gap-3 rounded-[10px] border-0 px-2.5 py-2.5 text-left transition-colors",
                         isActive
                           ? "bg-brand/20 text-white"
-                          : "bg-transparent text-[#d5e0ef] hover:bg-white/8 hover:text-white",
+                          : "bg-transparent text-white/80 hover:bg-white/8 hover:text-white",
                       )}
                     >
                       <span
@@ -208,12 +208,12 @@ function MarketplaceDropdownInner({
                         <span className="block text-[13px] font-bold">
                           {t(`marketplaceCountries.${country.code}.name`)}
                         </span>
-                        <span className="mt-0.5 block text-[10px] text-[#8fa0bb]">
+                        <span className="mt-0.5 block text-[10px] text-white/55">
                           {t(`marketplaceCountries.${country.code}.description`)}
                         </span>
                       </span>
                       {isActive ? (
-                        <Check className="size-4 shrink-0 text-[#66a9ff]" aria-hidden />
+                        <Check className="size-4 shrink-0 text-[var(--logo-accent)]" aria-hidden />
                       ) : null}
                     </button>
                   </motion.li>

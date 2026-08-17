@@ -113,7 +113,7 @@ export function BlogIndexContent() {
                         />
                       </span>
                     </div>
-                    <div className="relative hidden min-h-[220px] overflow-hidden bg-[linear-gradient(160deg,#1268f3_0%,#071b3d_62%,#0a9d70_120%)] tablet:block">
+                    <div className="relative hidden min-h-[220px] overflow-hidden bg-[image:var(--blog-gradient)] tablet:block">
                       <div
                         aria-hidden
                         className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,#ffffff33_0%,transparent_42%)]"

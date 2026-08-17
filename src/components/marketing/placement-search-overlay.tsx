@@ -48,8 +48,8 @@ function avatarTone(domain: string): { wrap: string; text: string } {
       text: "text-[#1a4a9e] dark:text-[#7db4ff]",
     },
     {
-      wrap: "bg-[#eee8ff] dark:bg-[#2a1f4a]",
-      text: "text-[#5b3d9e] dark:text-[#c4b5fd]",
+      wrap: "bg-navy/10 dark:bg-navy/25",
+      text: "text-navy dark:text-[var(--logo-accent)]",
     },
     {
       wrap: "bg-[#e6f7f0] dark:bg-[#14352c]",
@@ -78,7 +78,7 @@ function SearchResultRow({
         "border-[#d6e6fb] bg-[#f7fbff] hover:border-[#b7d2f7] hover:bg-[#eef6ff]",
         "dark:border-white/10 dark:bg-[#0f1829] dark:hover:border-white/18 dark:hover:bg-[#152238]",
         selected &&
-          "border-brand/40 bg-[#eaf3ff] dark:border-brand/40 dark:bg-[#15233a]",
+          "border-brand/40 bg-sky",
       )}
     >
       <span
@@ -232,7 +232,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
       <motion.button
         type="button"
         aria-label={t("search.close")}
-        className="absolute inset-0 border-0 bg-[#071b3d]/55 backdrop-blur-xl dark:bg-[#02060f]/70"
+        className="absolute inset-0 border-0 bg-navy/55 backdrop-blur-xl dark:bg-black/70"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -240,14 +240,14 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
       />
 
       <motion.div
-        className="relative z-10 w-full max-w-[780px] overflow-hidden rounded-2xl border border-[#d6e3f5] bg-white shadow-[0_30px_80px_#071b3d40] backdrop-blur-2xl dark:border-white/10 dark:bg-[#121a2b]/95 dark:shadow-[0_30px_80px_#00000080]"
+        className="relative z-10 w-full max-w-[780px] overflow-hidden rounded-2xl border border-line bg-card shadow-[var(--shadow-overlay)] backdrop-blur-2xl dark:shadow-[0_30px_80px_#00000080]"
         initial={reduce ? { opacity: 1 } : { opacity: 0, y: 24, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={reduce ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.28, ease }}
       >
-        <div className="flex items-center gap-3 border-b border-[#dfe6f0] px-4 py-3.5 dark:border-white/10">
-          <Search className="size-5 shrink-0 text-[#1268f3] dark:text-brand" aria-hidden />
+        <div className="flex items-center gap-3 border-b border-line px-4 py-3.5">
+          <Search className="size-5 shrink-0 text-brand" aria-hidden />
           <div className="min-w-0 flex-1">
             <p id={titleId} className="sr-only">
               {t("search.title")}
@@ -257,7 +257,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder={t("hero.searchPlaceholder")}
-              className="w-full border-0 bg-transparent text-[15px] font-medium text-[#0b1830] outline-none placeholder:text-[#63708a] dark:text-ink dark:placeholder:text-muted"
+              className="w-full border-0 bg-transparent text-[15px] font-medium text-ink outline-none placeholder:text-muted"
               autoComplete="off"
               spellCheck={false}
             />
@@ -269,7 +269,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
               type="button"
               onClick={onClose}
               aria-label={t("search.close")}
-              className="grid size-9 place-items-center rounded-xl border border-[#dfe6f0] bg-[#f7f9fc] text-[#0b1830] transition-colors hover:bg-[#eaf3ff] dark:border-white/10 dark:bg-white/5 dark:text-ink dark:hover:bg-white/10"
+              className="grid size-9 place-items-center rounded-xl border border-line bg-surface text-ink transition-colors hover:bg-sky"
             >
               <X className="size-4" aria-hidden />
             </button>
@@ -278,7 +278,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
 
         <div className="max-h-[min(58vh,480px)] overflow-y-auto p-2.5">
           {!query.trim() ? (
-            <p className="px-3 py-8 text-center text-[12px] text-[#63708a] dark:text-muted">
+            <p className="px-3 py-8 text-center text-[12px] text-muted">
               {t("search.hint")}
             </p>
           ) : results.length === 0 && showLoading ? (
@@ -291,7 +291,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
               ))}
             </div>
           ) : results.length === 0 ? (
-            <p className="px-3 py-8 text-center text-[12px] text-[#63708a] dark:text-muted">
+            <p className="px-3 py-8 text-center text-[12px] text-muted">
               {t("search.empty", { query: debouncedQuery })}
             </p>
           ) : (

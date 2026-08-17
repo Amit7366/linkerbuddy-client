@@ -4,7 +4,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --navy: #071b3d;
+  /* --navy: #071b3d; */
+  --navy: #483EF4;
   --blue: #1268f3;
   --blue-hover: #075be2;
   --sky: #eaf3ff;
@@ -16,21 +17,42 @@
   --page: #ffffff;
   --card: #ffffff;
   --surface: #f7f9fc;
-  --header: #051837f7;
+  /* --header: #051837f7; */
+  --header: var(--navy);
+  --navy-hover: color-mix(in srgb, var(--navy) 82%, black);
   --logo-accent: #62a8ff;
   --logo-mark: #66a9ff;
-  --nav-link: #cfdaeb;
+  /* --nav-link: #cfdaeb; */
+  --nav-link: #ffffff;
   --container: 1180px;
   --radius-btn: 10px;
   --radius-card: 14px;
-  --shadow-btn: 0 8px 24px #1268f338;
-  --shadow-product: 0 30px 80px #1c417529;
-  --shadow-stats: 0 10px 40px #18396514;
-  --shadow-table: 0 8px 30px #12325b0d;
-  --shadow-benefit: 0 8px 26px #1635600a;
+  --shadow-btn: 0 8px 24px color-mix(in srgb, var(--blue) 22%, transparent);
+  --shadow-product: 0 30px 80px color-mix(in srgb, var(--navy) 16%, transparent);
+  --shadow-stats: 0 10px 40px color-mix(in srgb, var(--navy) 8%, transparent);
+  --shadow-table: 0 8px 30px color-mix(in srgb, var(--navy) 5%, transparent);
+  --shadow-benefit: 0 8px 26px color-mix(in srgb, var(--navy) 4%, transparent);
   --shadow-agency: 0 28px 60px #00000040;
-  --shadow-cta: 0 20px 55px #071c402e;
-  --shadow-shortlist: 0 18px 50px #05173559;
+  --shadow-cta: 0 20px 55px color-mix(in srgb, var(--navy) 18%, transparent);
+  --shadow-shortlist: 0 18px 50px color-mix(in srgb, var(--navy) 35%, transparent);
+  --shadow-overlay: 0 30px 80px color-mix(in srgb, var(--navy) 25%, transparent);
+  --cta-gradient: linear-gradient(
+    120deg,
+    var(--navy),
+    color-mix(in srgb, var(--navy) 55%, var(--blue))
+  );
+  --blog-gradient: linear-gradient(
+    128deg,
+    var(--navy) 0%,
+    color-mix(in srgb, var(--navy) 45%, var(--blue)) 48%,
+    color-mix(in srgb, var(--navy) 40%, var(--green)) 100%
+  );
+  --panel-gradient: linear-gradient(
+    160deg,
+    var(--navy) 0%,
+    color-mix(in srgb, var(--navy) 62%, var(--blue)) 55%,
+    var(--blue) 140%
+  );
   --hero-gradient: linear-gradient(160deg, #f8fbff 0%, #fff 58%, #eef6ff 100%);
   --btn-ghost-border: #cbd7e8;
   --btn-ghost-hover: #f5f8fc;
@@ -39,6 +61,7 @@
 .dark {
   color-scheme: dark;
   --navy: #0a1428;
+  /* --navy: #483EF4; */
   --blue: #3b82f6;
   --blue-hover: #2563eb;
   --sky: #15233a;
@@ -51,9 +74,12 @@
   --card: #121a2b;
   --surface: #0c1322;
   --header: #050b16f7;
+  /* --header: var(--navy); */
+  --navy-hover: color-mix(in srgb, var(--navy) 82%, black);
   --logo-accent: #7db4ff;
   --logo-mark: #7db4ff;
-  --nav-link: #b7c5da;
+  /* --nav-link: #b7c5da; */
+  --nav-link: #ffffff;
   --shadow-btn: 0 8px 24px #00000055;
   --shadow-product: 0 30px 80px #00000066;
   --shadow-stats: 0 10px 40px #00000055;
@@ -62,6 +88,24 @@
   --shadow-agency: 0 28px 60px #00000080;
   --shadow-cta: 0 20px 55px #00000066;
   --shadow-shortlist: 0 18px 50px #00000080;
+  --shadow-overlay: 0 30px 80px #00000080;
+  --cta-gradient: linear-gradient(
+    120deg,
+    var(--navy),
+    color-mix(in srgb, var(--navy) 55%, var(--blue))
+  );
+  --blog-gradient: linear-gradient(
+    128deg,
+    var(--navy) 0%,
+    color-mix(in srgb, var(--navy) 45%, var(--blue)) 48%,
+    color-mix(in srgb, var(--navy) 40%, var(--green)) 100%
+  );
+  --panel-gradient: linear-gradient(
+    160deg,
+    var(--navy) 0%,
+    color-mix(in srgb, var(--navy) 62%, var(--blue)) 55%,
+    var(--blue) 140%
+  );
   --hero-gradient: linear-gradient(160deg, #0a1424 0%, #070d18 58%, #0d1a30 100%);
   --btn-ghost-border: #334155;
   --btn-ghost-hover: #1a2438;
@@ -72,6 +116,7 @@
   --color-foreground: var(--ink);
   --color-card: var(--card);
   --color-navy: var(--navy);
+  --color-navy-hover: var(--navy-hover);
   --color-brand: var(--blue);
   --color-brand-hover: var(--blue-hover);
   --color-sky: var(--sky);
@@ -178,13 +223,13 @@
 
   .lb-btn-light {
     background: #fff;
-    color: #0a2147;
+    color: var(--navy);
     box-shadow: none;
   }
 
   .lb-btn-light:hover {
     background: var(--sky);
-    color: #0a2147;
+    color: var(--navy);
   }
 
   .dark .lb-btn-light {
@@ -197,27 +242,27 @@
     flex: 1;
     cursor: pointer;
     border-radius: 10px;
-    border: 1px solid #9fc0f0;
-    background: #eaf3ff;
+    border: 1px solid color-mix(in srgb, var(--blue) 55%, white);
+    background: var(--sky);
     padding: 8px 12px;
     font-size: 9px;
     font-weight: 700;
-    color: #1268f3;
+    color: var(--blue);
   }
 
   .lb-add-site:hover {
-    background: #1268f3;
+    background: var(--blue);
     color: #fff;
   }
 
   .lb-add-site[data-selected="true"] {
-    border-color: #1268f3;
-    background: #1268f3;
+    border-color: var(--blue);
+    background: var(--blue);
     color: #fff;
   }
 
   .lb-add-site[data-selected="true"]:hover {
-    background: #075be2;
+    background: var(--blue-hover);
   }
 
   .dark .lb-add-site {
@@ -388,10 +433,12 @@
   @keyframes cart-pulse {
     0%,
     100% {
-      box-shadow: 0 12px 40px rgba(7, 27, 61, 0.35), 0 0 0 0 rgba(38, 121, 242, 0.45);
+      box-shadow: 0 12px 40px color-mix(in srgb, var(--navy) 35%, transparent),
+        0 0 0 0 color-mix(in srgb, var(--blue) 45%, transparent);
     }
     50% {
-      box-shadow: 0 12px 40px rgba(7, 27, 61, 0.35), 0 0 0 12px rgba(38, 121, 242, 0);
+      box-shadow: 0 12px 40px color-mix(in srgb, var(--navy) 35%, transparent),
+        0 0 0 12px color-mix(in srgb, var(--blue) 0%, transparent);
     }
   }
 }

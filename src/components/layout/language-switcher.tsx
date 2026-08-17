@@ -74,9 +74,9 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6, scale: 0.97 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-[calc(100%+10px)] right-0 z-[80] w-[240px] overflow-hidden rounded-xl border border-white/10 bg-[#0a2147] p-1.5 shadow-[0_20px_50px_#03122880] dark:border-white/15 dark:bg-[#071528]"
+            className="absolute top-[calc(100%+10px)] right-0 z-[80] w-[240px] overflow-hidden rounded-xl border border-white/10 bg-navy p-1.5 shadow-[var(--shadow-overlay)]"
           >
-            <div className="mb-1 px-2.5 pt-1.5 pb-1 text-[9px] font-bold tracking-[1.2px] text-[#7f93b3] uppercase">
+            <div className="mb-1 px-2.5 pt-1.5 pb-1 text-[9px] font-bold tracking-[1.2px] text-white/50 uppercase">
               {t("common.chooseLanguage")}
             </div>
             <ul className="m-0 list-none space-y-0.5 p-0">
@@ -99,7 +99,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
                         "flex w-full cursor-pointer items-center gap-3 rounded-[10px] border-0 px-2.5 py-2.5 text-left transition-colors",
                         isActive
                           ? "bg-brand/20 text-white"
-                          : "bg-transparent text-[#d5e0ef] hover:bg-white/8 hover:text-white",
+                          : "bg-transparent text-white/80 hover:bg-white/8 hover:text-white",
                       )}
                     >
                       <span

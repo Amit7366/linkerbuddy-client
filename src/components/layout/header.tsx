@@ -251,6 +251,7 @@ export function Header() {
 
           <Button
             size="sm"
+            variant="light"
             className="hidden phablet:inline-flex"
             onClick={() => scrollTo("custom-list")}
           >

@@ -174,8 +174,8 @@ export function Pricing() {
                     className={cn(
                       "relative flex h-full flex-col overflow-hidden rounded-[22px] p-7 transition-[transform,box-shadow,border-color] duration-300",
                       active
-                        ? "z-[2] border border-transparent text-white shadow-[0_24px_60px_#1268f355] tablet:scale-[1.03]"
-                        : "z-[1] border border-line bg-card text-ink shadow-[0_18px_50px_#12325b14] dark:shadow-[0_18px_50px_#00000040]",
+                        ? "z-[2] border border-transparent text-white shadow-[0_24px_60px_color-mix(in_srgb,var(--blue)_33%,transparent)] tablet:scale-[1.03]"
+                        : "z-[1] border border-line bg-card text-ink shadow-[var(--shadow-product)]",
                     )}
                   >
                     <motion.span

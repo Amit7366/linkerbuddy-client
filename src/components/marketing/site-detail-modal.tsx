@@ -67,7 +67,7 @@ function SiteDetailPanel({ site, onClose }: { site: SiteListing; onClose: () => 
       <motion.button
         type="button"
         aria-label={t("inventory.modal.close")}
-        className="absolute inset-0 border-0 bg-[#071b3d]/55 backdrop-blur-xl dark:bg-[#02060f]/70"
+        className="absolute inset-0 border-0 bg-navy/55 backdrop-blur-xl dark:bg-black/70"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -75,7 +75,7 @@ function SiteDetailPanel({ site, onClose }: { site: SiteListing; onClose: () => 
       />
 
       <motion.div
-        className="relative z-10 max-h-[92vh] w-full max-w-[560px] overflow-y-auto rounded-t-[22px] border border-line bg-card shadow-[0_30px_80px_#071b3d40] tablet:rounded-[22px] dark:shadow-[0_30px_80px_#00000080]"
+        className="relative z-10 max-h-[92vh] w-full max-w-[560px] overflow-y-auto rounded-t-[22px] border border-line bg-card shadow-[var(--shadow-overlay)] tablet:rounded-[22px] dark:shadow-[0_30px_80px_#00000080]"
         initial={reduce ? { opacity: 1 } : { opacity: 0, y: 40, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={reduce ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
@@ -83,7 +83,7 @@ function SiteDetailPanel({ site, onClose }: { site: SiteListing; onClose: () => 
       >
         <div className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-line bg-card/95 px-5 py-4 backdrop-blur-md">
           <div className="flex min-w-0 items-center gap-3">
-            <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[#eaf3ff] text-[13px] font-extrabold text-[#1268f3] dark:bg-[#1a2740] dark:text-brand">
+            <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-sky text-[13px] font-extrabold text-brand">
               {domainInitials(site.domain)}
             </span>
             <div className="min-w-0">
@@ -117,11 +117,11 @@ function SiteDetailPanel({ site, onClose }: { site: SiteListing; onClose: () => 
           </div>
 
           <div className="grid grid-cols-2 gap-2.5">
-            <div className="rounded-xl border border-[#9fc0f0] bg-[#eaf3ff] px-3.5 py-3 dark:border-[#2a4570] dark:bg-[#15233a]">
-              <small className="block text-[9px] tracking-[0.6px] text-[#1268f3] uppercase dark:text-[#7db4ff]">
+            <div className="rounded-xl border border-brand/30 bg-sky px-3.5 py-3">
+              <small className="block text-[9px] tracking-[0.6px] text-brand uppercase">
                 {t("inventory.modal.guestPost")}
               </small>
-              <b className="mt-1 block text-[22px] text-[#1268f3] dark:text-brand">
+              <b className="mt-1 block text-[22px] text-brand">
                 ${site.guest}
                 <span className="ml-1 text-[11px] font-medium text-muted">/ post</span>
               </b>

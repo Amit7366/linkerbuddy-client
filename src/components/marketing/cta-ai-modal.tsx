@@ -81,13 +81,13 @@ function RecommendationCard({
       className="rounded-2xl border border-line bg-surface p-4"
     >
       <div className="flex items-start gap-3">
-        <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#eaf3ff] text-[12px] font-extrabold text-[#1268f3] dark:bg-[#1a2740] dark:text-brand">
+        <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-sky text-[12px] font-extrabold text-brand">
           {domainInitials(site.domain)}
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="truncate text-[15px] font-bold text-ink">{site.domain}</h3>
-            <span className="rounded-md bg-[#1268f3]/12 px-2 py-0.5 text-[10px] font-bold text-[#1268f3] dark:bg-brand/20 dark:text-brand">
+            <span className="rounded-md bg-brand/12 px-2 py-0.5 text-[10px] font-bold text-brand">
               {fitScore}% {t("cta.modal.fit")}
             </span>
           </div>
@@ -222,7 +222,7 @@ function ModalBody({
       <motion.button
         type="button"
         aria-label={t("cta.modal.close")}
-        className="absolute inset-0 border-0 bg-[#071b3d]/55 backdrop-blur-xl dark:bg-[#02060f]/70"
+        className="absolute inset-0 border-0 bg-navy/55 backdrop-blur-xl dark:bg-black/70"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -230,7 +230,7 @@ function ModalBody({
       />
 
       <motion.div
-        className="relative z-10 flex max-h-[92vh] w-full max-w-[640px] flex-col overflow-hidden rounded-t-[22px] border border-line bg-card shadow-[0_30px_80px_#071b3d40] tablet:rounded-[22px] dark:shadow-[0_30px_80px_#00000080]"
+        className="relative z-10 flex max-h-[92vh] w-full max-w-[640px] flex-col overflow-hidden rounded-t-[22px] border border-line bg-card shadow-[var(--shadow-overlay)] tablet:rounded-[22px] dark:shadow-[0_30px_80px_#00000080]"
         initial={reduce ? { opacity: 1 } : { opacity: 0, y: 40, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={reduce ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
@@ -264,11 +264,11 @@ function ModalBody({
         <div className="flex-1 overflow-y-auto px-5 py-5">
           {status === "loading" ? (
             <div className="space-y-4" aria-busy="true" aria-live="polite">
-              <div className="rounded-2xl border border-[#9fc0f0] bg-[#eaf3ff] p-4 dark:border-[#2a4570] dark:bg-[#15233a]">
+              <div className="rounded-2xl border border-brand/30 bg-sky p-4">
                 <div className="flex items-center gap-3">
                   <span className="relative grid size-10 place-items-center rounded-full bg-white/70 dark:bg-[#0d1a2e]">
-                    <span className="absolute inset-0 animate-ping rounded-full bg-[#1268f3]/25" />
-                    <Sparkles className="relative size-4 text-[#1268f3] dark:text-brand" />
+                    <span className="absolute inset-0 animate-ping rounded-full bg-brand/25" />
+                    <Sparkles className="relative size-4 text-brand" />
                   </span>
                   <div>
                     <p className="text-[13px] font-bold text-ink">{t(LOADING_STEPS[stepIndex])}</p>
@@ -281,7 +281,7 @@ function ModalBody({
                       key={step}
                       className={cn(
                         "h-1 flex-1 rounded-full transition-colors duration-300",
-                        index <= stepIndex ? "bg-[#1268f3]" : "bg-[#1268f3]/20 dark:bg-brand/20",
+                        index <= stepIndex ? "bg-brand" : "bg-brand/20",
                       )}
                     />
                   ))}
@@ -313,9 +313,9 @@ function ModalBody({
 
           {status === "ready" && result ? (
             <div className="space-y-5">
-              <div className="rounded-2xl border border-[#9fc0f0] bg-[#eaf3ff] p-4 dark:border-[#2a4570] dark:bg-[#15233a]">
+              <div className="rounded-2xl border border-brand/30 bg-sky p-4">
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-[#1268f3] dark:text-brand" />
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-brand" />
                   <div>
                     <p className="text-[13px] font-bold text-ink">{result.summary}</p>
                     <p className="mt-1.5 text-[12px] leading-relaxed text-ink/75">{result.strategy}</p>

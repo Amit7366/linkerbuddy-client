@@ -39,13 +39,13 @@ export function CtaForm() {
     <section id="custom-list" className="py-[70px]" aria-labelledby="cta-heading">
       <Container>
         <Reveal>
-          <div className="grid items-center gap-8 rounded-[20px] bg-[linear-gradient(120deg,#071c40,#0c3470)] p-7 text-white shadow-[var(--shadow-cta)] tablet:grid-cols-[0.8fr_1.2fr] tablet:gap-[55px] tablet:p-[42px]">
+          <div className="grid items-center gap-8 rounded-[20px] bg-[image:var(--cta-gradient)] p-7 text-white shadow-[var(--shadow-cta)] tablet:grid-cols-[0.8fr_1.2fr] tablet:gap-[55px] tablet:p-[42px]">
             <div>
               <p className="lb-kicker lb-kicker-light">{t("cta.kicker")}</p>
               <h2 id="cta-heading" className="my-3 text-[31px] font-bold tracking-[-1.3px]">
                 {t("cta.title")}
               </h2>
-              <p className="m-0 text-[13px] leading-relaxed text-[#b9c9df]">{t("cta.description")}</p>
+              <p className="m-0 text-[13px] leading-relaxed text-white/70">{t("cta.description")}</p>
             </div>
 
             <form

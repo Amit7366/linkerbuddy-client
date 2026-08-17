@@ -11,7 +11,7 @@ export function downloadOrderPdf(order: Order) {
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(20);
-  doc.setTextColor(7, 27, 61);
+  doc.setTextColor(72, 62, 244);
   doc.text(siteConfig.name, marginX, y);
 
   doc.setFont("helvetica", "normal");
@@ -21,7 +21,7 @@ export function downloadOrderPdf(order: Order) {
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
-  doc.setTextColor(7, 27, 61);
+  doc.setTextColor(72, 62, 244);
   doc.text(order.orderNumber, 547, y, { align: "right" });
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
@@ -37,7 +37,7 @@ export function downloadOrderPdf(order: Order) {
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
-  doc.setTextColor(7, 27, 61);
+  doc.setTextColor(72, 62, 244);
   doc.text("Bill to", marginX, y);
   doc.text("Status", 320, y);
 
@@ -81,7 +81,7 @@ export function downloadOrderPdf(order: Order) {
       textColor: [51, 65, 85],
     },
     headStyles: {
-      fillColor: [7, 27, 61],
+      fillColor: [72, 62, 244],
       textColor: [255, 255, 255],
       fontStyle: "bold",
     },
@@ -114,7 +114,7 @@ export function downloadOrderPdf(order: Order) {
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
-  doc.setTextColor(7, 27, 61);
+  doc.setTextColor(72, 62, 244);
   doc.text("Total", 400, totalsY);
   doc.text(formatCents(order.totalCents, order.currency), 547, totalsY, {
     align: "right",

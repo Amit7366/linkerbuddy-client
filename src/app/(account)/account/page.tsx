@@ -178,7 +178,7 @@ export default function AccountOverviewPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-line bg-[linear-gradient(160deg,#071b3d_0%,#0c2a56_55%,#1268f3_140%)] p-5 text-white">
+          <div className="rounded-xl border border-line bg-[image:var(--panel-gradient)] p-5 text-white">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-sm font-bold">Linkerbuddy PRO</p>

@@ -171,7 +171,7 @@ function CustomFilterPanel({
       <motion.button
         type="button"
         aria-label={t("marketplace.custom.close")}
-        className="absolute inset-0 border-0 bg-[#071b3d]/55 backdrop-blur-xl dark:bg-[#02060f]/70"
+        className="absolute inset-0 border-0 bg-navy/55 backdrop-blur-xl dark:bg-black/70"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -180,7 +180,7 @@ function CustomFilterPanel({
 
       <motion.form
         onSubmit={handleSubmit}
-        className="relative z-10 max-h-[92vh] w-full max-w-[560px] overflow-y-auto rounded-t-[22px] border border-line bg-card p-5 shadow-[0_30px_80px_#071b3d40] tablet:rounded-[22px] tablet:p-6 dark:shadow-[0_30px_80px_#00000080]"
+        className="relative z-10 max-h-[92vh] w-full max-w-[560px] overflow-y-auto rounded-t-[22px] border border-line bg-card p-5 shadow-[var(--shadow-overlay)] tablet:rounded-[22px] tablet:p-6 dark:shadow-[0_30px_80px_#00000080]"
         initial={reduce ? { opacity: 1 } : { opacity: 0, y: 40, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={reduce ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}

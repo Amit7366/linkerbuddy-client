@@ -57,7 +57,7 @@ export function ScrollToTop() {
           type="button"
           aria-label={t("scrollToTop.label")}
           onClick={scrollTop}
-          className="pointer-events-auto relative grid size-11 place-items-center rounded-full border-0 bg-card text-brand shadow-[0_10px_26px_#071b3d28] ring-1 ring-line outline-none transition-colors hover:text-brand-hover focus-visible:ring-2 focus-visible:ring-brand dark:bg-[#121a2b] dark:shadow-[0_10px_26px_#00000066] dark:ring-white/10"
+          className="pointer-events-auto relative grid size-11 place-items-center rounded-full border-0 bg-card text-brand shadow-[0_10px_26px_color-mix(in_srgb,var(--navy)_16%,transparent)] ring-1 ring-line outline-none transition-colors hover:text-brand-hover focus-visible:ring-2 focus-visible:ring-brand"
           initial={reduce ? { opacity: 1 } : { opacity: 0, y: 14, scale: 0.82 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={reduce ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.88 }}

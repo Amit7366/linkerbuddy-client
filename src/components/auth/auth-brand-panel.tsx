@@ -15,9 +15,9 @@ export function AuthBrandPanel() {
     >
       {/* Layered abstract shapes */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-[20%] -right-[15%] h-[70%] w-[70%] rounded-full bg-[#1268f3]/35 blur-3xl" />
-        <div className="absolute top-[30%] -left-[25%] h-[55%] w-[55%] rounded-full bg-[#3b82f6]/25 blur-3xl" />
-        <div className="absolute right-[8%] bottom-[10%] h-[40%] w-[40%] rounded-[40%] bg-[#075be2]/40 blur-2xl" />
+        <div className="absolute -top-[20%] -right-[15%] h-[70%] w-[70%] rounded-full bg-brand/35 blur-3xl" />
+        <div className="absolute top-[30%] -left-[25%] h-[55%] w-[55%] rounded-full bg-brand/25 blur-3xl" />
+        <div className="absolute right-[8%] bottom-[10%] h-[40%] w-[40%] rounded-[40%] bg-brand-hover/40 blur-2xl" />
         <div className="absolute top-[12%] left-[18%] h-48 w-48 rotate-12 rounded-[2rem] border border-white/10 bg-white/5" />
         <div className="absolute right-[12%] bottom-[22%] h-36 w-36 -rotate-6 rounded-full border border-white/10 bg-white/5" />
       </div>
@@ -49,13 +49,13 @@ export function AuthBrandPanel() {
           >
             <path
               d="M0 48 C28 44 40 20 70 28 C100 36 110 10 140 18 C170 26 180 40 210 32 C240 24 255 12 280 8"
-              stroke="#1268f3"
+              stroke="var(--blue)"
               strokeWidth="2.5"
               strokeLinecap="round"
             />
             <path
               d="M0 54 C32 50 48 36 78 40 C108 44 120 28 150 34 C180 40 195 48 224 42 C250 37 265 30 280 26"
-              stroke="#ffb13b"
+              stroke="var(--orange)"
               strokeWidth="2"
               strokeLinecap="round"
               opacity="0.9"

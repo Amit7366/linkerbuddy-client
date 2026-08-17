@@ -73,7 +73,7 @@ export function CartDrawer() {
             <motion.button
               type="button"
               aria-label={t("cart.close")}
-              className="absolute inset-0 border-0 bg-[#071b3d]/45 backdrop-blur-sm"
+              className="absolute inset-0 border-0 bg-navy/45 backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -81,7 +81,7 @@ export function CartDrawer() {
             />
 
             <motion.aside
-              className="relative z-10 flex h-full w-full max-w-[420px] flex-col bg-card shadow-[-20px_0_60px_rgba(7,27,61,0.18)]"
+              className="relative z-10 flex h-full w-full max-w-[420px] flex-col bg-card shadow-[-20px_0_60px_color-mix(in_srgb,var(--navy)_18%,transparent)]"
               initial={reduce ? { x: 0 } : { x: "100%" }}
               animate={{ x: 0 }}
               exit={reduce ? { opacity: 0 } : { x: "100%" }}

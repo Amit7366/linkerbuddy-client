@@ -23,7 +23,7 @@ const ACTIONS = [
     labelKey: "contact.email",
     href: `mailto:${CONTACT.email}`,
     icon: Mail,
-    className: "bg-[#1268f3] text-white hover:bg-[#075be2]",
+    className: "bg-brand text-white hover:bg-brand-hover",
   },
   {
     id: "whatsapp",
@@ -46,7 +46,7 @@ const ACTIONS = [
     labelKey: "contact.phone",
     href: `tel:${CONTACT.phoneE164}`,
     icon: Phone,
-    className: "bg-[#0a9d70] text-white hover:bg-[#088a62]",
+    className: "bg-green text-white hover:bg-green/90",
   },
 ] as const;
 
@@ -109,8 +109,8 @@ export function FloatingContact() {
                     target={"external" in action && action.external ? "_blank" : undefined}
                     rel={"external" in action && action.external ? "noopener noreferrer" : undefined}
                     className={cn(
-                      "group inline-flex items-center gap-2 rounded-full py-1.5 pr-1.5 pl-3 no-underline shadow-[0_12px_30px_#071b3d33] backdrop-blur-md transition-transform hover:-translate-y-0.5 dark:shadow-[0_12px_30px_#00000066]",
-                      "bg-navy text-white ring-1 ring-white/15 dark:bg-[#121a2b] dark:ring-white/10",
+                      "group inline-flex items-center gap-2 rounded-full py-1.5 pr-1.5 pl-3 no-underline shadow-[0_12px_30px_color-mix(in_srgb,var(--navy)_20%,transparent)] backdrop-blur-md transition-transform hover:-translate-y-0.5 dark:shadow-[0_12px_30px_#00000066]",
+                      "bg-navy text-white ring-1 ring-white/15",
                     )}
                     onClick={() => setOpen(false)}
                   >
@@ -142,7 +142,7 @@ export function FloatingContact() {
         aria-controls={menuId}
         className={cn(
           "pointer-events-auto grid size-11 place-items-center rounded-full border-0 text-white shadow-[0_12px_28px_#1268f355] transition-colors",
-          open ? "bg-navy dark:bg-[#1a2740]" : "bg-brand hover:bg-brand-hover",
+          open ? "bg-navy" : "bg-brand hover:bg-brand-hover",
         )}
         onClick={() => setOpen((prev) => !prev)}
         whileTap={reduce ? undefined : { scale: 0.94 }}

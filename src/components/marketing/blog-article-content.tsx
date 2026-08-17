@@ -176,7 +176,7 @@ export function BlogArticleContent({ date, readingMinutes }: BlogArticleContentP
       title: page.guestBenefits.nicheTitle,
       body: page.guestBenefits.nicheBody,
       icon: Target,
-      tone: "bg-[#eee8ff] text-[#6d4ec9] dark:bg-[#2a1f4a] dark:text-[#c4b5fd]",
+      tone: "bg-navy/10 text-navy dark:bg-navy/25 dark:text-[var(--logo-accent)]",
     },
   ];
 
@@ -558,7 +558,7 @@ export function BlogArticleContent({ date, readingMinutes }: BlogArticleContentP
                 <div className="relative overflow-hidden rounded-2xl bg-navy px-6 py-10 text-white shadow-[var(--shadow-cta)] tablet:px-10 tablet:py-12">
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_0%_0%,_#1268f355_0%,_transparent_50%),radial-gradient(ellipse_at_100%_100%,_#0a9d7040_0%,_transparent_45%)]"
+                    className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_0%_0%,color-mix(in_srgb,var(--blue)_33%,transparent)_0%,transparent_50%),radial-gradient(ellipse_at_100%_100%,color-mix(in_srgb,var(--green)_25%,transparent)_0%,transparent_45%)]"
                   />
                   <div className="relative">
                     <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-white/90">
@@ -571,7 +571,7 @@ export function BlogArticleContent({ date, readingMinutes }: BlogArticleContentP
                     <p className="mt-3 m-0 max-w-2xl text-[15px] leading-relaxed text-white/75">
                       {page.combine.body}
                     </p>
-                    <p className="mt-5 m-0 text-[14px] font-bold text-[#ffb13b]">{page.combine.cta}</p>
+                    <p className="mt-5 m-0 text-[14px] font-bold text-orange">{page.combine.cta}</p>
                   </div>
                 </div>
               </MotionSection>

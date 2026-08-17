@@ -139,17 +139,17 @@ export function AboutPageContent() {
       title: page.why.policyTitle,
       body: page.why.policyBody,
       icon: ShieldCheck,
-      tone: "bg-[#eee8ff] text-[#6d4ec9] dark:bg-[#2a1f4a] dark:text-[#c4b5fd]",
+      tone: "bg-navy/10 text-navy dark:bg-navy/25 dark:text-[var(--logo-accent)]",
     },
   ];
 
   const processSteps = [
     { title: page.howWeWork.step1Title, body: page.howWeWork.step1Body, icon: Search, color: "text-brand border-brand/30 bg-brand/10" },
-    { title: page.howWeWork.step2Title, body: page.howWeWork.step2Body, icon: MapPinned, color: "text-[#0a9d70] border-[#0a9d70]/30 bg-[#0a9d70]/10" },
+    { title: page.howWeWork.step2Title, body: page.howWeWork.step2Body, icon: MapPinned, color: "text-green border-green/30 bg-green/10" },
     { title: page.howWeWork.step3Title, body: page.howWeWork.step3Body, icon: MessageSquare, color: "text-[#c47a00] border-[#c47a00]/30 bg-[#c47a00]/10" },
-    { title: page.howWeWork.step4Title, body: page.howWeWork.step4Body, icon: FileCheck2, color: "text-[#6d4ec9] border-[#6d4ec9]/30 bg-[#6d4ec9]/10" },
-    { title: page.howWeWork.step5Title, body: page.howWeWork.step5Body, icon: PenLine, color: "text-[#1268f3] border-[#1268f3]/30 bg-[#1268f3]/10" },
-    { title: page.howWeWork.step6Title, body: page.howWeWork.step6Body, icon: Rocket, color: "text-[#0a9d70] border-[#0a9d70]/30 bg-[#0a9d70]/10" },
+    { title: page.howWeWork.step4Title, body: page.howWeWork.step4Body, icon: FileCheck2, color: "text-navy border-navy/30 bg-navy/10" },
+    { title: page.howWeWork.step5Title, body: page.howWeWork.step5Body, icon: PenLine, color: "text-brand border-brand/30 bg-brand/10" },
+    { title: page.howWeWork.step6Title, body: page.howWeWork.step6Body, icon: Rocket, color: "text-green border-green/30 bg-green/10" },
   ];
 
   return (

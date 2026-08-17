@@ -128,7 +128,7 @@ export function NavMoreDropdown({
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6, scale: 0.97 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
-              "z-[70] overflow-hidden rounded-xl border border-white/10 bg-[#0a2147] p-1.5 shadow-[0_20px_50px_#03122880] dark:bg-[#071528]",
+              "z-[70] overflow-hidden rounded-xl border border-white/10 bg-navy p-1.5 shadow-[var(--shadow-overlay)]",
               fullWidth
                 ? "relative mt-2 w-full"
                 : "absolute top-[calc(100%+12px)] left-1/2 w-[220px] -translate-x-1/2 tablet:left-0 tablet:translate-x-0",
@@ -154,7 +154,7 @@ export function NavMoreDropdown({
                         "flex w-full items-center rounded-[10px] px-3 py-2.5 text-[13px] font-semibold no-underline transition-colors",
                         itemActive
                           ? "bg-brand/20 text-white"
-                          : "text-[#d5e0ef] hover:bg-white/8 hover:text-white",
+                          : "text-white/80 hover:bg-white/8 hover:text-white",
                       )}
                       onClick={(event) => {
                         setOpen(false);

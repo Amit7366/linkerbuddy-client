@@ -793,7 +793,7 @@ export function CheckoutClient() {
                         variables: {
                           colorPrimary: "#1268f3",
                           colorBackground: "#ffffff",
-                          colorText: "#0b1830",
+                          colorText: "var(--ink)",
                           colorDanger: "#dc2626",
                           borderRadius: "12px",
                           fontFamily: "var(--font-geist-sans), system-ui, sans-serif",

@@ -83,7 +83,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-[#06152f] px-0 pt-14 pb-10 text-white dark:bg-[#040914]">
+    <footer className="bg-navy px-0 pt-14 pb-10 text-white">
       <Container>
         <div className="grid grid-cols-1 gap-10 phablet:grid-cols-2 tablet:grid-cols-4 tablet:gap-8 desktop:gap-12">
           {/* Contact */}

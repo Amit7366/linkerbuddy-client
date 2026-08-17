@@ -191,7 +191,7 @@ function MarketplaceInner() {
             aria-label="Guest post inventory"
           >
             <div
-              className="hidden min-h-[42px] grid-cols-[1.45fr_0.65fr_0.28fr_0.28fr_0.65fr_0.6fr_0.55fr_0.45fr_0.75fr] items-center bg-navy px-[15px] text-[9px] tracking-[0.4px] text-[#d8e3f2] uppercase tablet:grid"
+              className="hidden min-h-[42px] grid-cols-[1.45fr_0.65fr_0.28fr_0.28fr_0.65fr_0.6fr_0.55fr_0.45fr_0.75fr] items-center bg-navy px-[15px] text-[9px] tracking-[0.4px] text-white/75 uppercase tablet:grid"
               role="row"
             >
               <span>{t("marketplace.columns.website")}</span>

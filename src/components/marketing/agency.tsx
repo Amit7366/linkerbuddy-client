@@ -34,14 +34,14 @@ export function Agency() {
             >
               {t("agency.title")}
             </h2>
-            <p className="m-0 max-w-[540px] leading-[1.7] text-[#b6c5db]">
+            <p className="m-0 max-w-[540px] leading-[1.7] text-white/70">
               {t("agency.description")}
             </p>
             <ul className="my-[26px] grid list-none grid-cols-1 gap-3.5 p-0 tablet:grid-cols-2">
               {PERK_KEYS.map((key) => (
                 <li
                   key={key}
-                  className="text-xs text-[#d5e0ef] before:mr-2 before:text-[#37d0a3] before:content-['✓']"
+                  className="text-xs text-white/80 before:mr-2 before:text-green before:content-['✓']"
                 >
                   {t(`agency.perks.${key}`)}
                 </li>
