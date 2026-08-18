@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutList, LogOut, Menu, Package, Percent, Plus, Star, X } from "lucide-react";
+import { LayoutList, LogOut, Menu, Package, Percent, Phone, Plus, Sparkles, Star, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { useSuperAdminAuth } from "./super-admin-shell";
@@ -37,6 +37,18 @@ const navItems = [
     href: "/dashboard/super-admin/reviews",
     label: "Reviews",
     icon: Star,
+    exact: false,
+  },
+  {
+    href: "/dashboard/super-admin/cta-requests",
+    label: "AI shortlists",
+    icon: Sparkles,
+    exact: false,
+  },
+  {
+    href: "/dashboard/super-admin/calls",
+    label: "Scheduled calls",
+    icon: Phone,
     exact: false,
   },
 ];
@@ -155,7 +167,11 @@ export function SuperAdminSidebar({ children }: { children: React.ReactNode }) {
           </button>
           <div className="min-w-0 flex-1">
             <h1 className="truncate text-base font-semibold text-zinc-900">
-              {pathname.startsWith("/dashboard/super-admin/reviews")
+              {pathname.startsWith("/dashboard/super-admin/calls")
+                ? "Scheduled calls"
+                : pathname.startsWith("/dashboard/super-admin/cta-requests")
+                ? "AI shortlists"
+                : pathname.startsWith("/dashboard/super-admin/reviews")
                 ? "Reviews"
                 : pathname.startsWith("/dashboard/super-admin/promos")
                   ? "Promo codes"
@@ -164,7 +180,11 @@ export function SuperAdminSidebar({ children }: { children: React.ReactNode }) {
                     : "Marketplace"}
             </h1>
             <p className="truncate text-xs text-zinc-500">
-              {pathname.startsWith("/dashboard/super-admin/reviews")
+              {pathname.startsWith("/dashboard/super-admin/calls")
+                ? "Manage strategy call bookings and follow-up status"
+                : pathname.startsWith("/dashboard/super-admin/cta-requests")
+                ? "Gemini shortlist submissions and follow-up status"
+                : pathname.startsWith("/dashboard/super-admin/reviews")
                 ? "Control home page review visibility"
                 : pathname.startsWith("/dashboard/super-admin/promos")
                   ? "Create and manage discount codes"

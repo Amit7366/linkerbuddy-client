@@ -83,7 +83,11 @@ export function CtaForm() {
                 />
               </Field>
 
-              <Button type="submit" className="h-[50px] w-full" disabled={submitting}>
+              <Button
+                type="submit"
+                className="h-[50px] w-full !bg-[#F00E58] shadow-[0_12px_28px_rgba(240,14,88,0.38)] hover:!bg-[#d40c4c]"
+                disabled={submitting}
+              >
                 {t("cta.submit")}
               </Button>
             </form>

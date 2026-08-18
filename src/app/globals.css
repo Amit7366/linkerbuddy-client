@@ -242,44 +242,44 @@
     flex: 1;
     cursor: pointer;
     border-radius: 10px;
-    border: 1px solid color-mix(in srgb, var(--blue) 55%, white);
-    background: var(--sky);
+    border: 1px solid color-mix(in srgb, #483EF4 55%, white);
+    background: color-mix(in srgb, #483EF4 10%, white);
     padding: 8px 12px;
     font-size: 9px;
     font-weight: 700;
-    color: var(--blue);
+    color: #483EF4;
   }
 
   .lb-add-site:hover {
-    background: var(--blue);
+    background: #483EF4;
     color: #fff;
   }
 
   .lb-add-site[data-selected="true"] {
-    border-color: var(--blue);
-    background: var(--blue);
+    border-color: #483EF4;
+    background: #483EF4;
     color: #fff;
   }
 
   .lb-add-site[data-selected="true"]:hover {
-    background: var(--blue-hover);
+    background: color-mix(in srgb, #483EF4 88%, black);
   }
 
   .dark .lb-add-site {
-    border-color: #2a4570;
-    background: #15233a;
-    color: #7db4ff;
+    border-color: color-mix(in srgb, #483EF4 45%, transparent);
+    background: color-mix(in srgb, #483EF4 16%, #15233a);
+    color: #b4afff;
   }
 
   .dark .lb-add-site:hover {
-    border-color: var(--blue);
-    background: var(--blue);
+    border-color: #483EF4;
+    background: #483EF4;
     color: #fff;
   }
 
   .dark .lb-add-site[data-selected="true"] {
-    border-color: var(--blue);
-    background: var(--blue);
+    border-color: #483EF4;
+    background: #483EF4;
     color: #fff;
   }
 

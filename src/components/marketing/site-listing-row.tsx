@@ -39,8 +39,8 @@ export function SiteListingRow({ site, onView, gridClassName }: SiteListingRowPr
           aria-pressed={selected}
           onClick={() => toggle(site.id)}
           className={cn(
-            "grid size-[25px] place-items-center rounded-[7px] border border-line bg-card text-sm font-bold text-brand",
-            selected && "border-brand bg-brand text-white",
+            "grid size-[25px] place-items-center rounded-[7px] border border-[#483EF4] bg-card text-sm font-bold text-[#483EF4]",
+            selected && "border-[#483EF4] bg-[#483EF4] text-white",
           )}
         >
           {selected ? "✓" : "+"}
@@ -113,7 +113,7 @@ export function SiteListingRow({ site, onView, gridClassName }: SiteListingRowPr
           type="button"
           onClick={() => onView(site)}
           aria-label={t("inventory.viewDetails", { domain: site.domain })}
-          className="grid size-9 shrink-0 place-items-center rounded-lg border border-line bg-surface text-brand transition-colors hover:border-brand hover:bg-sky"
+          className="grid size-9 shrink-0 place-items-center rounded-lg border border-[#483EF4] bg-surface text-[#483EF4] transition-colors hover:bg-[#483EF4]/10"
         >
           <Eye className="size-3.5" aria-hidden />
         </button>

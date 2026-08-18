@@ -51,5 +51,9 @@ export const endpoints = {
     list: "/promos",
     detail: (id: string) => `/promos/${id}`,
   },
+  ctaRequests: {
+    list: "/cta-requests",
+    detail: (id: string) => `/cta-requests/${id}`,
+  },
   health: "/health",
 } as const;
