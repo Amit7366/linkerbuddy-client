@@ -5,6 +5,7 @@ import {
   FaFacebookF,
   FaInstagram,
   FaLinkedinIn,
+  FaTelegram,
   FaWhatsapp,
   FaXTwitter,
 } from "react-icons/fa6";
@@ -18,7 +19,7 @@ import { cn } from "@/lib/utils";
 const infoCards = [
   {
     title: "Office",
-    body: siteConfig.contact.address,
+    body: siteConfig.contact.addressLines.join("\n"),
     icon: MapPin,
     tone: "bg-brand/10 text-brand",
   },
@@ -49,6 +50,7 @@ const socials = [
   { href: siteConfig.links.twitter, label: "X", icon: FaXTwitter },
   { href: siteConfig.links.linkedin, label: "LinkedIn", icon: FaLinkedinIn },
   { href: siteConfig.links.instagram, label: "Instagram", icon: FaInstagram },
+  { href: siteConfig.links.telegram, label: "Telegram", icon: FaTelegram },
   {
     href: `https://wa.me/${siteConfig.contact.phoneE164.replace(/^\+/, "")}`,
     label: "WhatsApp",
@@ -147,7 +149,7 @@ export function ContactPageContent() {
                         <span className="block text-[11px] font-bold uppercase tracking-[0.08em] text-muted">
                           {card.title}
                         </span>
-                        <span className="mt-1 block text-sm font-semibold text-ink">
+                        <span className="mt-1 block whitespace-pre-line text-sm font-semibold text-ink">
                           {card.body}
                         </span>
                       </span>

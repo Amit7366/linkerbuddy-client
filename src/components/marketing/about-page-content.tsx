@@ -169,6 +169,22 @@ export function AboutPageContent() {
             <h1 className="m-0 text-[clamp(2.5rem,6vw,3.75rem)] font-bold tracking-[-0.06em] text-ink">
               {page.heroTitle}
             </h1>
+            <p className="mx-auto mt-5 mb-0 max-w-3xl text-[clamp(1.35rem,3.2vw,2rem)] font-bold leading-snug tracking-[-0.045em] text-ink">
+              {page.introLead.split(/(?<=\.)\s+/).map((phrase, index) => (
+                <span
+                  key={phrase}
+                  className={cn(
+                    "box-decoration-clone px-1.5",
+                    index === 0
+                      ? "bg-[linear-gradient(transparent_58%,#c6dcff_58%)] dark:bg-[linear-gradient(transparent_58%,#1268f366_58%)]"
+                      : "bg-[linear-gradient(transparent_58%,#b8ead6_58%)] dark:bg-[linear-gradient(transparent_58%,#0a9d7066_58%)]",
+                  )}
+                >
+                  {phrase}
+                  {index === 0 ? " " : null}
+                </span>
+              ))}
+            </p>
             <nav
               aria-label="Breadcrumb"
               className="mt-4 flex items-center justify-center gap-2 text-[13px] text-muted"
@@ -186,12 +202,6 @@ export function AboutPageContent() {
       {/* Intro — image + copy */}
       <section className="pb-16 tablet:pb-20">
         <Container>
-          <MotionSection className="mx-auto mb-10 max-w-2xl text-center tablet:mb-14">
-            <p className="m-0 text-[15px] leading-relaxed text-muted tablet:text-[16px]">
-              {page.introLead}
-            </p>
-          </MotionSection>
-
           <div className="grid items-center gap-10 tablet:grid-cols-2 tablet:gap-12 desktop:gap-16">
             <MotionSection>
               <div className="relative overflow-hidden rounded-2xl shadow-[var(--shadow-product)] ring-1 ring-line">

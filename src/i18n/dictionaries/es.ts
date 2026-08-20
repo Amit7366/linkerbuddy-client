@@ -364,6 +364,9 @@ export const es: Dictionary = {
   },
   footer: {
     contactHeading: "Contacto",
+    storeAddress: "Dirección",
+    callUs: "Llámanos",
+    storeHours: "Horario",
     company: "Empresa",
     services: "Servicios",
     home: "Inicio",

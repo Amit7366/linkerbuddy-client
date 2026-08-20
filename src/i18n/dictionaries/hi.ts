@@ -361,6 +361,9 @@ export const hi: Dictionary = {
   },
   footer: {
     contactHeading: "संपर्क",
+    storeAddress: "स्टोर पता",
+    callUs: "कॉल करें",
+    storeHours: "स्टोर समय",
     company: "कंपनी",
     services: "सेवाएँ",
     home: "होम",

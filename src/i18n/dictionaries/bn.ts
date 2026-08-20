@@ -361,6 +361,9 @@ export const bn: Dictionary = {
   },
   footer: {
     contactHeading: "যোগাযোগ",
+    storeAddress: "স্টোর ঠিকানা",
+    callUs: "কল করুন",
+    storeHours: "স্টোর সময়",
     company: "কোম্পানি",
     services: "সার্ভিস",
     home: "হোম",

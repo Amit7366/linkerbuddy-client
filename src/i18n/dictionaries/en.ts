@@ -363,6 +363,9 @@ export const en = {
   },
   footer: {
     contactHeading: "Contact",
+    storeAddress: "Store Address",
+    callUs: "Call Us",
+    storeHours: "Store Hours",
     company: "Company",
     services: "Services",
     home: "Home",

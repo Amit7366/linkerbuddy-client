@@ -73,8 +73,11 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     robots: { index: true, follow: true },
     icons: {
-      icon: siteConfig.mark,
-      apple: siteConfig.mark,
+      icon: [
+        { url: "/brand/linkerbuddy.svg", type: "image/svg+xml" },
+        { url: "/brand/linkerbuddy.png", type: "image/png" },
+      ],
+      apple: "/brand/linkerbuddy.png",
     },
   };
 }

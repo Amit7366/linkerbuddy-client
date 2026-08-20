@@ -14,7 +14,7 @@ const CONTACT = {
   phoneDisplay: siteConfig.contact.phoneDisplay,
   phoneE164: siteConfig.contact.phoneE164,
   whatsappE164: siteConfig.contact.phoneE164.replace(/^\+/, ""),
-  telegram: "https://t.me/linkerbuddy",
+  telegram: siteConfig.links.telegram,
 } as const;
 
 const ACTIONS = [

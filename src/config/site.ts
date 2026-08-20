@@ -7,13 +7,16 @@ export const siteConfig = {
   mark: "/brand/linkerbuddy.svg",
   ogImage: "/og/default.png",
   contact: {
-    address: "Dhaka, Bangladesh",
-    phoneDisplay: "+880 1709-751603",
-    phoneE164: "+8801709751603",
+    addressLines: ["USA - 30 N GOULD ST STE R", "SHERIDAN WY 82801"],
+    address: "USA - 30 N GOULD ST STE R, SHERIDAN WY 82801",
+    phoneDisplay: "+1 (606) 415-0230",
+    phoneE164: "+16064150230",
     email: "linkerbuddy@gmail.com",
-    workHours: "Mon–Fri 10 am – 6 pm (GMT+6)",
+    workHoursWeekday: "Mon-Fri: 10:00 - 20:00",
+    workHoursWeekend: "Weekend: 12:00 - 16:00",
+    workHours: "Mon-Fri: 10:00 - 20:00\nWeekend: 12:00 - 16:00",
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Dhaka%2C%20Bangladesh&z=13&output=embed",
+      "https://maps.google.com/maps?q=30%20N%20Gould%20St%20Ste%20R%2C%20Sheridan%20WY%2082801&z=15&output=embed",
     mapLabel: "Linkerbuddy",
   },
   links: {
@@ -22,6 +25,7 @@ export const siteConfig = {
     instagram: "https://instagram.com",
     pinterest: "https://pinterest.com",
     linkedin: "https://linkedin.com",
+    telegram: "https://t.me/linkerbuddy",
     github: "https://github.com",
   },
 } as const;
