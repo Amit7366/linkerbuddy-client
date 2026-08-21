@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import type { TimeSlot } from "@/types/call";
 
 const inputClass =
-  "mt-1.5 flex h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-ink placeholder:text-muted outline-none transition focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/25";
+  "mt-1.5 flex h-11 w-full min-w-0 max-w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-ink placeholder:text-muted outline-none transition focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/25";
 
 function visitorTimeZone() {
   try {
@@ -140,7 +140,7 @@ export function ScheduleCallForm() {
 
   if (booked) {
     return (
-      <div className="space-y-4">
+      <div className="min-w-0 space-y-4">
         <div className="rounded-2xl border border-green/30 bg-green/10 p-5">
           <p className="m-0 text-lg font-bold text-ink">You&apos;re booked</p>
           <p className="mt-2 m-0 text-sm text-muted">
@@ -155,13 +155,13 @@ export function ScheduleCallForm() {
             </a>
           ) : null}
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex min-w-0 flex-col gap-2 phablet:flex-row phablet:flex-wrap">
           {booked.ics ? (
-            <Button type="button" onClick={() => downloadIcs(booked.ics!)}>
+            <Button type="button" className="w-full phablet:w-auto" onClick={() => downloadIcs(booked.ics!)}>
               Download calendar invite
             </Button>
           ) : null}
-          <ButtonLink variant="ghost" href={`/schedule/${booked.manageToken}`}>
+          <ButtonLink variant="ghost" className="w-full phablet:w-auto" href={`/schedule/${booked.manageToken}`}>
             Manage booking
           </ButtonLink>
         </div>
@@ -170,9 +170,9 @@ export function ScheduleCallForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid gap-4 phablet:grid-cols-2">
-        <div>
+    <form onSubmit={handleSubmit} className="min-w-0 w-full space-y-4">
+      <div className="grid min-w-0 grid-cols-1 gap-4 phablet:grid-cols-2">
+        <div className="min-w-0">
           <label className="text-[13px] font-semibold text-ink" htmlFor="purpose">
             Call purpose
           </label>
@@ -189,7 +189,7 @@ export function ScheduleCallForm() {
             ))}
           </select>
         </div>
-        <div>
+        <div className="min-w-0">
           <label className="text-[13px] font-semibold text-ink" htmlFor="channel">
             How should we talk?
           </label>
@@ -208,43 +208,45 @@ export function ScheduleCallForm() {
         </div>
       </div>
 
-      <div>
+      <div className="min-w-0">
         <p className="m-0 text-[13px] font-semibold text-ink">Pick a day</p>
-        <p className="mt-1 mb-2 text-[12px] text-muted">Times shown in {timezone}</p>
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {days.map((day) => {
-            const key = dateKey(day);
-            const selected = key === selectedDay;
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setSelectedDay(key)}
-                className={cn(
-                  "min-w-[72px] rounded-xl border px-3 py-2 text-left",
-                  selected
-                    ? "border-brand bg-brand text-white"
-                    : "border-line bg-surface text-ink hover:border-brand/40",
-                )}
-              >
-                <span className="block text-[10px] font-bold uppercase tracking-wide opacity-80">
-                  {day.toLocaleDateString(undefined, { weekday: "short" })}
-                </span>
-                <span className="block text-sm font-semibold">{day.getDate()}</span>
-              </button>
-            );
-          })}
+        <p className="mt-1 mb-2 break-words text-[12px] text-muted">Times shown in {timezone}</p>
+        <div className="min-w-0 max-w-full overflow-x-auto overscroll-x-contain pb-1 [-webkit-overflow-scrolling:touch]">
+          <div className="flex w-max gap-2">
+            {days.map((day) => {
+              const key = dateKey(day);
+              const selected = key === selectedDay;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setSelectedDay(key)}
+                  className={cn(
+                    "w-[4.5rem] shrink-0 rounded-xl border px-2 py-2 text-left",
+                    selected
+                      ? "border-brand bg-brand text-white"
+                      : "border-line bg-surface text-ink hover:border-brand/40",
+                  )}
+                >
+                  <span className="block text-[10px] font-bold uppercase tracking-wide opacity-80">
+                    {day.toLocaleDateString(undefined, { weekday: "short" })}
+                  </span>
+                  <span className="block text-sm font-semibold">{day.getDate()}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      <div>
+      <div className="min-w-0">
         <p className="mb-2 m-0 text-[13px] font-semibold text-ink">Available times (30 min)</p>
         {slotsLoading ? (
           <p className="text-sm text-muted">Loading times…</p>
         ) : slots.length === 0 ? (
           <p className="text-sm text-muted">No times on this day. Try another date.</p>
         ) : (
-          <div className="grid grid-cols-3 gap-2 phablet:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 phablet:grid-cols-3 tablet:grid-cols-4">
             {slots.map((slot) => {
               const selected = startsAt === slot.start;
               return (
@@ -253,7 +255,7 @@ export function ScheduleCallForm() {
                   type="button"
                   onClick={() => setStartsAt(slot.start)}
                   className={cn(
-                    "rounded-xl border px-2 py-2 text-[13px] font-semibold",
+                    "min-w-0 rounded-xl border px-1.5 py-2 text-[12px] font-semibold phablet:text-[13px]",
                     selected
                       ? "border-brand bg-brand text-white"
                       : "border-line bg-card text-ink hover:border-brand/40",
@@ -267,8 +269,8 @@ export function ScheduleCallForm() {
         )}
       </div>
 
-      <div className="grid gap-4 phablet:grid-cols-2">
-        <div>
+      <div className="grid min-w-0 grid-cols-1 gap-4 phablet:grid-cols-2">
+        <div className="min-w-0">
           <label className="text-[13px] font-semibold text-ink" htmlFor="call-name">
             Name
           </label>
@@ -280,7 +282,7 @@ export function ScheduleCallForm() {
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
         </div>
-        <div>
+        <div className="min-w-0">
           <label className="text-[13px] font-semibold text-ink" htmlFor="call-email">
             Email
           </label>
@@ -294,8 +296,8 @@ export function ScheduleCallForm() {
           />
         </div>
       </div>
-      <div className="grid gap-4 phablet:grid-cols-2">
-        <div>
+      <div className="grid min-w-0 grid-cols-1 gap-4 phablet:grid-cols-2">
+        <div className="min-w-0">
           <label className="text-[13px] font-semibold text-ink" htmlFor="call-phone">
             Phone
           </label>
@@ -306,7 +308,7 @@ export function ScheduleCallForm() {
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
           />
         </div>
-        <div>
+        <div className="min-w-0">
           <label className="text-[13px] font-semibold text-ink" htmlFor="call-company">
             Company
           </label>
@@ -318,8 +320,8 @@ export function ScheduleCallForm() {
           />
         </div>
       </div>
-      <div className="grid gap-4 phablet:grid-cols-2">
-        <div>
+      <div className="grid min-w-0 grid-cols-1 gap-4 phablet:grid-cols-2">
+        <div className="min-w-0">
           <label className="text-[13px] font-semibold text-ink" htmlFor="call-site">
             Website
           </label>
@@ -332,7 +334,7 @@ export function ScheduleCallForm() {
             onChange={(e) => setForm({ ...form, website: e.target.value })}
           />
         </div>
-        <div>
+        <div className="min-w-0">
           <label className="text-[13px] font-semibold text-ink" htmlFor="call-budget">
             Monthly link budget
           </label>
@@ -353,7 +355,7 @@ export function ScheduleCallForm() {
           </select>
         </div>
       </div>
-      <div>
+      <div className="min-w-0">
         <label className="text-[13px] font-semibold text-ink" htmlFor="call-notes">
           Notes
         </label>
@@ -365,14 +367,14 @@ export function ScheduleCallForm() {
           onChange={(e) => setForm({ ...form, notes: e.target.value })}
         />
       </div>
-      <label className="flex items-start gap-2 text-[13px] text-muted">
+      <label className="flex min-w-0 items-start gap-2 text-[13px] text-muted">
         <input
           type="checkbox"
-          className="mt-0.5 size-4 accent-[var(--blue)]"
+          className="mt-0.5 size-4 shrink-0 accent-[var(--blue)]"
           checked={form.privacyAccepted}
           onChange={(e) => setForm({ ...form, privacyAccepted: e.target.checked })}
         />
-        <span>
+        <span className="min-w-0 break-words">
           I agree to the{" "}
           <a href="/privacy" className="font-semibold text-brand no-underline hover:underline">
             privacy policy
@@ -380,7 +382,7 @@ export function ScheduleCallForm() {
         </span>
       </label>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      <Button type="submit" disabled={loading}>
+      <Button type="submit" disabled={loading} className="w-full phablet:w-auto">
         {loading ? "Booking..." : "Schedule call"}
       </Button>
     </form>

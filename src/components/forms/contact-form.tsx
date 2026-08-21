@@ -17,7 +17,7 @@ const contactSchema = z.object({
 });
 
 const inputClass =
-  "mt-1.5 flex h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-ink placeholder:text-muted outline-none transition focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/25";
+  "mt-1.5 flex h-11 w-full min-w-0 max-w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-ink placeholder:text-muted outline-none transition focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/25";
 
 export function ContactForm() {
   const [form, setForm] = useState({
@@ -70,9 +70,9 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid gap-4 phablet:grid-cols-2">
-        <div>
+    <form onSubmit={handleSubmit} className="min-w-0 w-full space-y-4">
+      <div className="grid min-w-0 grid-cols-1 gap-4 phablet:grid-cols-2">
+        <div className="min-w-0">
           <label htmlFor="name" className="text-[13px] font-semibold text-ink">
             Name
           </label>
@@ -85,7 +85,7 @@ export function ContactForm() {
             required
           />
         </div>
-        <div>
+        <div className="min-w-0">
           <label htmlFor="email" className="text-[13px] font-semibold text-ink">
             Email
           </label>
@@ -100,7 +100,7 @@ export function ContactForm() {
           />
         </div>
       </div>
-      <div>
+      <div className="min-w-0">
         <label htmlFor="subject" className="text-[13px] font-semibold text-ink">
           Subject
         </label>
@@ -113,7 +113,7 @@ export function ContactForm() {
           required
         />
       </div>
-      <div>
+      <div className="min-w-0">
         <label htmlFor="message" className="text-[13px] font-semibold text-ink">
           Message
         </label>
@@ -126,22 +126,22 @@ export function ContactForm() {
           onChange={(e) => setForm({ ...form, message: e.target.value })}
         />
       </div>
-      <div className="flex flex-col gap-3 pt-1 phablet:flex-row phablet:items-center phablet:justify-between">
-        <label className="flex items-start gap-2 text-[13px] text-muted">
+      <div className="flex min-w-0 flex-col gap-3 pt-1 phablet:flex-row phablet:items-center phablet:justify-between">
+        <label className="flex min-w-0 items-start gap-2 text-[13px] text-muted">
           <input
             type="checkbox"
-            className="mt-0.5 size-4 accent-[var(--blue)]"
+            className="mt-0.5 size-4 shrink-0 accent-[var(--blue)]"
             checked={form.privacyAccepted}
             onChange={(e) => setForm({ ...form, privacyAccepted: e.target.checked })}
           />
-          <span>
+          <span className="min-w-0 break-words">
             I agree to the{" "}
             <a href="/privacy" className="font-semibold text-brand no-underline hover:underline">
               privacy policy
             </a>
           </span>
         </label>
-        <Button type="submit" disabled={loading} className="rounded-xl px-6">
+        <Button type="submit" disabled={loading} className="w-full shrink-0 rounded-xl px-6 phablet:w-auto">
           {loading ? "Sending..." : "Send Message"}
         </Button>
       </div>

@@ -68,7 +68,7 @@ export function ContactPageContent() {
           aria-hidden
           className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-page [clip-path:polygon(0_100%,100%_0,100%_100%)]"
         />
-        <h1 className="m-0 text-[clamp(1.9rem,4vw,3rem)] font-bold tracking-[-0.04em] text-white">
+        <h1 className="m-0 text-[clamp(1.7rem,6vw,3rem)] font-bold tracking-[-0.04em] text-white">
           Feel free to get in touch
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-white/70">
@@ -77,16 +77,16 @@ export function ContactPageContent() {
         </p>
       </section>
 
-      <section className="pb-20">
+      <section className="overflow-x-clip pb-20">
         <Container className="relative z-10">
-          <div className="grid items-start gap-10 tablet:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] tablet:gap-12">
-            <div className="-mt-8 rounded-[22px] border border-line bg-card p-6 shadow-[var(--shadow-product)] tablet:-mt-12 tablet:p-8">
-              <div className="mb-6 flex gap-2 rounded-full bg-surface p-1">
+          <div className="grid min-w-0 items-start gap-10 tablet:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] tablet:gap-12">
+            <div className="min-w-0 -mt-8 rounded-[22px] border border-line bg-card p-4 shadow-[var(--shadow-product)] phablet:p-6 tablet:-mt-12 tablet:p-8">
+              <div className="mb-6 grid min-w-0 grid-cols-2 gap-1 rounded-2xl bg-surface p-1">
                 <button
                   type="button"
                   onClick={() => setTab("message")}
                   className={cn(
-                    "flex-1 rounded-full px-4 py-2 text-[13px] font-bold",
+                    "min-w-0 rounded-xl px-2 py-2.5 text-center text-[12px] leading-tight font-bold phablet:px-4 phablet:text-[13px]",
                     tab === "message" ? "bg-brand text-white" : "text-muted hover:text-ink",
                   )}
                 >
@@ -96,7 +96,7 @@ export function ContactPageContent() {
                   type="button"
                   onClick={() => setTab("call")}
                   className={cn(
-                    "flex-1 rounded-full px-4 py-2 text-[13px] font-bold",
+                    "min-w-0 rounded-xl px-2 py-2.5 text-center text-[12px] leading-tight font-bold phablet:px-4 phablet:text-[13px]",
                     tab === "call" ? "bg-brand text-white" : "text-muted hover:text-ink",
                   )}
                 >
@@ -105,14 +105,14 @@ export function ContactPageContent() {
               </div>
               {tab === "message" ? (
                 <>
-                  <h2 className="mt-0 mb-5 text-2xl font-bold tracking-[-0.03em] text-ink">
+                  <h2 className="mt-0 mb-5 text-xl font-bold tracking-[-0.03em] text-ink tablet:text-2xl">
                     Leave your message
                   </h2>
                   <ContactForm />
                 </>
               ) : (
                 <>
-                  <h2 className="mt-0 mb-2 text-2xl font-bold tracking-[-0.03em] text-ink">
+                  <h2 className="mt-0 mb-2 text-xl font-bold tracking-[-0.03em] text-ink tablet:text-2xl">
                     Schedule a strategy call
                   </h2>
                   <p className="mt-0 mb-5 text-sm text-muted">
@@ -123,8 +123,8 @@ export function ContactPageContent() {
               )}
             </div>
 
-            <div className="pt-8 tablet:pt-16">
-              <h2 className="mt-0 text-[1.65rem] font-bold tracking-[-0.03em] text-ink">
+            <div className="min-w-0 pt-2 tablet:pt-16">
+              <h2 className="mt-0 text-[clamp(1.25rem,4vw,1.65rem)] font-bold tracking-[-0.03em] text-ink">
                 Don&apos;t hesitate to contact us
               </h2>
               <p className="mt-3 mb-7 text-[15px] leading-relaxed text-muted">
@@ -132,31 +132,31 @@ export function ContactPageContent() {
                 campaign, our editors and account team are ready to help you
                 move rankings with real sites.
               </p>
-              <div className="grid gap-3 phablet:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3 phablet:grid-cols-2 tablet:grid-cols-1">
                 {infoCards.map((card) => {
                   const Icon = card.icon;
                   const inner = (
                     <>
                       <span
                         className={cn(
-                          "grid size-10 place-items-center rounded-full",
+                          "grid size-10 shrink-0 place-items-center rounded-full",
                           card.tone,
                         )}
                       >
                         <Icon className="size-4" aria-hidden />
                       </span>
-                      <span>
+                      <span className="min-w-0">
                         <span className="block text-[11px] font-bold uppercase tracking-[0.08em] text-muted">
                           {card.title}
                         </span>
-                        <span className="mt-1 block whitespace-pre-line text-sm font-semibold text-ink">
+                        <span className="mt-1 block whitespace-pre-line break-words [overflow-wrap:anywhere] text-sm font-semibold text-ink">
                           {card.body}
                         </span>
                       </span>
                     </>
                   );
                   const className =
-                    "flex items-start gap-3 rounded-2xl border border-line bg-card p-4 shadow-[var(--shadow-table)]";
+                    "flex min-w-0 items-start gap-3 rounded-2xl border border-line bg-card p-4 shadow-[var(--shadow-table)]";
                   if ("href" in card && card.href) {
                     return (
                       <a key={card.title} href={card.href} className={`${className} no-underline`}>
@@ -182,7 +182,7 @@ export function ContactPageContent() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.label}
-                      className="grid size-10 place-items-center rounded-full bg-brand text-white no-underline shadow-[var(--shadow-btn)] transition hover:-translate-y-0.5 hover:bg-brand-hover"
+                      className="grid size-10 shrink-0 place-items-center rounded-full bg-brand text-white no-underline shadow-[var(--shadow-btn)] transition hover:-translate-y-0.5 hover:bg-brand-hover"
                     >
                       <Icon className="size-4" />
                     </a>
