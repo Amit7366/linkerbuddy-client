@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
@@ -100,12 +100,20 @@ export function Header() {
     return () => mq.removeEventListener("change", closeOnDesktop);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!open) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
+    const prevHtmlOverscroll = html.style.overscrollBehavior;
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    html.style.overscrollBehavior = "none";
     return () => {
-      document.body.style.overflow = previous;
+      html.style.overflow = prevHtmlOverflow;
+      body.style.overflow = prevBodyOverflow;
+      html.style.overscrollBehavior = prevHtmlOverscroll;
     };
   }, [open]);
 
@@ -115,7 +123,8 @@ export function Header() {
 
   useEffect(() => {
     if (wasOpen.current && !open) {
-      hamburgerRef.current?.focus();
+      const finePointer = window.matchMedia("(pointer: fine)").matches;
+      if (finePointer) hamburgerRef.current?.focus();
     }
     wasOpen.current = open;
   }, [open]);
