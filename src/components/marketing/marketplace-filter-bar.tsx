@@ -77,37 +77,38 @@ export function MarketplaceFilterBar({
 
   return (
     <div className={cn("relative", className)}>
-      <button
-        type="button"
-        aria-label={t("marketplace.prevFilters")}
-        disabled={!canPrev}
-        onClick={() => scrollByPage(-1)}
-        className={cn(
-          "absolute top-1/2 left-0 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border border-line bg-card text-[#483EF4] shadow-[0_6px_16px_#483EF428] tablet:hidden",
-          canPrev ? "opacity-100" : "pointer-events-none opacity-0",
-        )}
-      >
-        <ChevronLeft className="size-4" aria-hidden />
-      </button>
-      <button
-        type="button"
-        aria-label={t("marketplace.nextFilters")}
-        disabled={!canNext}
-        onClick={() => scrollByPage(1)}
-        className={cn(
-          "absolute top-1/2 right-0 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border border-line bg-card text-[#483EF4] shadow-[0_6px_16px_#483EF428] tablet:hidden",
-          canNext ? "opacity-100" : "pointer-events-none opacity-0",
-        )}
-      >
-        <ChevronRight className="size-4" aria-hidden />
-      </button>
+      <div className="relative">
+        <button
+          type="button"
+          aria-label={t("marketplace.prevFilters")}
+          disabled={!canPrev}
+          onClick={() => scrollByPage(-1)}
+          className={cn(
+            "absolute top-1/2 left-1 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border border-line bg-card text-[#483EF4] shadow-[0_6px_16px_#483EF428] tablet:hidden",
+            canPrev ? "opacity-100" : "pointer-events-none opacity-0",
+          )}
+        >
+          <ChevronLeft className="size-4" aria-hidden />
+        </button>
+        <button
+          type="button"
+          aria-label={t("marketplace.nextFilters")}
+          disabled={!canNext}
+          onClick={() => scrollByPage(1)}
+          className={cn(
+            "absolute top-1/2 right-1 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border border-line bg-card text-[#483EF4] shadow-[0_6px_16px_#483EF428] tablet:hidden",
+            canNext ? "opacity-100" : "pointer-events-none opacity-0",
+          )}
+        >
+          <ChevronRight className="size-4" aria-hidden />
+        </button>
 
-      <div
-        ref={scrollerRef}
-        className="flex gap-2.5 overflow-x-auto px-9 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden tablet:grid tablet:grid-cols-4 tablet:overflow-visible tablet:px-0"
-        role="group"
-        aria-label={t("marketplace.filterGroup")}
-      >
+        <div
+          ref={scrollerRef}
+          className="flex flex-nowrap gap-2.5 overflow-x-auto pr-10 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden tablet:grid tablet:grid-cols-4 tablet:overflow-visible tablet:pr-0"
+          role="group"
+          aria-label={t("marketplace.filterGroup")}
+        >
         {MARKETPLACE_FILTERS.map((item) => {
           const pressed = isSelected(item.key);
           return (
@@ -168,11 +169,12 @@ export function MarketplaceFilterBar({
             </span>
           </button>
         ) : null}
+        </div>
       </div>
 
       {onSelectCountry && isCountrySelected ? (
         <div
-          className="mt-3 flex gap-2 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden tablet:flex-wrap tablet:overflow-visible"
+          className="mt-2 flex flex-nowrap gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden tablet:mt-3 tablet:flex-wrap tablet:overflow-visible"
           role="group"
           aria-label={t("marketplace.countryGroup")}
         >

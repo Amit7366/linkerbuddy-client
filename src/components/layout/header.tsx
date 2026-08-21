@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
+import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { MarketplaceDropdown } from "@/components/layout/marketplace-dropdown";
 import { NavMoreDropdown } from "@/components/layout/nav-more-dropdown";
+import { MobileNavDrawer } from "@/components/layout/mobile-nav-drawer";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { useToast } from "@/components/ui/toast";
@@ -75,6 +76,9 @@ function ProfileNavLink({
 export function Header() {
   const [open, setOpen] = useState(false);
   const [authReady, setAuthReady] = useState(false);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
   const { showToast } = useToast();
   const t = useTranslations();
   const { locale } = useLocale();
@@ -103,6 +107,17 @@ export function Header() {
     return () => {
       document.body.style.overflow = previous;
     };
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (wasOpen.current && !open) {
+      hamburgerRef.current?.focus();
+    }
+    wasOpen.current = open;
   }, [open]);
 
   const displayName = user?.name?.trim() || user?.email?.split("@")[0] || "Account";
@@ -142,10 +157,10 @@ export function Header() {
 
   const mobileLinkClass = (isActive: boolean) =>
     cn(
-      "flex min-h-11 items-center rounded-lg px-3 text-[14px] font-semibold no-underline transition-colors",
+      "flex min-h-12 items-center rounded-xl px-3.5 text-[15px] font-medium no-underline transition-colors",
       isActive
-        ? "bg-white/10 text-white"
-        : "text-[var(--nav-link)] hover:bg-white/6 hover:text-white",
+        ? "bg-white/12 text-white"
+        : "text-white/80 hover:bg-white/8 hover:text-white",
     );
 
   const renderHashOrPageLink = (
@@ -258,57 +273,59 @@ export function Header() {
               {t("common.getCustomList")}
             </Button>
             <button
+              ref={hamburgerRef}
               type="button"
               className="inline-flex size-9 items-center justify-center border-0 bg-transparent text-[22px] text-white desktop:hidden"
               aria-label={t("common.toggleNav")}
               aria-expanded={open}
-              onClick={() => setOpen((prev) => !prev)}
+              aria-controls="mobile-nav-drawer"
+              onClick={() => setOpen(true)}
             >
-              {open ? <HiOutlineX aria-hidden /> : <HiOutlineMenuAlt3 aria-hidden />}
+              <HiOutlineMenuAlt3 aria-hidden />
             </button>
           </div>
         </Container>
       </header>
 
-      {open ? (
-        <nav
-          className="fixed top-[66px] right-0 bottom-0 left-0 z-[60] flex flex-col items-stretch gap-1 overflow-y-auto overscroll-contain bg-navy px-4 pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] phablet:top-[74px] phablet:px-6 desktop:hidden"
-          aria-label="Main navigation"
-        >
-          {navLinks("mobile")}
-
-          <div className="mt-3 border-t border-white/10 pt-4">
+      <MobileNavDrawer
+        open={open}
+        onClose={() => setOpen(false)}
+        label="Main navigation"
+        closeRef={closeRef}
+        footer={
+          <>
             <Button
               size="sm"
               variant="light"
-              className="w-full"
+              className="w-full rounded-full"
               onClick={() => scrollTo("custom-list")}
             >
               {t("common.getCustomList")}
             </Button>
-          </div>
-
-          {showAuth && user ? (
-            <div className="border-t border-white/10 pt-4">
-              <ProfileNavLink
-                name={displayName}
-                href={profileHref}
-                className="max-w-none"
+            {showAuth && user ? (
+              <div className="mt-3">
+                <ProfileNavLink
+                  name={displayName}
+                  href={profileHref}
+                  className="max-w-none rounded-xl bg-white/8 px-3 py-2.5"
+                  onClick={() => setOpen(false)}
+                />
+              </div>
+            ) : null}
+            {showAuth && !user ? (
+              <Link
+                href="/login"
+                className="mt-3 flex min-h-11 items-center justify-center rounded-xl text-[14px] font-semibold text-white/80 no-underline hover:bg-white/8 hover:text-white"
                 onClick={() => setOpen(false)}
-              />
-            </div>
-          ) : null}
-          {showAuth && !user ? (
-            <Link
-              href="/login"
-              className="border-t border-white/10 pt-4 text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white"
-              onClick={() => setOpen(false)}
-            >
-              {t("common.signIn")}
-            </Link>
-          ) : null}
-        </nav>
-      ) : null}
+              >
+                {t("common.signIn")}
+              </Link>
+            ) : null}
+          </>
+        }
+      >
+        {navLinks("mobile")}
+      </MobileNavDrawer>
     </>
   );
 }

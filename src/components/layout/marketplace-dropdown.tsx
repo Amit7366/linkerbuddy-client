@@ -122,12 +122,16 @@ function MarketplaceDropdownInner({
         type="button"
         className={cn(
           "relative inline-flex items-center gap-1.5 border-0 bg-transparent text-[13px] font-semibold transition-colors",
-          fullWidth && "min-h-11 w-full justify-between py-1",
+          fullWidth && "min-h-12 w-full justify-between rounded-xl px-3.5 py-0 text-[15px] font-medium",
           active
-            ? "text-[var(--orange)] after:absolute after:right-0 after:-bottom-1 after:left-0 after:mx-auto after:h-[2px] after:w-4 after:rounded-full after:bg-[var(--orange)]"
+            ? fullWidth
+              ? "bg-white/12 text-white"
+              : "text-[var(--orange)] after:absolute after:right-0 after:-bottom-1 after:left-0 after:mx-auto after:h-[2px] after:w-4 after:rounded-full after:bg-[var(--orange)]"
             : open
               ? "text-white"
-              : "text-[var(--nav-link)] hover:text-white",
+              : fullWidth
+                ? "text-white/80 hover:bg-white/8 hover:text-white"
+                : "text-[var(--nav-link)] hover:text-white",
         )}
         aria-haspopup="listbox"
         aria-expanded={open}

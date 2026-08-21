@@ -5,7 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import type { HomeNavSection } from "@/hooks/use-active-home-nav";
-import { marketingMoreNav } from "@/config/nav";
+import { marketingMoreNav, type MarketingMoreNavItem } from "@/config/nav";
 import { stripLocalePrefix, withLocalePrefix } from "@/i18n/routing";
 import { useLocale, useTranslations } from "@/providers/locale-provider";
 import { cn } from "@/lib/utils";
@@ -24,17 +24,16 @@ interface NavMoreDropdownProps {
 }
 
 function isItemActive(
-  item: (typeof marketingMoreNav)[number],
+  item: MarketingMoreNavItem,
   activeSection: HomeNavSection | null,
   pathname: string,
 ) {
-  if ("section" in item && item.section) {
+  if ("section" in item) {
     return activeSection === item.section;
   }
 
   const { pathname: bare } = stripLocalePrefix(pathname);
-  if (item.href === "/blog") return bare === "/blog" || bare.startsWith("/blog/");
-  return bare === item.href;
+  return bare === item.href || bare.startsWith(`${item.href}/`);
 }
 
 export function NavMoreDropdown({
@@ -114,13 +113,17 @@ export function NavMoreDropdown({
         className={cn(
           "relative inline-flex items-center gap-1.5 border-0 bg-transparent font-semibold whitespace-nowrap transition-colors",
           fullWidth
-            ? "min-h-11 w-full justify-between px-3 text-[14px]"
+            ? "min-h-12 w-full justify-between rounded-xl px-3.5 text-[15px] font-medium"
             : "text-[13px]",
           isActive
-            ? "text-[var(--orange)] after:absolute after:right-0 after:-bottom-1 after:left-0 after:mx-auto after:h-[2px] after:w-4 after:rounded-full after:bg-[var(--orange)]"
+            ? fullWidth
+              ? "bg-white/12 text-white"
+              : "text-[var(--orange)] after:absolute after:right-0 after:-bottom-1 after:left-0 after:mx-auto after:h-[2px] after:w-4 after:rounded-full after:bg-[var(--orange)]"
             : open
               ? "text-white"
-              : "text-[var(--nav-link)] hover:text-white",
+              : fullWidth
+                ? "text-white/80 hover:bg-white/8 hover:text-white"
+                : "text-[var(--nav-link)] hover:text-white",
         )}
         aria-haspopup="menu"
         aria-expanded={open}
