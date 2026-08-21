@@ -8,6 +8,8 @@ import {
   type PanInfo,
 } from "framer-motion";
 import { HiOutlineX } from "react-icons/hi";
+import Image from "next/image";
+import { siteConfig } from "@/config/site";
 import { useTranslations } from "@/providers/locale-provider";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -95,9 +97,19 @@ export function MobileNavDrawer({
                 aria-hidden
               />
               <div className="flex items-center justify-between gap-3 pb-3">
-                <p className="m-0 text-[13px] font-semibold tracking-[0.16em] text-white/55 uppercase">
-                  {t("common.menu")}
-                </p>
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <Image
+                    src={siteConfig.mark}
+                    alt=""
+                    width={28}
+                    height={28}
+                    className="size-7 shrink-0 object-contain"
+                    unoptimized
+                  />
+                  <p className="m-0 text-[13px] font-semibold tracking-[0.16em] text-white/55 uppercase">
+                    {t("common.menu")}
+                  </p>
+                </div>
                 <button
                   ref={closeRef}
                   type="button"
