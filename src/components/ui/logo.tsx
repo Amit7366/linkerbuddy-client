@@ -22,7 +22,7 @@ export function Logo({ href, className, light = false }: LogoProps) {
       href={homeHref}
       aria-label={`${siteConfig.name} home`}
       className={cn(
-        "flex items-center gap-2.5 text-[21px] font-extrabold tracking-[-0.5px] no-underline",
+        "flex items-center gap-2.5 no-underline",
         light ? "text-white" : "text-navy",
         className,
       )}
@@ -37,7 +37,7 @@ export function Logo({ href, className, light = false }: LogoProps) {
         unoptimized
       />
       <span className="flex flex-col leading-none">
-        <span>
+        <span className="font-logo text-[20px] font-extrabold uppercase tracking-[-0.04em]">
           Linker
           <span className={light ? "text-[#F00E58]" : "text-brand"}>buddy</span>
         </span>

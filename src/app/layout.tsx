@@ -3,6 +3,7 @@ import {
   Geist,
   Geist_Mono,
   Instrument_Serif,
+  Montserrat,
   Noto_Sans_Bengali,
   Noto_Sans_Devanagari,
 } from "next/font/google";
@@ -30,6 +31,13 @@ const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["800"],
   display: "swap",
 });
 
@@ -94,7 +102,7 @@ export default async function RootLayout({
       lang={locale}
       dir={localeMeta[locale].dir}
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${notoDevanagari.variable} ${notoBengali.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${montserrat.variable} ${notoDevanagari.variable} ${notoBengali.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body

@@ -153,7 +153,7 @@ export function PagePreloader() {
             </div>
 
             <motion.p
-              className="m-0 text-[28px] font-extrabold tracking-[-0.8px] text-white"
+              className="font-logo m-0 text-[28px] font-extrabold uppercase tracking-[-0.04em] text-white"
               initial={reduce ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, ease, delay: 0.18 }}
