@@ -20,7 +20,7 @@ export const hi: Dictionary = {
     resources: "संसाधन",
     more: "और अधिक",
     aboutUs: "हमारे बारे में",
-    contactUs: "संपर्क करें",
+    contactUs: "संपर्क",
     blog: "ब्लॉग",
     marketplace: "मार्केटप्लेस",
     chooseMarket: "बाजार चुनें",

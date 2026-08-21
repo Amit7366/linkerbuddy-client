@@ -93,7 +93,7 @@ export function Hero() {
 
             <h1
               id="hero-heading"
-              className="my-5 text-[41px] leading-[1.02] font-bold tracking-[-2.3px] text-ink tablet:text-[59px] tablet:tracking-[-3.3px]"
+              className="my-5 text-[clamp(2.05rem,8vw,3.7rem)] leading-[1.05] font-bold tracking-[-0.04em] text-ink tablet:leading-[1.02] tablet:tracking-[-3.3px]"
               aria-label={t("hero.title", { country: currentWord })}
             >
               {withCountrySlot(t("hero.title"), titleRotator)}
@@ -103,7 +103,7 @@ export function Hero() {
               {t("hero.subtitle")}
             </p>
 
-            <div className="mt-[29px] flex flex-col justify-center gap-3 tablet:flex-row tablet:justify-start">
+            <div className="mt-[29px] flex flex-col justify-center gap-3 [&_a]:w-full [&_button]:w-full tablet:flex-row tablet:justify-start tablet:[&_a]:w-auto tablet:[&_button]:w-auto">
               <ButtonLink
                 href="#marketplace"
                 className="bg-[#483EF4] hover:bg-[#3b32d6]"

@@ -20,7 +20,7 @@ export const es: Dictionary = {
     resources: "Recursos",
     more: "Más",
     aboutUs: "Sobre nosotros",
-    contactUs: "Contáctanos",
+    contactUs: "Contacto",
     blog: "Blog",
     marketplace: "Marketplace",
     chooseMarket: "Elige un mercado",

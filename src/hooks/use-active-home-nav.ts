@@ -7,8 +7,8 @@ import { stripLocalePrefix } from "@/i18n/routing";
 export const HOME_NAV_SECTIONS = [
   "marketplace",
   "services",
-  "agencies",
   "how-it-works",
+  "agencies",
   "pricing",
   "faq",
 ] as const;

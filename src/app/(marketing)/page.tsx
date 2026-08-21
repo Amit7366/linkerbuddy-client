@@ -125,8 +125,8 @@ export default async function HomePage() {
       <Hero />
       <Marketplace />
       <Benefits />
-      <Agency />
       <ProcessSteps />
+      <Agency />
       <Pricing />
       <Reviews />
       <HomeBlog />

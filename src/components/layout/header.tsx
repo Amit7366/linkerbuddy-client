@@ -19,17 +19,10 @@ import {
   useActiveHomeNavSection,
   type HomeNavSection,
 } from "@/hooks/use-active-home-nav";
-import { withLocalePrefix } from "@/i18n/routing";
+import { marketingAboutItem, marketingPrimaryNav } from "@/config/nav";
+import { stripLocalePrefix, withLocalePrefix } from "@/i18n/routing";
+import type { Locale } from "@/i18n/config";
 import { cn } from "@/lib/utils";
-
-const PRIMARY_NAV = [
-  { key: "nav.howItWorks", href: "#how-it-works", section: "how-it-works" },
-  { key: "nav.pricing", href: "#pricing", section: "pricing" },
-] as const satisfies ReadonlyArray<{
-  key: string;
-  href: `#${HomeNavSection}`;
-  section: HomeNavSection;
-}>;
 
 function userInitials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -37,6 +30,17 @@ function userInitials(name: string) {
     return `${parts[0]![0]}${parts[1]![0]}`.toUpperCase();
   }
   return name.slice(0, 2).toUpperCase() || "U";
+}
+
+function resolveNavHref(href: string, homeHref: string, locale: Locale) {
+  if (href.startsWith("#")) return `${homeHref}${href}`;
+  return withLocalePrefix(href, locale);
+}
+
+function isPagePathActive(pathname: string, href: string) {
+  const { pathname: bare } = stripLocalePrefix(pathname);
+  if (href === "/blog") return bare === "/blog" || bare.startsWith("/blog/");
+  return bare === href;
 }
 
 function ProfileNavLink({
@@ -83,15 +87,27 @@ export function Header() {
     setAuthReady(true);
   }, []);
 
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 80rem)");
+    const closeOnDesktop = () => {
+      if (mq.matches) setOpen(false);
+    };
+    mq.addEventListener("change", closeOnDesktop);
+    return () => mq.removeEventListener("change", closeOnDesktop);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+
   const displayName = user?.name?.trim() || user?.email?.split("@")[0] || "Account";
   const profileHref = profileHrefForRole(user?.role);
   const homeHref = withLocalePrefix("/", locale);
-  const aboutHref = withLocalePrefix("/about", locale);
-  const blogHref = withLocalePrefix("/blog", locale);
-  const contactHref = withLocalePrefix("/contact", locale);
-  const isAboutActive = pathname === aboutHref || pathname.endsWith("/about");
-  const isBlogActive = pathname === blogHref || pathname.startsWith(`${blogHref}/`);
-  const isContactActive = pathname === contactHref || pathname.endsWith("/contact");
   const showAuth = authReady && !loading;
 
   const scrollTo = (id: string) => {
@@ -99,7 +115,7 @@ export function Header() {
     setOpen(false);
   };
 
-  const handleNavClick = (
+  const handleHashNav = (
     event: React.MouseEvent<HTMLAnchorElement>,
     section: HomeNavSection,
   ) => {
@@ -118,94 +134,162 @@ export function Header() {
 
   const navLinkClass = (isActive: boolean) =>
     cn(
-      "relative text-[13px] font-semibold no-underline transition-colors",
+      "relative whitespace-nowrap text-[13px] font-semibold no-underline transition-colors",
       isActive
         ? "text-[var(--orange)] after:absolute after:right-0 after:-bottom-1 after:left-0 after:mx-auto after:h-[2px] after:w-4 after:rounded-full after:bg-[var(--orange)]"
         : "text-[var(--nav-link)] hover:text-white",
     );
 
-  return (
-    <header
-      className="sticky top-0 z-50 h-[66px] border-b border-white/10 bg-[var(--header)] text-white backdrop-blur-[12px] phablet:h-[74px]"
-      role="banner"
-    >
-      <Container className="flex h-full items-center justify-between gap-3">
-        <Logo light />
+  const mobileLinkClass = (isActive: boolean) =>
+    cn(
+      "flex min-h-11 items-center rounded-lg px-3 text-[14px] font-semibold no-underline transition-colors",
+      isActive
+        ? "bg-white/10 text-white"
+        : "text-[var(--nav-link)] hover:bg-white/6 hover:text-white",
+    );
 
+  const renderHashOrPageLink = (
+    item: { key: string; href: string; section?: string },
+    variant: "desktop" | "mobile",
+  ) => {
+    const href = resolveNavHref(item.href, homeHref, locale);
+    const section = item.section as HomeNavSection | undefined;
+    const isActive = section
+      ? active === section
+      : isPagePathActive(pathname, item.href);
+    const className = variant === "desktop" ? navLinkClass(isActive) : mobileLinkClass(isActive);
+
+    return (
+      <Link
+        key={item.key}
+        href={href}
+        aria-current={isActive ? "true" : undefined}
+        className={className}
+        onClick={(event) => {
+          if (section) {
+            handleHashNav(event, section);
+            return;
+          }
+          setOpen(false);
+        }}
+      >
+        {t(item.key)}
+      </Link>
+    );
+  };
+
+  const navLinks = (variant: "desktop" | "mobile") => (
+    <>
+      {renderHashOrPageLink(marketingAboutItem, variant)}
+
+      <MarketplaceDropdown
+        fullWidth={variant === "mobile"}
+        active={active === "marketplace"}
+        onSelect={(country) => {
+          setOpen(false);
+          setActive("marketplace");
+          showToast(
+            t("toast.marketplaceSelected", {
+              name: t(`marketplaceCountries.${country.code}.name`),
+            }),
+          );
+        }}
+      />
+
+      {marketingPrimaryNav.map((item) => renderHashOrPageLink(item, variant))}
+
+      <NavMoreDropdown
+        homeHref={homeHref}
+        activeSection={active}
+        pathname={pathname}
+        fullWidth={variant === "mobile"}
+        onNavigate={handleHashNav}
+        onClose={() => setOpen(false)}
+      />
+    </>
+  );
+
+  return (
+    <>
+      <header
+        className="sticky top-0 z-50 h-[66px] border-b border-white/10 bg-[var(--header)] text-white backdrop-blur-[12px] phablet:h-[74px]"
+        role="banner"
+      >
+        <Container className="flex h-full items-center justify-between gap-3">
+          <Logo light className="min-w-0" />
+
+          <nav
+            className="hidden items-center gap-4 desktop:flex desktop:gap-6"
+            aria-label="Main navigation"
+          >
+            {navLinks("desktop")}
+          </nav>
+
+          <div className="flex shrink-0 items-center gap-2 phablet:gap-3">
+            <LanguageSwitcher />
+            <ThemeToggle className="desktop:hidden" />
+            <div className="hidden items-center gap-2 desktop:flex">
+              <ThemeToggle />
+            </div>
+
+            {!showAuth ? (
+              <span className="hidden h-8 w-[4.5rem] desktop:inline-block" aria-hidden />
+            ) : user ? (
+              <ProfileNavLink
+                name={displayName}
+                href={profileHref}
+                className="hidden desktop:inline-flex"
+              />
+            ) : (
+              <Link
+                href="/login"
+                className="hidden text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white desktop:inline"
+              >
+                {t("common.signIn")}
+              </Link>
+            )}
+
+            <Button
+              size="sm"
+              variant="light"
+              className="hidden phablet:inline-flex"
+              onClick={() => scrollTo("custom-list")}
+            >
+              {t("common.getCustomList")}
+            </Button>
+            <button
+              type="button"
+              className="inline-flex size-9 items-center justify-center border-0 bg-transparent text-[22px] text-white desktop:hidden"
+              aria-label={t("common.toggleNav")}
+              aria-expanded={open}
+              onClick={() => setOpen((prev) => !prev)}
+            >
+              {open ? <HiOutlineX aria-hidden /> : <HiOutlineMenuAlt3 aria-hidden />}
+            </button>
+          </div>
+        </Container>
+      </header>
+
+      {open ? (
         <nav
-          className={cn(
-            "items-center gap-[30px]",
-            open
-              ? "absolute top-[66px] right-0 left-0 z-[60] flex max-h-[calc(100dvh-66px)] flex-col items-stretch gap-4 overflow-y-auto bg-navy p-5 phablet:top-[74px] phablet:max-h-[calc(100dvh-74px)]"
-              : "hidden tablet:flex",
-          )}
+          className="fixed top-[66px] right-0 bottom-0 left-0 z-[60] flex flex-col items-stretch gap-1 overflow-y-auto overscroll-contain bg-navy px-4 pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] phablet:top-[74px] phablet:px-6 desktop:hidden"
           aria-label="Main navigation"
         >
-          <MarketplaceDropdown
-            fullWidth={open}
-            active={active === "marketplace"}
-            onSelect={(country) => {
-              setOpen(false);
-              setActive("marketplace");
-              showToast(
-                t("toast.marketplaceSelected", {
-                  name: t(`marketplaceCountries.${country.code}.name`),
-                }),
-              );
-            }}
-          />
+          {navLinks("mobile")}
 
-          {PRIMARY_NAV.map((item) => {
-            const isActive = active === item.section;
-            return (
-              <Link
-                key={item.href}
-                href={`${homeHref}${item.href}`}
-                aria-current={isActive ? "true" : undefined}
-                className={navLinkClass(isActive)}
-                onClick={(event) => handleNavClick(event, item.section)}
-              >
-                {t(item.key)}
-              </Link>
-            );
-          })}
+          <div className="mt-3 border-t border-white/10 pt-4">
+            <Button
+              size="sm"
+              variant="light"
+              className="w-full"
+              onClick={() => scrollTo("custom-list")}
+            >
+              {t("common.getCustomList")}
+            </Button>
+          </div>
 
-          <Link
-            href={aboutHref}
-            aria-current={isAboutActive ? "true" : undefined}
-            className={navLinkClass(isAboutActive)}
-            onClick={() => setOpen(false)}
-          >
-            {t("nav.aboutUs")}
-          </Link>
-
-          <Link
-            href={blogHref}
-            aria-current={isBlogActive ? "true" : undefined}
-            className={navLinkClass(isBlogActive)}
-            onClick={() => setOpen(false)}
-          >
-            {t("nav.blog")}
-          </Link>
-
-          <Link
-            href={contactHref}
-            aria-current={isContactActive ? "true" : undefined}
-            className={navLinkClass(isContactActive)}
-            onClick={() => setOpen(false)}
-          >
-            {t("nav.contactUs")}
-          </Link>
-
-          <NavMoreDropdown
-            homeHref={homeHref}
-            activeSection={active}
-            fullWidth={open}
-            onNavigate={handleNavClick}
-          />
-
-          {open && showAuth && user ? (
-            <div className="mt-2 border-t border-white/10 pt-4 tablet:hidden">
+          {showAuth && user ? (
+            <div className="border-t border-white/10 pt-4">
               <ProfileNavLink
                 name={displayName}
                 href={profileHref}
@@ -214,60 +298,17 @@ export function Header() {
               />
             </div>
           ) : null}
-          {open && showAuth && !user ? (
+          {showAuth && !user ? (
             <Link
               href="/login"
-              className="mt-2 border-t border-white/10 pt-4 text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white tablet:hidden"
+              className="border-t border-white/10 pt-4 text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white"
               onClick={() => setOpen(false)}
             >
               {t("common.signIn")}
             </Link>
           ) : null}
         </nav>
-
-        <div className="flex items-center gap-2 phablet:gap-3">
-          <LanguageSwitcher />
-          <ThemeToggle className="tablet:hidden" />
-          <div className="hidden items-center gap-2 tablet:flex">
-            <ThemeToggle />
-          </div>
-
-          {!showAuth ? (
-            <span className="hidden h-8 w-[4.5rem] tablet:inline-block" aria-hidden />
-          ) : user ? (
-            <ProfileNavLink
-              name={displayName}
-              href={profileHref}
-              className="hidden tablet:inline-flex"
-            />
-          ) : (
-            <Link
-              href="/login"
-              className="hidden text-[13px] font-semibold text-[var(--nav-link)] no-underline hover:text-white tablet:inline"
-            >
-              {t("common.signIn")}
-            </Link>
-          )}
-
-          <Button
-            size="sm"
-            variant="light"
-            className="hidden phablet:inline-flex"
-            onClick={() => scrollTo("custom-list")}
-          >
-            {t("common.getCustomList")}
-          </Button>
-          <button
-            type="button"
-            className="inline-flex border-0 bg-transparent text-[22px] text-white tablet:hidden"
-            aria-label={t("common.toggleNav")}
-            aria-expanded={open}
-            onClick={() => setOpen((prev) => !prev)}
-          >
-            {open ? <HiOutlineX aria-hidden /> : <HiOutlineMenuAlt3 aria-hidden />}
-          </button>
-        </div>
-      </Container>
-    </header>
+      ) : null}
+    </>
   );
 }

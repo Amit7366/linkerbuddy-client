@@ -5,36 +5,46 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import type { HomeNavSection } from "@/hooks/use-active-home-nav";
-import { useTranslations } from "@/providers/locale-provider";
+import { marketingMoreNav } from "@/config/nav";
+import { stripLocalePrefix, withLocalePrefix } from "@/i18n/routing";
+import { useLocale, useTranslations } from "@/providers/locale-provider";
 import { cn } from "@/lib/utils";
-
-const MORE_ITEMS = [
-  { key: "nav.services", href: "#services", section: "services" },
-  { key: "nav.agencies", href: "#agencies", section: "agencies" },
-  { key: "nav.resources", href: "#faq", section: "faq" },
-] as const satisfies ReadonlyArray<{
-  key: string;
-  href: `#${HomeNavSection}`;
-  section: HomeNavSection;
-}>;
 
 interface NavMoreDropdownProps {
   homeHref: string;
   activeSection: HomeNavSection | null;
+  pathname: string;
   fullWidth?: boolean;
   className?: string;
   onNavigate: (
     event: React.MouseEvent<HTMLAnchorElement>,
     section: HomeNavSection,
   ) => void;
+  onClose?: () => void;
+}
+
+function isItemActive(
+  item: (typeof marketingMoreNav)[number],
+  activeSection: HomeNavSection | null,
+  pathname: string,
+) {
+  if ("section" in item && item.section) {
+    return activeSection === item.section;
+  }
+
+  const { pathname: bare } = stripLocalePrefix(pathname);
+  if (item.href === "/blog") return bare === "/blog" || bare.startsWith("/blog/");
+  return bare === item.href;
 }
 
 export function NavMoreDropdown({
   homeHref,
   activeSection,
+  pathname,
   fullWidth = false,
   className,
   onNavigate,
+  onClose,
 }: NavMoreDropdownProps) {
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
@@ -42,8 +52,11 @@ export function NavMoreDropdown({
   const closeTimer = useRef<number | null>(null);
   const listId = useId();
   const t = useTranslations();
+  const { locale } = useLocale();
 
-  const isActive = MORE_ITEMS.some((item) => item.section === activeSection);
+  const isActive = marketingMoreNav.some((item) =>
+    isItemActive(item, activeSection, pathname),
+  );
 
   const clearCloseTimer = () => {
     if (closeTimer.current != null) {
@@ -65,6 +78,11 @@ export function NavMoreDropdown({
   useEffect(() => {
     return () => clearCloseTimer();
   }, []);
+
+  useEffect(() => {
+    if (!fullWidth) return;
+    setOpen(false);
+  }, [fullWidth]);
 
   useEffect(() => {
     if (!open) return;
@@ -94,8 +112,10 @@ export function NavMoreDropdown({
       <button
         type="button"
         className={cn(
-          "relative inline-flex items-center gap-1.5 border-0 bg-transparent text-[13px] font-semibold transition-colors",
-          fullWidth && "w-full justify-between py-1",
+          "relative inline-flex items-center gap-1.5 border-0 bg-transparent font-semibold whitespace-nowrap transition-colors",
+          fullWidth
+            ? "min-h-11 w-full justify-between px-3 text-[14px]"
+            : "text-[13px]",
           isActive
             ? "text-[var(--orange)] after:absolute after:right-0 after:-bottom-1 after:left-0 after:mx-auto after:h-[2px] after:w-4 after:rounded-full after:bg-[var(--orange)]"
             : open
@@ -130,25 +150,33 @@ export function NavMoreDropdown({
             className={cn(
               "z-[70] overflow-hidden rounded-xl border border-white/10 bg-navy p-1.5 shadow-[var(--shadow-overlay)]",
               fullWidth
-                ? "relative mt-2 w-full"
-                : "absolute top-[calc(100%+12px)] left-1/2 w-[220px] -translate-x-1/2 tablet:left-0 tablet:translate-x-0",
+                ? "relative mt-1 w-full"
+                : "absolute top-[calc(100%+12px)] left-0 w-[220px]",
             )}
             onMouseEnter={fullWidth ? undefined : openMenu}
             onMouseLeave={fullWidth ? undefined : scheduleClose}
           >
             <ul className="m-0 list-none space-y-0.5 p-0">
-              {MORE_ITEMS.map((item, index) => {
-                const itemActive = activeSection === item.section;
+              {marketingMoreNav.map((item, index) => {
+                const itemActive = isItemActive(item, activeSection, pathname);
+                const href = item.href.startsWith("#")
+                  ? `${homeHref}${item.href}`
+                  : withLocalePrefix(item.href, locale);
+                const section =
+                  "section" in item ? (item.section as HomeNavSection) : undefined;
+                const showDivider = item.key === "nav.agencies";
+
                 return (
                   <motion.li
-                    key={item.section}
+                    key={item.key}
                     initial={reduce ? false : { opacity: 0, x: -6 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: reduce ? 0 : 0.03 * index, duration: 0.16 }}
+                    className={showDivider ? "mb-1 border-b border-white/10 pb-1" : undefined}
                   >
                     <Link
                       role="menuitem"
-                      href={`${homeHref}${item.href}`}
+                      href={href}
                       aria-current={itemActive ? "true" : undefined}
                       className={cn(
                         "flex w-full items-center rounded-[10px] px-3 py-2.5 text-[13px] font-semibold no-underline transition-colors",
@@ -158,7 +186,8 @@ export function NavMoreDropdown({
                       )}
                       onClick={(event) => {
                         setOpen(false);
-                        onNavigate(event, item.section);
+                        onClose?.();
+                        if (section) onNavigate(event, section);
                       }}
                     >
                       {t(item.key)}

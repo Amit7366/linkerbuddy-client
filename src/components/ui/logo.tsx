@@ -36,14 +36,14 @@ export function Logo({ href, className, light = false }: LogoProps) {
         priority
         unoptimized
       />
-      <span className="flex flex-col leading-none">
-        <span className="font-logo text-[20px] font-extrabold uppercase tracking-[-0.04em]">
+      <span className="flex min-w-0 flex-col leading-none">
+        <span className="font-logo text-[17px] font-extrabold uppercase tracking-[-0.04em] whitespace-nowrap phablet:text-[20px]">
           Linker
           <span className={light ? "text-[#F00E58]" : "text-brand"}>buddy</span>
         </span>
         <small
           className={cn(
-            "mt-px block text-[8px] font-semibold uppercase tracking-[1.25px]",
+            "mt-px hidden text-[8px] font-semibold uppercase tracking-[1.25px] min-[380px]:block",
             light ? "text-[#9fb0ca]" : "text-muted",
           )}
         >

@@ -20,7 +20,7 @@ export const en = {
     resources: "Resources",
     more: "More",
     aboutUs: "About Us",
-    contactUs: "Contact Us",
+    contactUs: "Contact",
     blog: "Blog",
     marketplace: "Marketplace",
     chooseMarket: "Choose a market",

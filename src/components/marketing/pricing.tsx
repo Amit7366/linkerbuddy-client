@@ -69,7 +69,7 @@ export function Pricing() {
   return (
     <section
       id="pricing"
-      className="relative overflow-hidden bg-surface py-[90px]"
+      className="relative overflow-hidden bg-surface py-16 tablet:py-[90px]"
       aria-labelledby="pricing-heading"
     >
       <div

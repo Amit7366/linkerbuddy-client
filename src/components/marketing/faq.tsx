@@ -18,12 +18,12 @@ export function Faq() {
   return (
     <section id="faq" className="lb-section bg-surface" aria-labelledby="faq-heading">
       <Container>
-        <div className="grid gap-10 tablet:grid-cols-[0.65fr_1fr] tablet:gap-[90px]">
+        <div className="grid gap-8 tablet:grid-cols-[0.65fr_1fr] tablet:gap-12 desktop:gap-[90px]">
           <Reveal>
             <p className="lb-kicker">{t("faq.kicker")}</p>
             <h2
               id="faq-heading"
-              className="my-3 text-[30px] font-bold tracking-[-1.8px] text-ink tablet:text-[39px]"
+              className="my-3 text-[clamp(1.75rem,4vw,2.44rem)] font-bold tracking-[-1.8px] text-ink"
             >
               {t("faq.title")}
             </h2>

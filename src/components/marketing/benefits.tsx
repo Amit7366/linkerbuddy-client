@@ -34,7 +34,7 @@ export function Benefits() {
         <Stagger className="mt-[34px] grid gap-3.5 phablet:grid-cols-2 desktop:grid-cols-4">
           {BENEFIT_KEYS.map((benefit) => (
             <StaggerItem key={benefit.key}>
-              <article className="h-full rounded-[14px] border border-line bg-card p-[25px] shadow-[var(--shadow-benefit)]">
+              <article className="h-full rounded-[14px] border border-line bg-card p-5 shadow-[var(--shadow-benefit)] transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-[#483EF4]/35 phablet:p-[25px]">
                 <span className="grid size-10 place-items-center rounded-[10px] bg-[#483EF4]/10 text-xl text-[#483EF4]">
                   {benefit.icon}
                 </span>

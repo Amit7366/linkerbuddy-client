@@ -190,7 +190,7 @@ export function Reviews() {
         <div className="mt-10 grid items-center gap-10 tablet:mt-14 tablet:grid-cols-[minmax(280px,0.95fr)_minmax(0,1.15fr)] tablet:gap-8 desktop:gap-16">
           {/* Arc carousel */}
           <div
-            className="relative mx-auto h-[420px] w-full max-w-[420px] tablet:mx-0"
+            className="relative mx-auto h-[340px] w-full max-w-[420px] tablet:mx-0 tablet:h-[420px]"
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             onFocusCapture={() => setPaused(true)}

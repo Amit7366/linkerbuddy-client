@@ -105,7 +105,7 @@ export function HeroProductPreview() {
           <motion.div
             key={row.domain}
             className={cn(
-              "my-2 grid grid-cols-[32px_1.5fr_0.5fr_0.55fr_24px] items-center gap-2 rounded-[10px] border border-line px-2.5 py-2.5 tablet:grid-cols-[34px_1.7fr_0.5fr_0.7fr_0.55fr_26px] tablet:gap-2.5",
+              "my-2 grid grid-cols-[32px_minmax(0,1.5fr)_0.5fr_0.55fr_24px] items-center gap-2 rounded-[10px] border border-line px-2.5 py-2.5 tablet:grid-cols-[34px_minmax(0,1.7fr)_0.5fr_0.7fr_0.55fr_26px] tablet:gap-2.5",
               row.featured && "border-[#9fc2fa] bg-sky",
             )}
             initial={reduce ? false : { opacity: 0, x: 24, y: 8 }}
@@ -121,8 +121,8 @@ export function HeroProductPreview() {
             >
               {row.initials}
             </span>
-            <div className="flex flex-col gap-0.5">
-              <b className="text-[10px] text-ink">{row.domain}</b>
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <b className="truncate text-[10px] text-ink">{row.domain}</b>
               <small className="text-[8px] text-muted">{row.meta}</small>
             </div>
             <div className="flex flex-col">

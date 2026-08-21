@@ -60,26 +60,35 @@ export const marketplaceCountries = [
 export type MarketplaceCountry = (typeof marketplaceCountries)[number];
 export type MarketplaceCountryCode = MarketplaceCountry["code"];
 
-export const marketingNav = [
-  { title: "How it works", href: "#how-it-works" },
-  { title: "Pricing", href: "#pricing" },
-  { title: "About Us", href: "/about" },
-  { title: "Blog", href: "/blog" },
-  { title: "Contact Us", href: "/contact" },
+/**
+ * Primary nav, left → right.
+ * About is rendered before Marketplace; remaining items follow it.
+ */
+export const marketingAboutItem = { key: "nav.aboutUs", href: "/about" } as const;
+
+export const marketingPrimaryNav = [
+  { key: "nav.services", href: "#services", section: "services" },
+  { key: "nav.howItWorks", href: "#how-it-works", section: "how-it-works" },
+  { key: "nav.pricing", href: "#pricing", section: "pricing" },
+  { key: "nav.contactUs", href: "/contact" },
 ] as const;
 
+/** More menu, top → bottom (same serial as the page: agencies → blog → resources). */
 export const marketingMoreNav = [
-  { title: "Services", href: "#services" },
-  { title: "For Agencies", href: "#agencies" },
-  { title: "Resources", href: "#faq" },
+  { key: "nav.agencies", href: "#agencies", section: "agencies" },
+  { key: "nav.blog", href: "/blog" },
+  { key: "nav.resources", href: "#faq", section: "faq" },
 ] as const;
+
+export type MarketingPrimaryNavItem = (typeof marketingPrimaryNav)[number];
+export type MarketingMoreNavItem = (typeof marketingMoreNav)[number];
 
 export const footerNav = {
   company: [
     { title: "Home", href: "/" },
+    { title: "Blog", href: "/blog" },
     { title: "About Us", href: "/about" },
     { title: "Contact", href: "/contact" },
-    { title: "Blog", href: "/blog" },
   ],
   services: [
     { title: "Guest Posts", href: "#marketplace" },

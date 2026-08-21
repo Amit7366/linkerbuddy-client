@@ -22,12 +22,12 @@ export function ProcessSteps() {
           />
         </Reveal>
 
-        <Stagger className="mt-[45px] grid grid-cols-1 tablet:grid-cols-2 tablet:gap-x-0 tablet:gap-y-[35px] desktop:grid-cols-4">
+        <Stagger className="mt-8 grid grid-cols-1 gap-0 tablet:mt-[45px] tablet:grid-cols-2 tablet:gap-x-0 tablet:gap-y-[35px] desktop:grid-cols-4">
           {PROCESS_STEP_KEYS.map((step, index) => (
             <StaggerItem key={step}>
               <article
                 className={cn(
-                  "relative px-0 pt-6 pb-0 tablet:px-[30px] tablet:pt-0",
+                  "relative px-0 py-5 tablet:px-[30px] tablet:py-0 tablet:pt-0",
                   index > 0 && "border-t border-line tablet:border-t-0",
                   index > 0 && "tablet:border-l tablet:border-line",
                   index === 2 && "tablet:border-l-0 desktop:border-l",

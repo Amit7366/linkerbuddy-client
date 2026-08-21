@@ -92,9 +92,9 @@ export function Footer() {
 
   const companyLinks = [
     { title: t("footer.home"), href: "/" },
+    { title: t("footer.blog"), href: "/blog" },
     { title: t("footer.about"), href: "/about" },
     { title: t("footer.contact"), href: "/contact" },
-    { title: t("footer.blog"), href: "/blog" },
   ];
 
   const serviceLinks = [

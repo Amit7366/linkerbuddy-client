@@ -36,13 +36,13 @@ export function CtaForm() {
   };
 
   return (
-    <section id="custom-list" className="py-[70px]" aria-labelledby="cta-heading">
+    <section id="custom-list" className="py-14 tablet:py-[70px]" aria-labelledby="cta-heading">
       <Container>
         <Reveal>
-          <div className="grid items-center gap-8 rounded-[20px] bg-[image:var(--cta-gradient)] p-7 text-white shadow-[var(--shadow-cta)] tablet:grid-cols-[0.8fr_1.2fr] tablet:gap-[55px] tablet:p-[42px]">
+          <div className="grid items-center gap-7 rounded-[20px] bg-[image:var(--cta-gradient)] p-5 text-white shadow-[var(--shadow-cta)] phablet:p-7 tablet:grid-cols-[0.8fr_1.2fr] tablet:gap-[55px] tablet:p-[42px]">
             <div>
               <p className="lb-kicker lb-kicker-light">{t("cta.kicker")}</p>
-              <h2 id="cta-heading" className="my-3 text-[31px] font-bold tracking-[-1.3px]">
+              <h2 id="cta-heading" className="my-3 text-[clamp(1.6rem,4vw,1.95rem)] font-bold tracking-[-1.3px]">
                 {t("cta.title")}
               </h2>
               <p className="m-0 text-[13px] leading-relaxed text-white/70">{t("cta.description")}</p>

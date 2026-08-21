@@ -285,8 +285,14 @@
   }
 
   .lb-section {
-    padding: 90px 0;
+    padding: 64px 0;
     scroll-margin-top: 5.75rem;
+  }
+
+  @media (width >= 61.25rem) {
+    .lb-section {
+      padding: 90px 0;
+    }
   }
 
   #home,

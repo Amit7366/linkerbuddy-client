@@ -159,7 +159,7 @@ export function HeroStatsStrip() {
               <span className="text-[10px] text-muted">{t(`hero.stats.${stat.key}`)}</span>
             </div>
           ))}
-          <div className="col-span-2 flex items-center gap-3 border-0 bg-sky p-[15px] tablet:col-span-1 tablet:px-[23px] tablet:py-[19px]">
+          <div className="col-span-2 flex items-center gap-3 border-t border-line bg-sky p-[15px] tablet:col-span-1 tablet:border-t-0 tablet:px-[23px] tablet:py-[19px]">
             <span className="grid size-[34px] place-items-center rounded-full bg-[#d8f7eb] text-[15px] text-[#07845f] dark:bg-[#0f3d32] dark:text-[#34d399]">
               ✓
             </span>
